@@ -82,5 +82,5 @@
        activeCont = this.getAttribute("href"); //href의 속성 얻는다 => id를 얻음
        console.log(activeCont);
        document.querySelector(activeCont).style.display = "block";
-     });
+     });   
  };
