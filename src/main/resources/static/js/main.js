@@ -76,7 +76,7 @@
          btn.innerText = "더보기";
        }
 
-       //this = 현재 누른 탭
+       //this = 현재 누른 탭      
        console.log(this);
        //탭 클릭시 컨텐츠 전환
        activeCont = this.getAttribute("href"); //href의 속성 얻는다 => id를 얻음
