@@ -9,5 +9,5 @@ public class InstaPjApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(InstaPjApplication.class, args);
 	}
-    
+       
 }
