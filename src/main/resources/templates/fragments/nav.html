@@ -3,29 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-	<link rel="stylesheet" th:href="@{css/nav.css}" />
+	<link rel="stylesheet" th:href="@{/css/nav.css}" />
+	<!-- 아이콘CDN -->
+	<script src="https://kit.fontawesome.com/3590bdbf3c.js" crossorigin="anonymous"></script>
+	
+	
 </head>
 
 <body>
-
    <div id="sidebar">
       <div id="close-button"></div>
       <p id="menu"> &nbsp; 메뉴</p>
       <ul class="dep1">
-        <li><a class="fa-solid fa-house" herf="#"><p>&nbsp; &nbsp;홈</p></a></li>
-        <li><a class="fa-solid fa-magnifying-glass" href="#"><p>&nbsp; &nbsp;검색</p></a></li>
-        <li><a class="fa-regular fa-paper-plane" href="#"><p>&nbsp; &nbsp;메시지</p></a></li>
-        <li><a class="fa-regular fa-heart" href="#"><p>&nbsp; &nbsp;알림</p></a></li>
-        <li><a class="fa-solid fa-list" href="#" id="my-post"><p>&nbsp; &nbsp;내 게시물</p></a>
-          <ul class="panel" id="panel">
-            <li><a th:herf="@{#tab-all}" class="btn">전체</a></li>
-            <li><a th:href="@{#tab-iu}" class="btn">아이유</a></li>
-            <li><a th:href="@{#tab-trip}" class="btn">여행</a></li>
-          </ul>
-        </li>
+        <li><a herf="#"><div class="home_icon"></div><p>&nbsp; &nbsp;홈</p></a></li>
+        <li><a herf="#"><div class="search_icon"></div><p>&nbsp; &nbsp;검색</p></a></li>
+        <li><a herf="#"><div class="message_icon"></div><p>&nbsp; &nbsp;메시지</p></a></li>
+        <li><a herf="#"><div class="notif_icon"></div><p>&nbsp; &nbsp;알림</p></a></li>
+        <li><a herf="#"><div class="plus_icon"></div><p>&nbsp; &nbsp;만들기</p></a></li>
+        <li><a herf="#"><div class="settings_icon"></div><p>&nbsp; &nbsp;설정</p></a></li>
+        
       </ul>
     </div>
-    
-<script type="text/javascript" th:src="@{js/nav.js}"></script> 
+
+<!-- JS -->
+<script type="text/javascript" th:src="@{/js/nav.js}"></script> 
+
+
 </body>
 </html>

@@ -1,53 +1,28 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-
     <title>ingstagram</title>
-    <link rel="stylesheet" href="css/login/reset.css">
-    <link rel="stylesheet" href="css/login/common.css">
-    <link rel="stylesheet" href="css/login/style.css">
-    <link rel="stylesheet" href="css/login/login.css">
-    <link rel="shortcut icon" href="imgs/instagram.png">
-
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
 
 
 <section id="container">
-    <header id="header">
-        <section class="h_inner">
-            <h1 class="logo">
-                <a th:href="@{/}">
-                    <div class="sprite_insta_icon"></div>
-                    <div>
-                        <div class="sprite_write_logo"></div>
-                    </div>
-                </a>
-            </h1>
-
-            <div class="search_field">
-                <input type="text" placeholder="검색" tabindex="0">
-
-                <div class="fake_field">
-                    <span class=sprite_small_search_icon></span>
-                    <span>검색</span>
-                </div>
-            </div>
-
-
-            <div class="right_icons">
-                <a href="javascript:void(0);" onclick="signIn()"><div class="sprite_camera_icon"></div></a>
-                <a href="javascript:void(0);" onclick="signIn()"><div class="sprite_compass_icon"></div></a>
-                <a href="javascript:void(0);" onclick="signIn()"><div class="sprite_heart_icon_outline"></div></a>
-                <a href="javascript:void(0);" onclick="signIn()"><div class="sprite_user_icon_outline"></div></a>
-            </div>
-        </section>
-    </header>
-
-
+	<!-- 헤더 -->
+   	<div th:replace="/fragments/header.html :: fragment-header"></div>
+    
+    <!-- nav 사이드메뉴바  -->
+    <div th:replace="/fragments/nav.html :: fragment-nav"></div>
+	
+	<!-- 메인 -->
     <div id="main_container">
 
         <div class="form_container">
@@ -73,7 +48,7 @@
             <div class="bottom_box">
                 <div>
                     <span>아이디가 없으신가요?</span>
-                    <a th:href="@{/signIn}">회원가입</a>
+                    <a th:href="@{/signin}">회원가입</a>
                 </div>
             </div>
 
@@ -85,10 +60,5 @@
 </section>
 
 
-<script type="text/javascript">
-function signIn() {
-	alert("로그인이 필요한 기능입니다");
-}
-</script>
 </body>
 </html>

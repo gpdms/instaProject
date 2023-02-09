@@ -16,7 +16,7 @@
         top: 5px;
         width: 40px;
         height: 40px;
-        background: url(toggle_button.jpg);
+        background: url(/imgs/toggle_button.jpg);
         cursor: pointer;
         z-index: 2;
       }

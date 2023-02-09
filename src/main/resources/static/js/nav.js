@@ -19,11 +19,6 @@
       });
 
 
-      //내게시물 열기 닫기
-      let myPost = document.getElementById("my-post");
-
-      myPost.addEventListener("click", function(){
-        document.getElementById("panel").classList.toggle("hide");
-      });
+      
 
 

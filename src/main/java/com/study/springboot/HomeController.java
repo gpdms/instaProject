@@ -10,15 +10,26 @@ public String logIn() {
 	return "login";
 }
 
-@GetMapping("/signIn")
-public String signIn() {
-	return "signin";
+@GetMapping("/signin")
+public void signIn() {
 }
 
-@GetMapping("/index")
-public String tohome() {
-	return "index";
+@GetMapping("/myHome")
+public String myHome() {
+	return "my_home";
 }
 
+@GetMapping("/feed")
+public void feed() {
+}
+
+@GetMapping("/view")
+public void view() {
+}
+
+@GetMapping("/newPost")
+public String posting() {
+	return "new_post";
+}
   
 } 

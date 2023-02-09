@@ -1,32 +1,28 @@
-
-
     /* -----------사이드바css----------------------------------------- */
     #sidebar {
-        width: 350px;
+        width: 250px;
         height: 100%;
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 10;
-        background: lightgray;
+        z-index: 10000;
+        background: white;
         overflow: hidden;
-        display: none;
+        /*display: none;*/
         /* transition: all 0.5s linear; */
+         border-right: 1px solid lightgray;
       }
+      
       #close-button {
         position: absolute;
         right: 0;
         top: 0;
         width: 40px;
         height: 40px;
-        background: url(toggle_button.jpg);
+        background: url(/imgs/toggle_button.jpg);
         background-position: -41px 0;
         cursor: pointer;
       }
-      .hide {
-        display: none;
-      }
-  
   
       .dep1 {
         margin: 0;
@@ -37,6 +33,7 @@
   
       .dep1 li {
         list-style: none;
+       	
       }
   
       .dep1 li a {
@@ -46,11 +43,14 @@
         color: #333;
         font-weight: bold;
         
+        
       }
   
       .dep1 li a p {
         font-weight: 600;
         display: inline;
+       
+        
       }
   
       #menu {
@@ -60,25 +60,51 @@
         padding-top: 20px;
       }
       
-      .panel {
-        /* margin: 0;
-        padding: 0; */
-        font-size: 15px;
+      .home_icon {
+      	display: inline-block;
+    	background: url(/imgs/home_black.png);
+    	background-size: cover;
+    	width: 25px;
+    	height: 25px;
       }
-  
-      .panel li {
-        list-style-type:  "-";
-        margin-left: 35px !important; 
-        font-weight: 600;
-        font-size: 18px;
+      
+      .search_icon {
+      	display: inline-block;
+    	background: url(/imgs/search.png);
+    	background-size: cover;
+    	width: 25px;
+    	height: 25px;
       }
-  /* 
-      li a.menu {
-        background: #333;
-        color: #fff;
-      } */
-  
-      .panel li a:hover {
-        background: #555;
-        color: #fff;
+      
+      .message_icon {
+      	display: inline-block;
+    	background: url(/imgs/message_black.png);
+    	background-size: cover;
+    	width: 25px;
+    	height: 25px;
       }
+      
+      .notif_icon {
+      	display: inline-block;
+    	background: url(/imgs/heart_black.png);
+    	background-size: cover;
+    	width: 25px;
+    	height: 25px;
+      }
+      
+      .plus_icon {
+      	display: inline-block;
+    	background: url(/imgs/plus.png);
+    	background-size: cover;
+    	width: 25px;
+    	height: 25px;
+      }
+      
+      .settings_icon {
+      	display: inline-block;
+    	background: url(/imgs/settings_black.png);
+    	background-size: cover;
+    	width: 25px;
+    	height: 25px;
+      }
+      
