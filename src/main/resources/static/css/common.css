@@ -76,17 +76,9 @@ body {
 .sprite_more_icon {
     display: inline-block;
     background: url('/imgs/background01.png') no-repeat -301px -218px;
-    width: 13px;
+    width: 15px;
     height: 3px;
 }
-
-/* .sprite_more_icon {
-    display: inline-block;
-    background: url('/imgs/dots.png') no-repeat;
-    width: 40px;
-    height: 40px;
-} */
-
 
 .sprite_bubble_icon {
     display: inline-block;
@@ -179,7 +171,8 @@ body {
 }
 
 #header .h_inner .logo {
-
+	display: flex;
+	align-items: center;
 }
 
 #header .h_inner .logo div {
@@ -195,7 +188,7 @@ body {
     transition: all 0.4s 0.2s ease;
 }
 
-#header .h_inner .logo > a > div:nth-child(1):after {
+#header .h_inner .logo > div:nth-child(1):after {
     content: '';
     width: 1px;
     height: 30px;
@@ -207,7 +200,7 @@ body {
 }
 
 #header .h_inner .logo > a {
-    display: flex;
+    
     align-items: center;
 }
 
