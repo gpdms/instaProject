@@ -10,8 +10,8 @@ public String logIn() {
 	return "login";
 }
 
-@GetMapping("/signin")
-public void signIn() {
+@GetMapping("/signup")
+public void signUp() {
 }
 
 @GetMapping("/myHome")
