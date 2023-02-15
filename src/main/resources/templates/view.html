@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,9 +20,10 @@
             /*height: 6000px;*/
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    
 </head>
 <body>
-
 
 <section id="container">
  	<!-- 헤더 -->
@@ -45,7 +46,6 @@
                             <div><img src="imgs/img_section/img03.jpg" alt=""></div>
                         </div>
                     </div>
-
 
                     <div class="detail--right_box">
                         <header class="top">
@@ -76,12 +76,18 @@
                                     <div class="time">2시간</div>
                                 </div>
                             </div>
-
-                            <div class="user_container-detail">
+							
+							 <div class="user_container-detail" th:each="comm : ${list}">
                                 <div class="user"><img src="imgs/thumb02.jpg" alt="user"></div>
                                 <div class="comment">
-                                    <span class="user_id">in0.lee</span>너무귀엽네요 ㅎㅎㅎ맞팔해요~!
-                                    <div class="time">2시간 <span class="try_comment">답글 달기</span></div>
+                                    <span class="user_id">[[${comm.mem_id}]]</span>[[${comm.com_text}]]
+                                    <input type="hidden" value="[[${comm.mem_id}]]">
+                                    <div class="time" th:each=" time, i : ${tList}">[[${time}]]일전<span class="try_comment" id="subCommentButton" >답글 달기</span>
+	                                    <span class="try_comment"><a th:href="@{/delete(com_id=${comm.com_id})}">삭제</a>
+	                                    </span>
+	                                    <span class="modify_comment"><a>수정</a>
+	                                    </span>
+                                    </div>
                                     <div class="icon_wrap">
                                         <div class="more_trigger">
                                             <div class="sprite_more_icon"></div>
@@ -90,72 +96,11 @@
                                             <div class="sprite_small_heart_icon_outline"></div>
                                         </div>
                                     </div>
+                                     	<div class="subCommentBox" id="subCommentBox" placeholder="댓글 달기" style= "display:none;">
+                                        	<input type="text" >
+                                        </div>
                                 </div>
-                            </div>
-
-                            <div class="user_container-detail">
-                                <div class="user"><img src="imgs/thumb03.jpg" alt="user"></div>
-                                <div class="comment">
-                                    <span class="user_id">ye_solkim</span>강아지 이름이 뭐에요???
-                                    <div class="time">2시간 <span class="try_comment">답글 달기</span></div>
-                                    <div class="icon_wrap">
-                                        <div class="more_trigger">
-                                            <div class="sprite_more_icon"></div>
-                                        </div>
-                                        <div>
-                                            <div class="sprite_small_heart_icon_outline"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="user_container-detail">
-                                <div class="user"><img src="imgs/thumb02.jpg" alt="user"></div>
-                                <div class="comment">
-                                    <span class="user_id">in0.lee</span>너무귀엽네요 ㅎㅎㅎ맞팔해요~!
-                                    <div class="time">2시간 <span class="try_comment">답글 달기</span></div>
-                                    <div class="icon_wrap">
-                                        <div class="more_trigger">
-                                            <div class="sprite_more_icon"></div>
-                                        </div>
-                                        <div>
-                                            <div class="sprite_small_heart_icon_outline"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="user_container-detail">
-                                <div class="user"><img src="imgs/thumb03.jpg" alt="user"></div>
-                                <div class="comment">
-                                    <span class="user_id">in0.lee</span>너무귀엽네요
-                                    <div class="time">2시간 <span class="try_comment">답글 달기</span></div>
-                                    <div class="icon_wrap">
-                                        <div class="more_trigger">
-                                            <div class="sprite_more_icon"></div>
-                                        </div>
-                                        <div>
-                                            <div class="sprite_small_heart_icon_outline"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="user_container-detail">
-                                <div class="user"><img src="imgs/thumb02.jpg" alt="user"></div>
-                                <div class="comment">
-                                    <span class="user_id">in0.lee</span>너무귀엽네요 ㅎㅎㅎ맞팔해요~!
-                                    <div class="time">2시간 <span class="try_comment">답글 달기</span></div>
-                                    <div class="icon_wrap">
-                                        <div class="more_trigger">
-                                            <div class="sprite_more_icon"></div>
-                                        </div>
-                                        <div>
-                                            <div class="sprite_small_heart_icon_outline"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> 
 
                         </section>
 
@@ -186,34 +131,131 @@
                         <div class="timer">2시간</div>
 
                         <div class="commit_field">
-                            <input type="text" placeholder="댓글달기..">
-
-                            <div class="upload_btn">게시</div>
+                        
+                        	<input type="hidden" id = "mem_id" name="mem_id" value="testmember1">
+                        	<input type="hidden" id = "post_id" name="post_id" value="2">
+                            <input type="text" id = "com_text" placeholder="댓글달기..">
+	
+							<button id="upload_btn"> 게시 </button>
+							<button id="select_btn"> 출력 </button>
+							<button id="text_btn"> ajax테스트</button>
+							<div class="comment_box">
+								
+							</div>
+                            <!-- <div class="upload_btn">게시</div> -->
                         </div>
-
-
-
                     </div>
-
-
                 </article>
-
-
             </div>
-
-
         </section>
-
     </div>
-
-
-    <div class="del_pop">
-        <div class="btn_box">
-            <div class="del">삭제</div>
-            <div class="cancel">취소</div>
-        </div>
-   </div>
-
 </section>
 
+
+<script th:inline="javascript">
+		/*<![CDATA[*/
+	
+	
+	document.querySelector("#upload_btn").addEventListener("click", function() {
+		
+		var params = {
+				"mem_id" : $("#mem_id").val(),
+				"post_id" : $("#post_id").val(),
+				"com_text" : $('#com_text').val()
+			};
+		
+		$.ajax({
+			type : "get",
+			url : "/insertComment",
+			contentType : "application/json",
+			dataType : "text",
+			data : params,
+			success : function(data) {
+				console.log("성공");
+			},
+			error : function(request,status,error) {
+				console.log("통신 실패" + "\n" + 
+				"code : " + request.status + "\n" + 
+				"message : " + request.responseText + "\n" + 
+				"error" + error
+				)
+			}
+		})
+	});
+	
+	document.querySelector("#select_btn").addEventListener("click", function() {
+		$.ajax({
+			type : "get",
+			url : "/selectAllComment",
+			contentType  : "aplication/json; charset=UTF-8",
+			dataType : "text",
+		/* 	dataType : "html",
+			data : "<div></div>", */
+			success : function(res) {
+				console.log("성공");
+			},
+			error : function(request,status,error) {
+				console.log("통신 실패" + "\n" + 
+				"code : " + request.status + "\n" + 
+				"message : " + request.responseText + "\n" + 
+				"error" + error
+				)
+			}
+		})
+	});
+	
+	document.querySelector("#text_btn").addEventListener("click", function() {
+		$.ajax({
+			type : "get",
+			url : "/ajaxTest",
+			dataType : "html",
+			data : "<div>2</div>", 
+			success : function(res) {
+				$(".scroll_section").append(data)
+				console.log("성공");
+			},
+			error : function(request,status,error) {
+				console.log("통신 실패" + "\n" + 
+				"code : " + request.status + "\n" + 
+				"message : " + request.responseText + "\n" + 
+				"error" + error
+				)
+			}
+		})
+	})
+	
+	/*]]>*/
+	
+	
+	let commentBtn = document.getElementById("subCommentButton");
+	let status = document.getElementById("subCommentBox");
+	
+	commentBtn.addEventListener("click", function() {
+		console.log(status);
+		
+		if(status.style.display == "none") {
+			status.style.display = "block";
+		} else if(status.style.display == "block") {
+			status.style.display = "none"
+		}
+	});
+	
+	
+	/* 
+		해결해야 할 문제
+		1. 댓글 답글달기 누르면 해당 댓글의 input text창 보이게
+			절반 성공.
+		2. 댓글 작성하면 바로 출력되게 (ajax append나 html 이용해서)
+		3. 댓글 수정기능(대댓글 기능과 비슷하게);
+		4. 방금 전, 몇분 전, 몇시간 전, 몇일 전, 몇주 전 등 시간 출력하기
+			절반 성공. 값 넘기면 해결 될수도?
+			거의 성공. 메인에서 상세로 넘어갈때 게시글 번호 넘겨서 
+		5. 로그인 세션값이 존재하면 댓글 창 출력되게
+		6. my_home -> view 로 이어지는 값 넘기기 성공.
+			각 게시글 번호에 따라서 각 게시글에 댓글 출력되게 구현 완료.
+	*/
+	
+	
+</script>
+</body>
  

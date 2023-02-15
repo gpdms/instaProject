@@ -1,4 +1,4 @@
-package com.study.springboot.Comment;
+package com.study.springboot.comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public String insertComment(Model model, CommentDto commDTO) {
 public String selectAllComment(Model model, int com_id) {
 	
 	System.out.println("selectCommentTest");
-	//List<CommentDTO> cList = commentdao.selectAllComment(post_id);
+	//List<CommentDto> cList = commentdao.selectAllComment(post_id);
 	//model.addAttribute("list", cList);
 	//int day = commentdao.calculateCommentTime(com_id);
 	//model.addAttribute("day", day);
@@ -98,8 +98,10 @@ public String deleteComment(int com_id) {
 @GetMapping("/asd")
 public String selectAllPost(Model model) {
 	
-	//List<PostDTO> pList = commentdao.selectAllPost();
-	//model.addAttribute("post", pList);
+	/*
+	 * List<PostDTO> pList = commentdao.selectAllPost(); model.addAttribute("post",
+	 * pList);
+	 */
 	return "my_home";
 }
 

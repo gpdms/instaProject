@@ -1,4 +1,4 @@
-package com.study.springboot.Comment;
+package com.study.springboot.comment;
 
 import java.sql.Timestamp;
 
@@ -11,7 +11,6 @@ import lombok.ToString;
 @ToString
 public class CommentDto {
 
-	
 	private int com_id;
 	private String mem_id;
 	private int post_id;

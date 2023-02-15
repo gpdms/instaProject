@@ -1,4 +1,4 @@
-package com.study.springboot.Comment;
+package com.study.springboot.comment;
 
 import java.util.List;
 
@@ -10,5 +10,4 @@ public interface CommentDao {
 	public List<CommentDto> selectAllComment(int post_id);
 	public int deleteComment(int com_id);
 	public int calculateCommentTime(int com_id);
-	//public List<PostDTO> selectAllPost();
 }
