@@ -31,5 +31,10 @@ public void view() {
 public String posting() {
 	return "new_post";
 }
+
+@GetMapping("/profile_edit")
+public void profile_Edit() {
+	
+}
   
 } 
