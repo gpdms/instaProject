@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.springboot.Comment.CommentDao">
+
+	<insert id="insertComment">
+		insert into comment (mem_id, post_id, com_text) values (#{mem_id}, #{post_id}, #{com_text})
+	</insert>	
+	
+	<select id="selectAllComment" resultType="com.example.demo.CommentDTO">
+		select * from comment where post_id = #{post_id}
+	</select>
+	
+	<delete id="deleteComment">
+		delete from comment where com_id = #{com_id}
+	</delete>
+	
+	<select id="selectAllPost" resultType="com.example.demo.PostDTO">
+		select * from post
+	</select>
+	
+	<select id="calculateCommentTime" resultType="int">
+		select datediff (current_date(), (select com_time from comment where com_id = #{com_id}));
+	</select>
+	
+</mapper>
