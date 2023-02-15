@@ -30,7 +30,7 @@ public void view(Model model, int post_id) {
 	System.out.println(tList);
 	
 	model.addAttribute("list", cList); 
-	model.addAttribute("tList", tList); 
+	model.addAttribute("tList", tList);   
 }
 
 
