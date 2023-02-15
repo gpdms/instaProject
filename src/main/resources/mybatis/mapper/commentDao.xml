@@ -4,13 +4,13 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.study.springboot.comment.commentDao">
+<mapper namespace="com.study.springboot.comment.CommentDao">
 
 	<insert id="insertComment">
 		insert into comment (mem_id, post_id, com_text) values (#{mem_id}, #{post_id}, #{com_text})
 	</insert>	
 	
-	<select id="selectAllComment" resultType="com.study.springboot.comment.commentDto">
+	<select id="selectAllComment" resultType="com.study.springboot.comment.CommentDto">
 		select * from comment where post_id = #{post_id}
 	</select>
 	

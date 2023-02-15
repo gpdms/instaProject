@@ -16,25 +16,8 @@ public class CommentController {
 
 	private final CommentDao commentdao;
 	
-@GetMapping("/")
-public String logIn() {
-	return "login";
-}
 
-@GetMapping("/signup")
-public void signUp() {
-}
-
-@GetMapping("/myHome")
-public String myHome() {
-	return "my_home";
-}
-
-@GetMapping("/feed")
-public void feed() {
-}
-
-@GetMapping("/view")
+@GetMapping("/view1")
 public void view(Model model, int post_id) {
 	List<CommentDto> cList = commentdao.selectAllComment(post_id);
 	List<Integer> tList = new ArrayList<>();
@@ -48,13 +31,6 @@ public void view(Model model, int post_id) {
 	
 	model.addAttribute("list", cList); 
 	model.addAttribute("tList", tList); 
-}
-
-
-
-@GetMapping("/newPost")
-public String posting() {
-	return "new_post";
 }
 
 
@@ -87,7 +63,7 @@ public String selectAllComment(Model model, int com_id) {
 
 
 
-@GetMapping("/delete")
+@GetMapping("/deleteComment")
 public String deleteComment(int com_id) {
 	commentdao.deleteComment(com_id);
 	return "redirect:/selectAllComment";
@@ -105,12 +81,4 @@ public String selectAllPost(Model model) {
 	return "my_home";
 }
 
-
-/*
- * @GetMapping("/calculateCommentTime") public String calculateCommentTime(Model
- * model, int com_id) {
- * 
- * int day = commentdao.calculateCommentTime(com_id); model.addAttribute("day",
- * day); return "redirect:/selectAllComment"; }
- */
 }

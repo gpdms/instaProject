@@ -83,7 +83,7 @@
                                     <span class="user_id">[[${comm.mem_id}]]</span>[[${comm.com_text}]]
                                     <input type="hidden" value="[[${comm.mem_id}]]">
                                     <div class="time" th:each=" time, i : ${tList}">[[${time}]]일전<span class="try_comment" id="subCommentButton" >답글 달기</span>
-	                                    <span class="try_comment"><a th:href="@{/delete(com_id=${comm.com_id})}">삭제</a>
+	                                    <span class="try_comment"><a th:href="@{/deleteComment(com_id=${comm.com_id})}">삭제</a>
 	                                    </span>
 	                                    <span class="modify_comment"><a>수정</a>
 	                                    </span>
