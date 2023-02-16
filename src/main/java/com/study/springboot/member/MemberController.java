@@ -46,7 +46,7 @@ public class MemberController {
 			log.info(rs);
 			if(rs > 0) {
 				md.addAttribute("msg", "가입되었습니다.");
-				md.addAttribute("url", "login");
+				md.addAttribute("url", "/");
 				return "alert";
 			} else {
 				md.addAttribute("msg", "가입되지 않았습니다. 다시 입력해주세요.");
