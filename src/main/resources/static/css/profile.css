@@ -105,7 +105,6 @@
     display: none;
 }
 
-
 .contents_container.active{
     display: flex;
 }
@@ -115,14 +114,18 @@
     max-height:300px;
     overflow:hidden;
     margin-bottom: 18px;
-
-
 }
 
 .contents_container .pic img{
-    width: 100%;
-    height: 100%;
+/*     width: 100%; */
+/*     height: 100%; */
+	width:300px;
+    height:300px;
+/*     background-size:cover; */
+    object-fit:cover;
 }
+
+
 
 
 @media screen and (max-width:1000px){

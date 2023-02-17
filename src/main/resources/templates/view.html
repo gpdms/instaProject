@@ -12,9 +12,10 @@
     <title>instagram</title>
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/common.css">
-<!--     <link rel="stylesheet" href="/css/style.css"> -->
     <link rel="stylesheet" href="/css/detail-page.css">
-
+	<!-- 이미지 슬라이드 -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+	
     <style>
         #main_container {
             /*height: 6000px;*/
@@ -40,21 +41,34 @@
             <div class="contents_box">
 
                 <article class="contents_detail">
-
+                
+					<!--이미지 -->
                     <div class="img_section">
-                        <div class="trans_inner">
-                            <div><img src="imgs/img_section/img03.jpg" alt=""></div>
-                        </div>
+<!--                         <div class="trans_inner"> -->
+<!--                             <img src="imgs/img_section/img03.jpg" alt=""> -->
+<!--                         </div> -->
+<!-- 	                   <th:block th:each="img : ${imgs}" class="trans_inner" > -->
+<!-- 							<img th:src="|/images/${img.imgId}|" width="150" height="150" alt="포스트이미지"> -->
+<!-- 	                   </th:block> -->
+	                  <div class="trans_inner">
+		                  <ul class="bxslider">
+						     <li th:each="img : ${imgs}">
+						     	<a href="#"><img th:src="|/images/${img.imgId}|" width="150" height="150" alt="포스트이미지"></a>
+						     </li>
+						  </ul>
+	                  </div>
                     </div>
 
+					
                     <div class="detail--right_box">
+                   		 <!-- 작성자 정보-->
                         <header class="top">
                             <div class="user_container">
                                 <div class="profile_img">
-                                    <img src="imgs/thumb.jpeg" alt="">
+                                    <img src="/imgs/thumb.jpeg" alt="">
                                 </div>
                                 <div class="user_name">
-                                    <div class="nick_name">KindTiger</div>
+                                    <div class="nick_name">[[${post.mem_id}]]</div>
                                     <div class="country">Seoul, South Korea</div>
                                 </div>
                             </div>
@@ -65,20 +79,27 @@
                                     <li>삭제</li>
                                 </ul>
                             </div>
-
                         </header>
-
-                        <section class="scroll_section">
+						
+                        <section class="scroll_section"> 
+                        	<!-- 작성 내용 -->
                             <div class="admin_container">
-                                <div class="admin"><img src="imgs/thumb.jpeg" alt="user"></div>
+                                <div class="admin"><img src="/imgs/thumb.jpeg" alt="user"></div>
                                 <div class="comment">
-                                    <span class="user_id">Kindtiger</span>강아지가 많이 힘든가보다ㅜㅜㅜㅜㅜ조금만힘내
-                                    <div class="time">2시간</div>
-                                </div>
+                                    <span class="user_id">[[${post.mem_id}]]</span>
+                                    <div style="height:5px;"></div>
+                                    <div th:utext="${post.content}"}></div>
+                               		<div class="time" th:if="${timeMap['min'] < 1}"> [[${timeMap['sec']}]]초</div>
+                               		<div class="time" th:if="${timeMap['min']>= 1 and timeMap['min']< 60}" >[[${timeMap['min']}]]분</div>
+                                    <div class="time" th:if="${timeMap['hour']>=1 and timeMap['hour'] < 24}" >[[${timeMap['hour']}]]시간</div>
+                                    <div class="time" th:if="${timeMap['day'] >= 1 and timeMap['day'] < 7}" >[[${timeMap['day']}]]일</div> 
+                                    <div class="time" th:if="${timeMap['day'] >= 7}">[[${timeMap['week']}]]주</div>
+                                 </div>
                             </div>
 							
+							<!-- 댓글 -->
 							 <div class="user_container-detail" th:each="comm : ${list}">
-                                <div class="user"><img src="imgs/thumb02.jpg" alt="user"></div>
+                                <div class="user"><img src="/imgs/thumb02.jpg" alt="user"></div>
                                 <div class="comment">
                                     <span class="user_id">[[${comm.mem_id}]]</span>[[${comm.com_text}]]
                                     <input type="hidden" value="[[${comm.mem_id}]]">
@@ -130,6 +151,10 @@
                         </div>
                         <div class="timer">2시간</div>
 
+
+
+
+
                         <div class="commit_field">
                         
                         	<input type="hidden" id = "mem_id" name="mem_id" value="testmember1">
@@ -152,10 +177,31 @@
 </section>
 
 
+<!-- 이미지 슬라이드 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $('.slider').bxSlider();
+  });
+  $(document).ready(function () {
+	    $('.bxslider').bxSlider({ // 클래스명 주의!
+	        auto: false, // 자동으로 애니메이션 시작
+	        speed: 500,  // 애니메이션 속도
+	        pause: 5000,  // 애니메이션 유지 시간 (1000은 1초)
+	        mode: 'horizontal', // 슬라이드 모드 ('fade', 'horizontal', 'vertical' 이 있음)
+	        autoControls: false, // 시작 및 중지버튼 보여짐
+	        pager: false, // 페이지 표시 보여짐
+	        captions: true, // 이미지 위에 텍스트를 넣을 수 있음
+	    });
+	});
+  
+</script>
+
 <script th:inline="javascript">
+
+	//-------------------댓글
 		/*<![CDATA[*/
-	
-	
 	document.querySelector("#upload_btn").addEventListener("click", function() {
 		
 		var params = {

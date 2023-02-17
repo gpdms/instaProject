@@ -12,16 +12,19 @@
     <header id="header">
         <section class="h_inner">
             <h1 class="logo">
-            <!-- 로그아웃시 href:로그인페이지 -->
-<!--            <div id="menu-button"></div> -->           
-<!--            <a th:href="@{/}"> -->
-<!--            	<div class="sprite_write_logo"></div> -->
-<!--            </a> -->
-             <!-- 로그인시 href:feed -->     
                 <div id="menu-button"></div>
-                <a th:href="@{/feed}">
-                	<div class="sprite_write_logo"></div>
-                </a>
+	               <!-- 로그아웃시 href:로그인페이지 -->
+		           <a th:if="${session.user == null}" th:href="@{/}"> 
+		           	<div class="sprite_write_logo"></div>
+		           </a>
+		           <!-- 로그인 시 href:내 피드 -->
+<!-- 	               <a th:if="${session.user != null}"  -->
+<!-- 	               th:href="@{/feed/{login_id}(login_id=${session.user.mem_id})}"> -->
+<!-- 	               	<div class="sprite_write_logo"></div> -->
+<!-- 	               </a> -->
+		           <a th:if="${session.user != null}" href="#" onclick="someday()"> 
+		           	<div class="sprite_write_logo"></div>
+		           </a>
             </h1>
 
             <div class="search_field">
@@ -36,15 +39,15 @@
 
             <div class="right_icons">
 				<!-- 로그아웃시  -->
-<!--            <a href="#" onclick="signUp()"><div class="sprite_plus_icon"></div></a>  -->
-<!--            <a href="#" onclick="signUp()"><div class="sprite_message_icon"></div></a>  -->
-<!-- 			<a href="#" onclick="signUp()"><div class="sprite_heart_icon_outline"></div></a> -->
-<!--   			<a href="#" onclick="signUp()"><div class="sprite_user_icon_outline"></div></a> -->
+          		<a th:if="${session.user == null}" onclick="signUp()"><div class="sprite_plus_icon"></div></a> 
+           		<a th:if="${session.user == null}" onclick="signUp()"><div class="sprite_message_icon"></div></a> 
+				<a th:if="${session.user == null}" onclick="signUp()"><div class="sprite_heart_icon_outline"></div></a>
+  				<a th:if="${session.user == null}" onclick="signUp()"><div class="sprite_user_icon_outline"></div></a>
                 <!-- 로그인시  -->
-                <a href="/newPost"><div class="sprite_plus_icon"></div></a>
-                <a href="#" onclick="signUp()"><div class="sprite_message_icon"></div></a>
-                <a href="#" onclick="signUp()"><div class="sprite_heart_icon_outline"></div></a>
-                <a href="/myHome" ><div class="sprite_user_icon_outline"></div></a>
+                <a th:if="${session.user != null}" href="/newPost"><div class="sprite_plus_icon"></div></a>
+                <a th:if="${session.user != null}" href="#" onclick="someday()"><div class="sprite_message_icon"></div></a>
+                <a th:if="${session.user != null}" href="#" onclick="someday()"><div class="sprite_heart_icon_outline"></div></a>
+                <a th:if="${session.user != null}" th:href="@{/myHome/{login_id}(login_id=${session.user.mem_id})}" ><div class="sprite_user_icon_outline"></div></a>
             </div>
         </section>
     </header>
@@ -52,6 +55,9 @@
 <script type="text/javascript">
 function signUp() {
 	alert("로그인이 필요한 기능입니다");
+}
+function someday() {
+	alert("추후에 만들 기능입니다...");
 }
 </script>
 </body>

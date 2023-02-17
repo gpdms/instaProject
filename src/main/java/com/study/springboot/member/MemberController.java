@@ -1,9 +1,16 @@
 package com.study.springboot.member;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import com.study.springboot.post.PostDao;
+import com.study.springboot.post.PostDto;
+import com.study.springboot.post.img.PostImgDto;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +22,22 @@ import lombok.extern.log4j.Log4j2;
 public class MemberController {
 	
 	private final MemberDao dao;
+	private final PostDao postDao;
+	//private final MemberService service;
+	
+	//서비스에서의 getId로부터 온 값이 true이면 아이디 중복이므로 no를 리턴.
+	
+//	@PostMapping("/getId")
+//	public String getId(MemberDto dto) {
+//		log.info("MemberController getId()");
+//		boolean b = service.getId(dto);
+//		if(b) {
+//			return "no";
+//		}
+//		return "ok";
+//	}
+	
+	//회원가입 완료되어 카운트된 숫자가 0보다 클 경우 true반환. true일때 회원가입 완료이므로 "ok"반환.
 	
 	//회원가입
 	@PostMapping("/signUp")
@@ -58,6 +81,7 @@ public class MemberController {
 	
 	
 	//로그인. 정보를 세션에 저장.
+	//로그인한 정보를 세션에 저장.
 	@PostMapping("/login")
 	public String login(MemberDto dto, HttpSession session, Model md) {
 		log.info("------------MemberController login()-------------");
@@ -71,8 +95,27 @@ public class MemberController {
 			MemberDto ses_user = (MemberDto) session.getAttribute("user");
 			log.info(ses_user);
 			md.addAttribute("nickname", ses_user.getNickname());
+			
+			//------------myhome에 이미지 깔아주기-------------//
+		  	List<PostDto> myPostList = postDao.selectAllMyPost(ses_user.getMem_id());
+		  	List<PostImgDto> firstImgIds = new ArrayList<>();
+		  	for (PostDto post : myPostList) {
+		  		List<PostImgDto> myImgList  = postDao.selectAllImgByPost(post.getPost_id());
+		  		firstImgIds.add(myImgList.get(0));
+		  	}
+		  	int myPostCount = postDao.countMyPost(ses_user.getMem_id());
+		  	md.addAttribute("firstImgs", firstImgIds);
+		  	md.addAttribute("myPostList", myPostList);
+		  	md.addAttribute("myPostCount", myPostCount);
+		  //------------myhome에 이미지 깔아주기-------------//
+			
+		  	
+		  	
 			return "my_home";
 		}
+		
+		
+
 	}
 	
 	//로그아웃. 세션 제거.

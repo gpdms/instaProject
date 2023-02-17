@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.springboot.post.PostDao">
+
+	<select id="selectOnePost" resultType="com.study.springboot.post.PostDto">
+		SELECT
+			*
+		FROM
+			post
+		WHERE
+			post_id = #{post_id}
+	</select>
+	
+	<select id="selectAllMyPost" resultType="com.study.springboot.post.PostDto">
+		select 
+			* 
+		from 
+			post 
+		where 
+			mem_id = #{mem_id}
+		order by posttime desc
+	</select>
+	
+	<select id="countMyPost" resultType="int">
+		SELECT COUNT(*) from  post where mem_id = #{mem_id}
+	</select>
+	
+	
+	<select id="selectAllImgByPost" resultType="com.study.springboot.post.img.PostImgDto">
+		select 
+			* 
+		from 
+			post_img
+		where 
+			post_id = #{post_id}
+		  and
+		  	delete_yn = 'n'
+		order by in_time asc
+	</select>
+	
+	<!-- 게시글 insert후에 해당 post_id 가져오기 (selectKey)-->
+	<insert id="insertPost" parameterType="com.study.springboot.post.PostDto" useGeneratedKeys="true"  keyProperty="post_id">
+ 		insert into post (mem_id, content)
+		values (#{mem_id}, #{content})
+	</insert>
+	
+	<select id="diffPostTime" resultType="int">
+		select timestampdiff (second,  (select posttime from post where post_id = #{post_id}), current_timestamp());
+	</select>
+</mapper>

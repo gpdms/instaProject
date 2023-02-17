@@ -13,12 +13,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
 public class CommentController {
-
 	private final CommentDao commentdao;
-	
 
 @GetMapping("/view1")
-public void view(Model model, int post_id) {
+public void view1(Model model, int post_id) {
 	List<CommentDto> cList = commentdao.selectAllComment(post_id);
 	List<Integer> tList = new ArrayList<>();
 	
@@ -27,7 +25,7 @@ public void view(Model model, int post_id) {
 		int a = commentdao.calculateCommentTime(cList.get(i).getCom_id());
 		tList.add(a);
 	}
-	System.out.println(tList);
+	//System.out.println(tList);
 	
 	model.addAttribute("list", cList); 
 	model.addAttribute("tList", tList);   
@@ -47,7 +45,6 @@ public String insertComment(Model model, CommentDto commDTO) {
 	return "asd";
 }
   
-
 
 @GetMapping("/selectAllComment")
 public String selectAllComment(Model model, int com_id) {

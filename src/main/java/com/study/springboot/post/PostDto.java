@@ -1,8 +1,10 @@
-package com.study.springboot.comment;
+package com.study.springboot.post;
 
 import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,15 +13,13 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor 
-public class CommentDto {
-
-	private int com_id;
-	private String mem_id;
+public class PostDto {
 	private int post_id;
-	private String com_text;
-	private Timestamp com_time;
-	private String up_time;
-	
+	private String mem_id;
+	private String content;
+	private Timestamp posttime;
+	private Timestamp uptime;
 }
