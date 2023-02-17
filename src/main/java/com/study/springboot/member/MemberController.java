@@ -100,7 +100,9 @@ public class MemberController {
 		  	List<PostDto> myPostList = postDao.selectAllMyPost(ses_user.getMem_id());
 		  	List<PostImgDto> firstImgIds = new ArrayList<>();
 		  	for (PostDto post : myPostList) {
-		  		List<PostImgDto> myImgList  = postDao.selectAllImgByPost(post.getPost_id());
+		  		List<PostImgDto> myImgList  = new ArrayList<>();
+		  		 myImgList = postDao.selectAllImgByPost(post.getPost_id());
+		  		 if(!myImgList.isEmpty()) 
 		  		firstImgIds.add(myImgList.get(0));
 		  	}
 		  	int myPostCount = postDao.countMyPost(ses_user.getMem_id());
