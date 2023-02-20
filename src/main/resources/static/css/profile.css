@@ -72,6 +72,10 @@
 .detail .middle > li{
     margin-right: 35px;
 }
+.detail .middle >li > a {
+	text-decoration:none; 
+	color:black;
+}
 .detail .about > span{
     display:inline-block;
     cursor: pointer;

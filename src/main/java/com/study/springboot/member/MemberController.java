@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.study.springboot.follow.FollowDao;
+import com.study.springboot.follow.FollowDto;
 import com.study.springboot.post.PostDao;
 import com.study.springboot.post.PostDto;
 import com.study.springboot.post.img.PostImgDto;
@@ -25,21 +27,8 @@ public class MemberController {
 	
 	private final MemberDao dao;
 	private final PostDao postDao;
-	//private final MemberService service;
+	private final FollowDao followDao;
 	
-	//서비스에서의 getId로부터 온 값이 true이면 아이디 중복이므로 no를 리턴.
-	
-//	@PostMapping("/getId")
-//	public String getId(MemberDto dto) {
-//		log.info("MemberController getId()");
-//		boolean b = service.getId(dto);
-//		if(b) {
-//			return "no";
-//		}
-//		return "ok";
-//	}
-	
-	//회원가입 완료되어 카운트된 숫자가 0보다 클 경우 true반환. true일때 회원가입 완료이므로 "ok"반환.
 	
 	//회원가입
 	@PostMapping("/signUp")
@@ -112,6 +101,22 @@ public class MemberController {
 		  	md.addAttribute("homeUser", ses_user);
 		  	md.addAttribute("postCount", postCount);
 		  	md.addAttribute("firstImgs", firstImgIds);
+		  	
+		  	//----------------팔로워----------------------
+		  	String mem_id = ses_user.getMem_id();
+			List<FollowDto> flwerList = followDao.selectFollower(mem_id);
+			int countFlwer = flwerList.size();
+			log.info("팔로워리스트-------------:"+flwerList);
+			log.info("팔로워 수--------------:"+countFlwer);
+			md.addAttribute("flwerList", flwerList);
+			md.addAttribute("countFlwer", countFlwer);
+			//--------------- 팔로잉----------------------
+			List<FollowDto> flwingList = followDao.selectFollowing(mem_id);
+			int countFlwing = flwingList.size();
+			log.info("팔로잉리스트------------:"+flwingList);
+			log.info("팔로잉 수-------------:"+countFlwing);
+			md.addAttribute("flwingList", flwingList);
+			md.addAttribute("countFlwing", countFlwing);
 		  	
 			return "my_home";
 		}

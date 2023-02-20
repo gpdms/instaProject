@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.springboot.follow.FollowDao">
+
+<!-- 팔로워 아이디: 나를 팔로우하는 사람들의 아이디 -->
+	<select id="selectFollower" resultType="String">
+		select from_user from follow where to_user = #{mem_id}
+	</select>
+
+<!-- 팔로우 아이디: 내가 팔로우하는 사람들의 아이디 -->
+	<select id="selectFollowing" resultType="String">
+		select to_user from follow where from_user = #{mem_id}
+	</select>
+	
+</mapper>

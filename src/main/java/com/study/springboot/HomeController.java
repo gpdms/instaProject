@@ -34,9 +34,9 @@ public String toLogIn() {
 	return "login";
 }
 
-@GetMapping("/signup")
-public void toSignUp() {
-}
+//@GetMapping("/signup")
+//public void toSignUp() {
+//}
 
 @GetMapping("/feed")
 public void toFeed() {
