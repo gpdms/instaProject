@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.study.springboot.follow.FollowDao;
+import com.study.springboot.follow.FollowDto;
 import com.study.springboot.member.MemberDao;
 import com.study.springboot.member.MemberDto;
 import com.study.springboot.post.ImgService;
@@ -28,15 +30,13 @@ import lombok.extern.log4j.Log4j2;
 public class HomeController {
 	private final PostDao postDao;
 	private final MemberDao memberDao;
+	private final FollowDao followDao;
 
 @GetMapping("/")
 public String toLogIn() {
 	return "login";
 }
 
-//@GetMapping("/signup")
-//public void toSignUp() {
-//}
 
 @GetMapping("/feed")
 public void toFeed() {
@@ -65,6 +65,21 @@ public String toMyFeed(@PathVariable("mem_id") String mem_id, Model model) throw
 	model.addAttribute("homeUser", homeUser);
 	model.addAttribute("postCount", postCount);
 	model.addAttribute("firstImgs", firstImgs);
+	
+	//----------------팔로워----------------------
+	List<FollowDto> flwerList = followDao.selectFollower(mem_id);
+	int countFlwer = flwerList.size();
+	//log.info("팔로워리스트-------------:"+flwerList);
+	//log.info("팔로워 수--------------:"+countFlwer);
+	model.addAttribute("flwerList", flwerList);
+	model.addAttribute("countFlwer", countFlwer);
+	//--------------- 팔로잉----------------------
+	List<FollowDto> flwingList = followDao.selectFollowing(mem_id);
+	int countFlwing = flwingList.size();
+	//log.info("팔로잉리스트------------:"+flwingList);
+	//log.info("팔로잉 수-------------:"+countFlwing);
+	model.addAttribute("flwingList", flwingList);
+	model.addAttribute("countFlwing", countFlwing);
 	
 	return "my_home";
 }
