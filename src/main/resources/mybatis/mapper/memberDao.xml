@@ -18,5 +18,23 @@
 	<select id="login" resultType="com.study.springboot.member.MemberDto">
 		select * from member where mem_id = #{mem_id} and mem_pw = #{mem_pw}
 	</select>
-	
+
+<!-- 회원 한명 select -->
+	<select id="selectOneMember" resultType="com.study.springboot.member.MemberDto">
+		select * from member where mem_id = #{mem_id}
+	</select>
+<!-- 회원 닉네임 변경 -->
+	<update id="updateNickname" parameterType="com.study.springboot.member.MemberDto">
+		update member set nickname = #{nickname} where mem_id = #{mem_id}
+	</update>
+<!-- 회원 프로필 수정 -->	
+	<update id="updateProfimg" parameterType="com.study.springboot.member.MemberDto">
+		update member set profimg = #{profimg} where mem_id = #{mem_id}
+	</update>
+<!-- 회원 프로필 삭제(null) -->		
+	<update id="deleteProfimg" parameterType="com.study.springboot.member.MemberDto">
+		update member set profimg = null where mem_id = #{mem_id}
+	</update>
+
+
 </mapper>

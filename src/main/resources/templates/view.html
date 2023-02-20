@@ -53,7 +53,7 @@
 	                  <div class="trans_inner">
 		                  <ul class="bxslider">
 						     <li th:each="img : ${imgs}">
-						     	<a href="#"><img th:src="|/images/${img.imgId}|" width="150" height="150" alt="포스트이미지"></a>
+						     	<a href="#"><img th:src="|/imgs/post/${img.imgId}|" width="150" height="150" alt="포스트이미지"></a>
 						     </li>
 						  </ul>
 	                  </div>
@@ -99,6 +99,8 @@
 							
 							<!-- 댓글 -->
 							
+							<!-- 댓글 -->
+							
 							<div id="commBox">
 							 	<div class="user_container-detail" th:each="comm,i : ${list}">
 	                                <div class="user"><img src="imgs/thumb02.jpg" alt="user"></div>
@@ -137,9 +139,7 @@
 		                                </div>
 	                            </div> 
 	                           </div>
-							
                         </section>
-
 
                         <div class="bottom_icons">
                             <div class="left_icons">
@@ -167,15 +167,11 @@
                         <div class="timer">2시간</div>
 
 
-
-
-
                         <div class="commit_field">
-                        	<input type="hidden" id = "mem_id" name="mem_id" th:value="${session.user.mem_id}">
-                        	<input type="hidden" id = "post_id" name="post_id" th:value="${post.post_id}">
-                            <input type="text" id = "com_text" placeholder="댓글달기..">
-	
-							<button id="upload_btn" onclick="insertComment()"> 게시 </button>
+	                        	<input type="hidden" id = "mem_id" name="mem_id" th:value="${session.user.mem_id}">
+	                        	<input type="hidden" id = "post_id" name="post_id" th:value="${post.post_id}">
+	                            <input type="text" id = "com_text" placeholder="댓글달기..">
+								<button id="upload_btn" onclick="insertComment()"> 게시 </button>
 							<button id="select_btn"> 출력 </button>
 							<button id="text_btn"> ajax테스트</button>
 							<div class="comment_box">
@@ -390,7 +386,6 @@
 		1. 누르면 인서트, 빨간 하트로 시간차 줘서 바뀌게
 		2. 
 	*/
-	
 </script>
 </body>
  

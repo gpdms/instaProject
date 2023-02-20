@@ -1,10 +1,33 @@
 package com.study.springboot;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.study.springboot.member.MemberDao;
+import com.study.springboot.member.MemberDto;
+import com.study.springboot.post.ImgService;
+import com.study.springboot.post.PostController;
+import com.study.springboot.post.PostDao;
+import com.study.springboot.post.PostDto;
+import com.study.springboot.post.PostService;
+import com.study.springboot.post.img.PostImgDto;
+import com.study.springboot.post.img.PostImgRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Controller
+@RequiredArgsConstructor
+@Log4j2
 public class HomeController {
+	private final PostDao postDao;
+	private final MemberDao memberDao;
 
 @GetMapping("/")
 public String toLogIn() {
@@ -15,27 +38,62 @@ public String toLogIn() {
 public void toSignUp() {
 }
 
-//@GetMapping("/myHome")
-//public String toMyHome() {
-//	return "my_home";
-//}
-
 @GetMapping("/feed")
 public void toFeed() {
 }
 
-@GetMapping("/view")
-public void toView() {
-}
 
-//@GetMapping("/newPost") --> postController에
-//public String posting() {
-//	return "new_post";
-//}
-
-@GetMapping("/profile_edit")
-public void profile_Edit() {
+@GetMapping("/myHome/{mem_id}")
+public String toMyFeed(@PathVariable("mem_id") String mem_id, Model model) throws IOException{
+	log.info("-----------PostController toMyFeed()-------------");
+	//홈 주인이 포스팅한 사진
+	List<PostDto> postList = postDao.selectAllMyPost(mem_id);
+	List<PostImgDto> firstImgs = new ArrayList<>();
+	for (PostDto post : postList) {
+		List<PostImgDto> myImgList  = new ArrayList<>();
+		myImgList = postDao.selectAllImgByPost(post.getPost_id());
+		if(!myImgList.isEmpty()) 
+		firstImgs.add(myImgList.get(0));
+	}
 	
+	//홈 주인이 쓴 게시물 수
+	int postCount = postDao.countMyPost(mem_id);
+
+	//홈 주인의 정보 (for 프로필 이미지, 닉네임) 
+	MemberDto homeUser = memberDao.selectOneMember(mem_id);
+	
+	model.addAttribute("homeUser", homeUser);
+	model.addAttribute("postCount", postCount);
+	model.addAttribute("firstImgs", firstImgs);
+	
+	return "my_home";
 }
+
+
+//나의 feed 이미지 리스트 (post_id)로
+//@GetMapping("/feed/{login_id}")
+//public String toMyFeed(@PathVariable("login_id") String login_id, Model model) throws IOException{
+//	List<PostDto> myPostList = postDao.selectAllMyPost(login_id);
+//	log.info("-----------PostController toMyFeed()-------------");
+//	
+//	Map<String, List<Integer>> myImgMap = new HashMap<>();
+//	
+//	for (PostDto post : myPostList) {
+//		//포스트 한개의 이미지Dto들
+//		List<PostImgDto> imgs= postDao.selectAllMyImg(post.getPost_id());
+//		//포스트 한개의 이미지Id들
+//		List<Integer> imgIds = new ArrayList<>();
+//		for(PostImgDto img : imgs) {
+//			imgIds.add(img.getImg_id());
+//		}
+//		myImgMap.put(String.valueOf(post.getPost_id()), imgIds);
+//		imgIds = null;
+//	}
+//	log.info(myImgMap);
+//	
+//	model.addAttribute("myImgMap", myImgMap);
+//	model.addAttribute("myPostList", myPostList);
+//	return "feed";
+//}
   
 } 

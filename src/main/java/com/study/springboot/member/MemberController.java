@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.study.springboot.post.PostDao;
 import com.study.springboot.post.PostDto;
@@ -80,7 +82,6 @@ public class MemberController {
 	}
 	
 	
-	//로그인. 정보를 세션에 저장.
 	//로그인한 정보를 세션에 저장.
 	@PostMapping("/login")
 	public String login(MemberDto dto, HttpSession session, Model md) {
@@ -94,24 +95,23 @@ public class MemberController {
 			session.setAttribute("user", user);
 			MemberDto ses_user = (MemberDto) session.getAttribute("user");
 			log.info(ses_user);
-			md.addAttribute("nickname", ses_user.getNickname());
+			//md.addAttribute("nickname", ses_user.getNickname());
 			
 			//------------myhome에 이미지 깔아주기-------------//
-		  	List<PostDto> myPostList = postDao.selectAllMyPost(ses_user.getMem_id());
+			//홈 주인이 포스팅한 사진
+		  	List<PostDto> postList = postDao.selectAllMyPost(ses_user.getMem_id());
 		  	List<PostImgDto> firstImgIds = new ArrayList<>();
-		  	for (PostDto post : myPostList) {
+		  	for (PostDto post : postList) {
 		  		List<PostImgDto> myImgList  = new ArrayList<>();
-		  		 myImgList = postDao.selectAllImgByPost(post.getPost_id());
-		  		 if(!myImgList.isEmpty()) 
+		  		myImgList = postDao.selectAllImgByPost(post.getPost_id());
+		  		if(!myImgList.isEmpty()) 
 		  		firstImgIds.add(myImgList.get(0));
 		  	}
-		  	int myPostCount = postDao.countMyPost(ses_user.getMem_id());
+		  	//홈 주인이 쓴 게시물 수
+		  	int postCount = postDao.countMyPost(ses_user.getMem_id());
+		  	md.addAttribute("homeUser", ses_user);
+		  	md.addAttribute("postCount", postCount);
 		  	md.addAttribute("firstImgs", firstImgIds);
-		  	md.addAttribute("myPostList", myPostList);
-		  	md.addAttribute("myPostCount", myPostCount);
-		  //------------myhome에 이미지 깔아주기-------------//
-			
-		  	
 		  	
 			return "my_home";
 		}
@@ -127,5 +127,30 @@ public class MemberController {
 		return "login";
 	}
 	
+	//프로필 이미지 제거  
+	@PostMapping("/deletePfImg")
+	public String deleteProfileImg(HttpSession session, Model model) {
+		MemberDto user = (MemberDto) session.getAttribute("user");
+		int del_result = dao.deleteProfimg(user);
+		model.addAttribute("homeUser",	dao.selectOneMember(user.getMem_id()));
+		return "my_home :: #profile_img";
+	}
+	
+//	@PostMapping("/updatePfImg")
+//	@ResponseBody
+//	public String updateProfileImg(HttpSession session) {
+//		int up_result = dao.updateProfimg((MemberDto) session.getAttribute("user"));
+//		if(up_result>0)
+//		return "프로필 이미지가 변경되었습니다.";
+//		return "프로필 이미지를 변경할 수 없습니다.";
+//	}
+	
+	//프로필 닉네임 업뎃 
+	@PostMapping("/updateNickname")
+	public String updateMemNickname(MemberDto member, Model model) {
+		int up_result = dao.updateNickname(member);
+		model.addAttribute("homeUser", dao.selectOneMember(member.getMem_id()));
+	   return "my_home :: #user_nick";
+	}
 	
 }

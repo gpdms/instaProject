@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/modal.css">
     <link rel="shortcut icon" href="/imgs/instagram.png">
 </head>
 <body>
@@ -29,22 +30,26 @@
 
             <div class="hori_cont">
                 <div class="profile_wrap">
-                    <div class="profile_img">
-                        <img src="/imgs/thumb.jpeg" alt="착한호랑이">
-                    </div>
+                    <div class="profile_img" id="profile_img">
+                    	<img th:if="${homeUser.profimg == null}" src="/imgs/profile_img.png" alt="기본_프로필이미지">
+                    	<img th:if="${homeUser.profimg != null}" th:src="|/imgs/profile/${homeUser.mem_id}|" alt="프로필이미지">
+                   </div>
                 </div>
 
                 <div class="detail">
                     <div class="top">
-                        <div class="user_name">[[${session.user.nickname}]]</div>
-                        <a href="/profile_edit" class="profile_edit">프로필편집</a>
-                        <a href="/logout" class="logout">로그아웃</a>
+                        <div class="user_name" id="user_nick" th:text="${homeUser.nickname}"></div>
+                        
+                        <div th:if="${session.user != null and homeUser.mem_id == session.user.mem_id}">
+	                        <a href="#" class="profile_edit" id="pfBtn">프로필편집</a>
+	                        <a href="/logout" class="logout">로그아웃</a>
+                        </div>
                     </div>
 
                     <ul class="middle">
                         <li>
                             <span>게시물</span>
-                            [[${myPostCount}]]
+                            [[${postCount}]]
                         </li>
                         <li>
                             <span>팔로워</span>
@@ -56,27 +61,29 @@
                         </li>
                     </ul>
                     <p class="about">
-                        <span class="nick_name" th:text="${session.user.nickname}+'님의 갤러리'"></span>
-                        <span class="book_mark">북마크</span>
+                        <span class="nick_name">갤러리</span>
+                        <span th:if="${session.user != null and homeUser.mem_id == session.user.mem_id}"class="book_mark">북마크</span>
                     </p>
 
                 </div>
             </div>
 
-
-            <div class="mylist_contents contents_container active" th:if="${myPostCount != 0}">
+			<!-- 갤러리 -->
+            <div class="mylist_contents contents_container active" th:if="${postCount != 0}">
 	            <div th:each="img : ${firstImgs}" class="pic">
-	          		<a th:href="@{/view/{post_id}(post_id=${img.post_id})}"> 
-						<img th:src="|/images/${img.img_id}|" width="150" height="150" alt="첫번째 미리보기 이미지">
+	          		<a th:if="${session.user != null}" th:href="@{/view/{post_id}(post_id=${img.post_id})}"> 
+						<img th:src="|/imgs/post/${img.img_id}|" width="150" height="150" alt="첫번째_미리보기_이미지">
+					</a>
+					<a th:if="${session.user == null}" href="#" onclick="signin()"> 
+						<img th:src="|/imgs/post/${img.img_id}|" width="150" height="150" alt="첫번째_미리보기_이미지">
 					</a>
 				</div>
             </div>
-            
-            <div th:if="${myPostCount == 0}">
-				<p style="font-size: 20px; color: #555;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;등록된 게시글이 없습니다</p>
+            <div th:if="${postCount == 0}">
+				<p style="font-size: 20px; color: #555;">등록된 게시글이 없습니다</p>
 			</div>
 
-
+			<!-- 북마크 -->
             <div class="bookmark_contents contents_container">
                 <div class="pic">
                     <a href="#"><img src="imgs/img_section/img03.jpg" alt=""></a>
@@ -116,13 +123,102 @@
 
 </section>
 
+  <!-- 프로필 편집 모달 -->
+	<div class="profileMd pfmodal">
+      <div class="pfmodal-body">
+		<div class="thumb_user_pf"> 
+           <div class="profile_thumb_pf" id="modal_img">
+              <img th:if="${homeUser.profimg == null}" src="/imgs/profile_img.png" alt="기본_프로필이미지">
+              <img th:if="${homeUser.profimg != null}" th:src="|/imgs/profile/${homeUser.profimg}|" alt="프로필이미지">
+           </div>
+           <div class="detail">
+               <div id="modal_nick" th:text="${homeUser.nickname}+'님의 프로필'"></div>
+           </div>
+		</div>
+		<hr> <a style="color:#0095F6;">이미지 변경</a> 
+        <hr> <a style="color:red;" th:onclick="delPf()">현재 사진 삭제</a>
+        <hr> <a style="color:#999;" id="pfCloseBtn">취소</a>
+        <hr> 
+        <div class="form_container">
+			<div class="form">
+				<form id="nickForm" method="post">
+					<p class="login_user_name">
+						<label for="user_name">닉네임:</label> 
+						<input type="text" name="nickname" id="modal_input_nick" th:value="${homeUser.nickname}">
+						<input type="hidden" name="mem_id" th:value="${homeUser.mem_id}">
+					</p>
+					<button type="button" th:onclick="editNickname()" class="submit_btn">닉네임 변경</button>
+				</form>
+			</div>
+        </div>
+    </div>
 
-<!--<script src="js/insta.js"></script>-->
+
+
 <script src="/js/profile.js"></script>
-<script>
+<script src="/js/modal.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script th:inline="javascript">
+function signin() {
+	  alert("로그인이 필요한 기능입니다.");
+	  location.href = "/";
+}
+
+function delPf() {
+	$.ajax({
+	    type: 'post',
+	    url: '/deletePfImg',
+	    success: function (data) {
+	        alert(data);
+	       	/*  $('#profile_img').load(location.href+' #profile_img'); */
+	       	$( '#none_pf' ).replaceWith( '<img th:if="${homeUser.profimg == null}" src="/imgs/profile_img.png" id="none_pf" alt="기본_프로필이미지">' );
+	        modalClose();
+	       
+	    },
+	    error: function (err) {
+	        console.log(err);
+	    }
+	});
+}
+
+function editNickname(){
+	var nickFormData = $("#nickForm").serialize();
+	$.ajax({
+	    type: 'post',
+	    url: '/updateNickname',
+	    data: nickFormData,
+		success: function (data) {
+		        alert("닉네임이 변경되었습니다."); 
+		        $("#user_nick").replaceWith(data);
+		        $("#modal_nick").replaceWith(data);
+		        modalClose();
+		    },
+		    error: function (err) {
+		        console.log(err);
+		    }
+		}) 
 
 
+}
 
+/* function editPf(){
+	var editPfForm = $("#pfForm").serialize();
+	$.ajax({
+	    type: 'post',
+	    enctype: 'multipart/form-data',
+	    url: '/board/register/imageUpload',
+	    data: formData,
+	    processData: false,
+	    contentType: false,
+	    success: function (data) {
+	        console.log(data);
+
+	    },
+	    error: function (err) {
+	        console.log(err);
+	    }
+	})
+} */
 </script>
 </body>
 </html>
