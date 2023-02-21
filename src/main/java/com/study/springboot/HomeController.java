@@ -21,6 +21,7 @@ import com.study.springboot.post.PostService;
 import com.study.springboot.post.img.PostImgDto;
 import com.study.springboot.post.img.PostImgRepository;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -37,6 +38,11 @@ public String toLogIn() {
 	return "login";
 }
 
+@GetMapping("/signup")
+public void toSignup() {
+	
+}
+
 
 @GetMapping("/feed")
 public void toFeed() {
@@ -44,7 +50,7 @@ public void toFeed() {
 
 
 @GetMapping("/myHome/{mem_id}")
-public String toMyHome(@PathVariable("mem_id") String mem_id, Model model) throws IOException{
+public String toMyHome(@PathVariable("mem_id") String mem_id, HttpSession session, Model model) throws IOException{
 	log.info("-----------PostController toMyHome()-------------");
 	//홈 주인이 포스팅한 사진
 	List<PostDto> postList = postDao.selectAllMyPost(mem_id);
@@ -80,6 +86,17 @@ public String toMyHome(@PathVariable("mem_id") String mem_id, Model model) throw
 	//log.info("팔로잉 수-------------:"+countFlwing);
 	model.addAttribute("flwingList", flwingList);
 	model.addAttribute("countFlwing", countFlwing);
+	
+	//팔로우되어있는지 체크
+		MemberDto sessionUser = (MemberDto) session.getAttribute("user");
+		String sessionId = sessionUser.getMem_id();
+		int checkFlw = followDao.checkFollow(sessionId, mem_id);
+		model.addAttribute("checkFlw", checkFlw);
+		
+		//log.info("세션유저------"+sessionUser);
+		//log.info("페이지주인 아이디--------:"+mem_id);
+		//log.info("세션유저아이디-----"+sessionId);
+		//log.info("팔로우되어있으면 1------------:"+checkFlw);
 	
 	return "my_home";
 }

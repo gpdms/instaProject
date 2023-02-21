@@ -39,27 +39,33 @@
                 <div class="detail">
                     <div class="top">
                         <div class="user_name" id="user_nick" th:text="${homeUser.nickname}"></div>
-                        
+                   <!-- 본인 홈: 프로필편집,로그아웃 버튼-->     
                         <div th:if="${session.user != null and homeUser.mem_id == session.user.mem_id}">
 	                        <a href="#" class="profile_edit" id="pfBtn">프로필편집</a>
 	                        <a href="/logout" class="logout">로그아웃</a>
                         </div>
+                   <!-- 타인 홈: 팔로우 안되어있으면 팔로우 버튼, 되어있으면 언팔로우 버튼 -->
+							<div
+								th:if="${session.user != null and checkFlw == 0 and session.user.mem_id != homeUser.mem_id}">
+							<!-- <a th:href="@{/follow/{homeUser}(homeUser=${homeUser.mem_id})}" class="profile_edit" id="pfBtn">팔로우</a>  -->	
+								<a href="javascript:void(0);" onclick="follow();" class="" id="">팔로우</a> 
+							</div>
+							<div
+								th:if="${session.user != null and checkFlw == 1 and session.user.mem_id != homeUser.mem_id}">
+								<a href="javascript:void(0);" onclick="unfollow();" class="" id="">언팔로우</a> 
+							</div>
+                        
+                        
                     </div>
 
                     <ul class="middle">
-                        <li>
-                            <span>게시물</span>
-                            [[${postCount}]]
-                        </li>
-                        <li>
-                            <span>팔로워</span>
-                            3
-                        </li>
-                        <li>
-                            <span>팔로우</span>
-                            3
-                        </li>
-                    </ul>
+							<li><span>게시물</span> [[${postCount}]]</li>
+							<li><a href="#" id="flwerBtn" ><span>팔로워</span>[[${countFlwer}]]</a>
+							</li>
+							<li><a href="#" id="flwingBtn"><span>팔로잉</span>[[${countFlwing}]]</a>
+							</li>
+						</ul>
+						
                     <p class="about">
                         <span class="nick_name">갤러리</span>
                         <span th:if="${session.user != null and homeUser.mem_id == session.user.mem_id}"class="book_mark">북마크</span>
@@ -154,6 +160,90 @@
 			</div>
         </div>
     </div>
+    </div>
+    
+   <!---------- 팔로워 모달 -------------------->
+		<div class="followerMd flwmodal">
+			<div class="flwmodal-body">
+				<div th:each="follower:${flwerList}" class="thumb_user">
+					<div class="profile_thumb">
+						<img src="/imgs/thumb02.jpg" alt="프로필사진">
+					</div>
+					<div class="detail">
+						<div class="id">
+							<a th:href="@{/myHome/{mem_id}(mem_id=${follower})}">[[${follower}]]</a>
+						</div>
+						<div class="time">1시간 전</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<!------------ 팔로잉 모달 ------------->
+		<div class="followingMd flwmodal">
+			<div class="flwmodal-body">
+				<div th:each="following:${flwingList}" class="thumb_user">
+					<div class="profile_thumb">
+						<img src="/imgs/thumb02.jpg" alt="프로필사진">
+					</div>
+					<div class="detail">
+						<div class="id">
+							<a th:href="@{/myHome/{mem_id}(mem_id=${following})}">[[${following}]]</a>
+						</div>
+						<div class="time">1시간 전</div>
+					</div>
+				</div>
+
+			</div>
+		</div> 
+ <script>
+//----팔로워 모달-----------------
+let body2 = document.querySelector("body");
+let followerMd = document.querySelector('.followerMd');
+let flwerBtn = document.getElementById("flwerBtn");
+
+function flwerMdOpen() {
+  followerMd.style.display = 'block';
+  body2.style.overflow = "hidden";
+}
+function flwerMdClose() {
+  followerMd.style.display = "none";
+  body2.style.overflow = "auto";
+}
+
+// 클릭시 모달오픈
+flwerBtn.addEventListener('click', flwerMdOpen);
+
+// 외부 클릭시 모달창닫음
+window.addEventListener('click', (e) => {
+  e.target === followerMd ? flwerMdClose() : false
+})
+
+//----팔로잉 모달-----------------
+let body3 = document.querySelector("body");
+let followingMd = document.querySelector('.followingMd');
+let flwingBtn = document.getElementById("flwingBtn");
+
+function flwingMdOpen() {
+  followingMd.style.display = 'block';
+  body3.style.overflow = "hidden";
+}
+function flwingMdClose() {
+  followingMd.style.display = "none";
+  body3.style.overflow = "auto";
+}
+
+// 클릭시 모달오픈
+flwingBtn.addEventListener('click', flwingMdOpen);
+
+// 외부 클릭시 모달창닫음
+window.addEventListener('click', (e) => {
+  e.target === followingMd ? flwingMdClose() : false
+})
+
+
+</script>   
 
 
 <script src="/js/profile.js"></script>
@@ -232,6 +322,43 @@ function refresh() {
 	location.href = "/myHome/"+ mem_id ;
 	console.log(refresh);
 }
+
+
+//-------------팔로우하기---------------
+function follow(){
+	console.log("팔로우클릭");
+	var mem_id = /*[[${homeUser.mem_id}]]*/;
+	var json = {"mem_id" : mem_id };
+	console.log(JSON.stringify(mem_id));
+	console.log(mem_id);
+	$.ajax({
+		type: 'post',
+		url: '/follow',
+		data: JSON.stringify(json),
+		contentType: "application/json",
+		success: function(data){
+				location.href = "/myHome/"+ mem_id ;
+		}
+	})
+}
+//------------언팔로우하기---------------
+function unfollow(){
+	console.log("언팔로우클릭");
+	var mem_id = /*[[${homeUser.mem_id}]]*/;
+	var json = {"mem_id" : mem_id };
+	console.log(JSON.stringify(mem_id));
+	console.log(mem_id);
+	$.ajax({
+		type: 'post',
+		url: '/unfollow',
+		data: JSON.stringify(json),
+		contentType: "application/json",
+		success: function(data){
+				location.href = "/myHome/"+ mem_id ;
+		}
+	})
+}
+
 
 
 
