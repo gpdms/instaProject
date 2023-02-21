@@ -44,8 +44,8 @@ public void toFeed() {
 
 
 @GetMapping("/myHome/{mem_id}")
-public String toMyFeed(@PathVariable("mem_id") String mem_id, Model model) throws IOException{
-	log.info("-----------PostController toMyFeed()-------------");
+public String toMyHome(@PathVariable("mem_id") String mem_id, Model model) throws IOException{
+	log.info("-----------PostController toMyHome()-------------");
 	//홈 주인이 포스팅한 사진
 	List<PostDto> postList = postDao.selectAllMyPost(mem_id);
 	List<PostImgDto> firstImgs = new ArrayList<>();

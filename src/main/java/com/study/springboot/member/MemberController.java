@@ -1,17 +1,24 @@
 package com.study.springboot.member;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.study.springboot.follow.FollowDao;
 import com.study.springboot.follow.FollowDto;
+import com.study.springboot.post.ImgService;
 import com.study.springboot.post.PostDao;
 import com.study.springboot.post.PostDto;
 import com.study.springboot.post.img.PostImgDto;
@@ -28,7 +35,7 @@ public class MemberController {
 	private final MemberDao dao;
 	private final PostDao postDao;
 	private final FollowDao followDao;
-	
+	private final ImgService imgService;
 	
 	//회원가입
 	@PostMapping("/signUp")
@@ -132,30 +139,31 @@ public class MemberController {
 		return "login";
 	}
 	
+	
 	//프로필 이미지 제거  
-	@PostMapping("/deletePfImg")
-	public String deleteProfileImg(HttpSession session, Model model) {
+	@GetMapping("/deletePfImg")
+	@ResponseBody
+	public MemberDto deleteProfileImg(HttpSession session) {
 		MemberDto user = (MemberDto) session.getAttribute("user");
 		int del_result = dao.deleteProfimg(user);
-		model.addAttribute("homeUser",	dao.selectOneMember(user.getMem_id()));
-		return "my_home :: #profile_img";
+		return dao.selectOneMember(user.getMem_id());
 	}
 	
-//	@PostMapping("/updatePfImg")
-//	@ResponseBody
-//	public String updateProfileImg(HttpSession session) {
-//		int up_result = dao.updateProfimg((MemberDto) session.getAttribute("user"));
-//		if(up_result>0)
-//		return "프로필 이미지가 변경되었습니다.";
-//		return "프로필 이미지를 변경할 수 없습니다.";
-//	}
+	//프로필 이미지 업뎃
+	@PostMapping("/updatePfImg")
+	@ResponseBody
+	public MemberDto updateProfileImg(@RequestParam("mem_id") String mem_id, @RequestParam("profimg") MultipartFile img) {
+		int up_result = imgService.saveProfImg(mem_id, img);
+		MemberDto homeUser = dao.selectOneMember(mem_id);
+		return homeUser;
+	}
 	
 	//프로필 닉네임 업뎃 
 	@PostMapping("/updateNickname")
-	public String updateMemNickname(MemberDto member, Model model) {
+	@ResponseBody
+	public String updateMemNickname(MemberDto member) {
 		int up_result = dao.updateNickname(member);
-		model.addAttribute("homeUser", dao.selectOneMember(member.getMem_id()));
-	   return "my_home :: #user_nick";
+		String nickname = dao.selectOneMember(member.getMem_id()).getNickname();
+		return nickname;
 	}
-	
 }

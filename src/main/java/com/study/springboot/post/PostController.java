@@ -34,6 +34,7 @@ public class PostController {
 	private final ImgService imgService;
 	private final PostDao postDao;
 	private final PostImgRepository imgRepo;
+
 	private final MemberDao memberDao;
 	private final CommentDao commentdao;
 	
@@ -80,24 +81,7 @@ public class PostController {
         }
     }
 	
-    //포스트 이미지 출력 (img_id로)
-    @GetMapping("/imgs/post/{imgId}")
-    @ResponseBody
-    public Resource viewImageOne(@PathVariable("imgId") Long id, Model model) throws IOException{
-        PostImgEntity imgFile = imgRepo.findById(id).orElse(null);
-        UrlResource urlResource = new UrlResource("file:" + imgFile.getSavePath());
-        return urlResource;
-    }
-    
-    //프로필 이미지 출력 (mem_id로)
-    @GetMapping("/imgs/profile/{mem_id}")
-    @ResponseBody
-    public String viewProfileImg(@PathVariable("mem_id") String mem_id, Model model) throws IOException{
-    	String pfImgPath = memberDao.selectOneMember(mem_id).getProfimg();
-    	log.info(pfImgPath);
-        return pfImgPath;
-    }
-    
+ 
   
   @GetMapping("/view/{post_id}")
   public String toView(@PathVariable("post_id") int post_id, Model model) throws IOException{
@@ -117,7 +101,33 @@ public class PostController {
   	
   	return "view";
   }
-        
+  
+  //나의 feed 이미지 리스트 (post_id)로
+//@GetMapping("/feed/{login_id}")
+//public String toMyFeed(@PathVariable("login_id") String login_id, Model model) throws IOException{
+//	List<PostDto> myPostList = postDao.selectAllMyPost(login_id);
+//	log.info("-----------PostController toMyFeed()-------------");
+//	
+//	Map<String, List<Integer>> myImgMap = new HashMap<>();
+//	
+//	for (PostDto post : myPostList) {
+//		//포스트 한개의 이미지Dto들
+//		List<PostImgDto> imgs= postDao.selectAllMyImg(post.getPost_id());
+//		//포스트 한개의 이미지Id들
+//		List<Integer> imgIds = new ArrayList<>();
+//		for(PostImgDto img : imgs) {
+//			imgIds.add(img.getImg_id());
+//		}
+//		myImgMap.put(String.valueOf(post.getPost_id()), imgIds);
+//		imgIds = null;
+//	}
+//	log.info(myImgMap);
+//	
+//	model.addAttribute("myImgMap", myImgMap);
+//	model.addAttribute("myPostList", myPostList);
+//	return "feed";
+//}
+  
 }
     
     
