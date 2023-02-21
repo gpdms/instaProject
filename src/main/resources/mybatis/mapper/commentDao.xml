@@ -10,17 +10,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into comment (mem_id, post_id, com_text) values (#{mem_id}, #{post_id}, #{com_text})
 	</insert>	
 	
-	<select id="selectAllComment" resultType="com.study.springboot.comment.CommentDto">
+	<select id="selectAllComment" parameterType="com.study.springboot.comment.CommentDto" resultType="com.study.springboot.comment.CommentDto">
 		select * from comment where post_id = #{post_id}
+	</select> 
+	
+	<select id="selectAllSubComment" resultType="com.study.springboot.comment.SubCommentDto">
+		select * from subcomment where com_id = #{com_id}
 	</select>
 	
 	<delete id="deleteComment">
 		delete from comment where com_id = #{com_id}
 	</delete>
 	
+	<insert id="insertSubComment">
+		insert into subcomment (mem_id, com_id, subcom_text) values (#{mem_id}, #{com_id}, #{subcom_text})
+	</insert>
 	
-	<select id="calculateCommentTime" resultType="int">
-		select datediff (current_date(), (select com_time from comment where com_id = #{com_id}));
+	<!--<select id="calculateCommentTime" resultType="int">
+		select datediff (current_date(), (select com_time from comment where com_id = #{com_id}))
+	</select>-->
+	
+	<!--<select id="findSubComByPostId" resultType="Map">
+	   select * from (with sub1 as (select c.* from post p, comment c where p.post_id = c.post_id)
+	   select (a.post_id, s.subcom_id, s.com_id, s.mem_id, s.subcom_text, s.subcom_time) from sub1 a, subcomment s where a.com_id = s.com_id) as sub2
+	   where post_id = #{post_id}
 	</select>
+	
+	
+	<select id="test1" resultType="com.study.springboot.comment.CommentDto">
+		select c.* from (post p, comment c) where p.post_id = c.post_id
+	</select>
+	
+	
+	<select id="test2" resultType="com.study.springboot.comment.SubCommentDto">
+		with sub1 as (select c.* from post p, comment c where p.post_id = c.post_id)
+		select a.post_id, s.subcom_id, s.com_id, s.mem_id, s.subcom_text, s.subcom_time from sub1 a, subcomment s where a.com_id = s.com_id;
+	</select>-->
 	
 </mapper>

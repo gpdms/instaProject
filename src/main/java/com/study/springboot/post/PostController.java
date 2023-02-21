@@ -1,9 +1,7 @@
 package com.study.springboot.post;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,14 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.study.springboot.comment.CommentDao;
+import com.study.springboot.comment.CommentDto;
 import com.study.springboot.member.MemberDao;
-import com.study.springboot.member.MemberDto;
-import com.study.springboot.post.img.PostImgDto;
 import com.study.springboot.post.img.PostImgEntity;
 import com.study.springboot.post.img.PostImgRepository;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -39,6 +35,7 @@ public class PostController {
 	private final PostDao postDao;
 	private final PostImgRepository imgRepo;
 	private final MemberDao memberDao;
+	private final CommentDao commentdao;
 	
 //	@PostConstruct
 //	public void init() throws MalformedURLException {
@@ -110,8 +107,10 @@ public class PostController {
   	List<PostImgEntity> imgs = new ArrayList<>();
   	imgs = imgRepo.findByPostIdAndDeleteYnOrderByInTimeDesc(post_id, "n");
 	
-	Map<String,Integer> postTimeMap= postService.calPostTime(post_id); //포스팅 시간
 	
+  	Map<String,Integer> postTimeMap= postService.calPostTime(post_id); //포스팅 시간
+	List<CommentDto> cList = commentdao.selectAllComment(post_id);
+	model.addAttribute("cList", cList);
 	model.addAttribute("timeMap",postTimeMap);
   	model.addAttribute("imgs", imgs); 
   	model.addAttribute("post", post);
