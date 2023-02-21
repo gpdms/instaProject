@@ -67,8 +67,7 @@
                         <header class="top">
                             <div class="user_container">
                                 <div class="profile_img">
-                                    <img th:if="${postUser.profimg == null}" src="/imgs/profile_img.png" alt="기본_프로필이미지">
-                    				<img th:if="${postUser.profimg != null}" th:src="|/profile/${homeUser.mem_id}|" alt="프로필이미지">
+                    				<img th:src="|/profile/${homeUser.mem_id}|" alt="프로필이미지">
                                 </div>
                                 <div class="user_name">
                                     <div class="nick_name">[[${post.mem_id}]]</div>
@@ -83,8 +82,7 @@
                         	<!-- 작성 내용 -->
                             <div class="admin_container">
                                 <div class="admin">
-	                                <img th:if="${postUser.profimg == null}" src="/imgs/profile_img.png" alt="기본_프로필이미지">
-	                    			<img th:if="${postUser.profimg != null}" th:src="|/profile/${homeUser.mem_id}|" alt="프로필이미지">
+	                    			<img th:src="|/profile/${homeUser.mem_id}|" alt="프로필이미지">
                                 </div>
                                 <div class="comment">
                                     <span class="user_id">[[${post.mem_id}]]</span>

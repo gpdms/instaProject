@@ -31,8 +31,7 @@
             <div class="hori_cont">
                 <div class="profile_wrap">
                     <div class="profile_img" >
-                    	<img id="pf_none" th:if="${homeUser.profimg == null}" src="/imgs/profile_img.png" alt="기본_프로필이미지">
-                    	<img id="pf_img" th:if="${homeUser.profimg != null}" th:src="|/profile/${homeUser.mem_id}|" alt="프로필이미지">
+                    	<img id="pf_img" th:src="|/profile/${homeUser.mem_id}|" alt="프로필이미지">
                    </div>
                 </div>
 
