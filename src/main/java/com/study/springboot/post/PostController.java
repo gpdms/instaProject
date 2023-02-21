@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +19,8 @@ import com.study.springboot.comment.CommentDao;
 import com.study.springboot.comment.CommentDto;
 import com.study.springboot.comment.SubComShowDto;
 import com.study.springboot.member.MemberDao;
+import com.study.springboot.member.MemberDto;
+import com.study.springboot.post.img.PostImgDto;
 import com.study.springboot.post.img.PostImgEntity;
 import com.study.springboot.post.img.PostImgRepository;
 
@@ -80,23 +83,25 @@ public class PostController {
     }
 	
  
-  
-  @GetMapping("/view/{post_id}")
-  public String toView(@PathVariable("post_id") int post_id, Model model) throws IOException{
+  @GetMapping("/view/{post_idS}")
+  public String toView(@PathVariable("post_idS") int post_id, Model model) throws IOException{
   	log.info("-----------PostController toView()-------------");
   	
   	PostDto post = postDao.selectOnePost(post_id);
   	List<PostImgEntity> imgs = new ArrayList<>();
   	imgs = imgRepo.findByPostIdAndDeleteYnOrderByInTimeDesc(post_id, "n");
-	
-	
+  	
   	Map<String,Integer> postTimeMap= postService.calPostTime(post_id); //포스팅 시간
 	List<CommentDto> cList = commentdao.selectAllComment(post_id); // 댓글 목록
 	List<SubComShowDto> sList = commentdao.findSubComByPostId(post_id); // 대댓글 목록
 	
 	//model.addAttribute("commTimeMap", commTimeMap); // 댓글 작성 시간 구현중
 	model.addAttribute("sList", sList);
+  	
+  	MemberDto postingUser = memberDao.selectOneMember(post.getMem_id());//포스팅 유저 정보
+  	
 	model.addAttribute("cList", cList);
+	model.addAttribute("postUser", postingUser);
 	model.addAttribute("timeMap",postTimeMap);
   	model.addAttribute("imgs", imgs); 
   	model.addAttribute("post", post);
@@ -104,32 +109,36 @@ public class PostController {
   	return "view";
   }
   
-  //나의 feed 이미지 리스트 (post_id)로
-//@GetMapping("/feed/{login_id}")
-//public String toMyFeed(@PathVariable("login_id") String login_id, Model model) throws IOException{
-//	List<PostDto> myPostList = postDao.selectAllMyPost(login_id);
-//	log.info("-----------PostController toMyFeed()-------------");
-//	
-//	Map<String, List<Integer>> myImgMap = new HashMap<>();
-//	
-//	for (PostDto post : myPostList) {
-//		//포스트 한개의 이미지Dto들
-//		List<PostImgDto> imgs= postDao.selectAllMyImg(post.getPost_id());
-//		//포스트 한개의 이미지Id들
-//		List<Integer> imgIds = new ArrayList<>();
-//		for(PostImgDto img : imgs) {
-//			imgIds.add(img.getImg_id());
-//		}
-//		myImgMap.put(String.valueOf(post.getPost_id()), imgIds);
-//		imgIds = null;
-//	}
-//	log.info(myImgMap);
-//	
-//	model.addAttribute("myImgMap", myImgMap);
-//	model.addAttribute("myPostList", myPostList);
-//	return "feed";
-//}
-  
+	@GetMapping("/updatePostForm/{post_id}")
+	public String  toUpdateForm(@PathVariable("post_id") String post_idS, Model model) {
+		int post_id = Integer.parseInt(post_idS);
+		PostDto post = postDao.selectOnePost(post_id);
+	  	List<PostImgEntity> imgs = new ArrayList<>();
+	  	imgs = imgRepo.findByPostIdAndDeleteYnOrderByInTimeDesc(post_id, "n");
+	  	int imgBoxSize = imgs.size() * 600;
+	  	
+		model.addAttribute("imgBoxSize", imgBoxSize);
+		model.addAttribute("imgCount", imgs.size());
+	  	model.addAttribute("post", post);
+	  	model.addAttribute("imgs", imgs);
+		return "update_post";
+	}
+	
+	@GetMapping("/deleteImg")
+	public String  deleteImg(@RequestBody PostImgDto img, Model model) {
+		int del_result = postDao.deletePostImg(img.getImg_id());
+		
+		if(del_result>0) {
+		List<PostImgEntity> imgs = new ArrayList<>();
+	  	imgs = imgRepo.findByPostIdAndDeleteYnOrderByInTimeDesc(img.getPost_id(), "n");
+	  	int imgBoxSize = imgs.size() * 600; 
+	  	
+		model.addAttribute("imgBoxSize", imgBoxSize);
+		model.addAttribute("imgCount", imgs.size());
+	  	model.addAttribute("imgs", imgs);
+		}
+	  	return "/view :: #img_preview"; 
+	}
 }
     
     

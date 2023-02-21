@@ -53,6 +53,7 @@ public class PostService {
     	postTimeMap.put("day", postDay);
     	postTimeMap.put("week", postWeek);
 		return postTimeMap;
-    	
     }
+    
+  
 }

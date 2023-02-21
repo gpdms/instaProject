@@ -13,13 +13,21 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/detail-page.css">
+    <link rel="stylesheet" href="/css/update_modal.css">
 	<!-- 이미지 슬라이드 -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
 	
-    <style>
-        #main_container {
-            /*height: 6000px;*/
-        }
+    <style>                                                                                                                                                                   
+ 		.bx-wrapper .bx-controls .bx-controls-auto{ 
+ 			display : none; 
+ 		} 
+ 		.bx-wrapper .bx-controls .bx-controls-direction .bx-next, .bx-prev{
+ 			z-index: 1;
+ 		}
+ 		
+ 		.bx-wrapper .bx-controls .bx-pager{ 
+ 			display : none; 
+ 		} 
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     
@@ -44,12 +52,6 @@
                 
 					<!--이미지 -->
                     <div class="img_section">
-<!--                         <div class="trans_inner"> -->
-<!--                             <img src="imgs/img_section/img03.jpg" alt=""> -->
-<!--                         </div> -->
-<!-- 	                   <th:block th:each="img : ${imgs}" class="trans_inner" > -->
-<!-- 							<img th:src="|/images/${img.imgId}|" width="150" height="150" alt="포스트이미지"> -->
-<!-- 	                   </th:block> -->
 	                  <div class="trans_inner">
 		                  <ul class="bxslider">
 						     <li th:each="img : ${imgs}">
@@ -65,26 +67,25 @@
                         <header class="top">
                             <div class="user_container">
                                 <div class="profile_img">
-                                    <img src="/imgs/thumb.jpeg" alt="">
+                                    <img th:if="${postUser.profimg == null}" src="/imgs/profile_img.png" alt="기본_프로필이미지">
+                    				<img th:if="${postUser.profimg != null}" th:src="|/profile/${homeUser.mem_id}|" alt="프로필이미지">
                                 </div>
                                 <div class="user_name">
                                     <div class="nick_name">[[${post.mem_id}]]</div>
                                     <div class="country">Seoul, South Korea</div>
                                 </div>
                             </div>
-                            <div class="sprite_more_icon" data-name="more">
-                                <ul class="more_detail">
-                                    <li>팔로우</li>
-                                    <li>수정</li>
-                                    <li>삭제</li>
-                                </ul>
-                            </div>
+							<!--  글 삭제, 수정  -->
+                            <div id="upBtn" class="sprite_more_icon" data-name="more"> </div>
                         </header>
 						
                         <section class="scroll_section"> 
                         	<!-- 작성 내용 -->
                             <div class="admin_container">
-                                <div class="admin"><img src="/imgs/thumb.jpeg" alt="user"></div>
+                                <div class="admin">
+	                                <img th:if="${postUser.profimg == null}" src="/imgs/profile_img.png" alt="기본_프로필이미지">
+	                    			<img th:if="${postUser.profimg != null}" th:src="|/profile/${homeUser.mem_id}|" alt="프로필이미지">
+                                </div>
                                 <div class="comment">
                                     <span class="user_id">[[${post.mem_id}]]</span>
                                     <div style="height:5px;"></div>
@@ -99,6 +100,9 @@
 							
 							<!-- 댓글 -->
 							 <div id="commentBox">
+							
+							<!-- 댓글 -->
+							 <div id="commentTable">
 							 	<div class="user_container-detail" th:each="comm,i : ${cList}">
 	                                <div class="user"><img src="imgs/thumb02.jpg" alt="user"></div>
 	                               		 <div class="comment">
@@ -198,6 +202,22 @@
     </div>
 </section>
 
+ <!-- 글 삭제, 수정 버튼 모달 -->
+	<div class="updateMd upmodal">
+     <div class="upmodal-body">	
+	    <div th:if="${session.user.mem_id != post.mem_id}">
+	    	<a>팔로우</a> <hr>
+	    </div>
+	    <div th:if="${session.user.mem_id == post.mem_id}"> 
+		    <a th:href="@{/updatePostForm/{post_idS}(post_idS=${post.post_id})}">수정</a> <hr>
+		    <a style="color:red;">삭제</a> <hr>
+		</div>    
+        <a style="color:#999;" id="upCloseBtn">취소</a>
+      </div>
+    </div>
+  
+
+<script src="/js/update_modal.js"></script>
 
 <!-- 이미지 슬라이드 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -215,13 +235,13 @@
 	        autoControls: false, // 시작 및 중지버튼 보여짐
 	        pager: false, // 페이지 표시 보여짐
 	        captions: true, // 이미지 위에 텍스트를 넣을 수 있음
+	        infiniteLoop: false, //무한루프 x
+	        hideControlOnEnd: true 
 	    });
 	});
-  
 </script>
 
 <script>
-
 	 // 대댓글창 출력 함수
 	$(document).ready(function() {
 		$(".deleteBox").next().click(function() {

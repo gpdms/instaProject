@@ -29,7 +29,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT COUNT(*) from  post where mem_id = #{mem_id}
 	</select>
 	
-	
 	<select id="selectAllImgByPost" resultType="com.study.springboot.post.img.PostImgDto">
 		select 
 			* 
@@ -48,7 +47,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values (#{mem_id}, #{content})
 	</insert>
 	
+	<!--시간 계산 -->
 	<select id="diffPostTime" resultType="int">
 		select timestampdiff (second,  (select posttime from post where post_id = #{post_id}), current_timestamp());
 	</select>
+	
+	<!-- 게시글 내용 변경 -->	
+	<update id="updatePostContent" parameterType="com.study.springboot.post.PostDto">
+		update post set content = #{content} where post_id = #{post_id}
+	</update>
+	
+	<!-- 포스트 이미지 삭제 -->
+	<update id="deletePostImg" parameterType="int">
+		update post_img set delete_yn = 'y' where img_id = #{img_id}
+	</update>
+	
 </mapper>

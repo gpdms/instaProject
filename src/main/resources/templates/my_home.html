@@ -130,11 +130,11 @@
       <div class="pfmodal-body">
 		<div class="thumb_user_pf"> 
            <div class="profile_thumb_pf" >
-              <img id="pf_none_modal" th:if="${homeUser.profimg == null}" src="/imgs/profile_img.png" alt="기본_프로필이미지">
-              <img id="pf_img_modal" th:if="${homeUser.profimg != null}" th:src="|/profile/${homeUser.mem_id}|" alt="프로필이미지">
+              <img id="pf_img_modal" th:src="|/profile/${homeUser.mem_id}|" alt="프로필이미지">
            </div>
            <div class="detail">
-               <div id="modal_nick" th:text="${homeUser.nickname}+'님의 프로필'"></div>
+               <div id="modal_nick" th:text="|${homeUser.nickname}님의 프로필|"></div>
+               
            </div>
 		</div>
 		<hr> <label className="input-file-button" for="profimg" style="color:#0095F6;">
@@ -320,7 +320,6 @@ function editPf(){
 function refresh() {
 	const mem_id = /*[[${homeUser.mem_id}]]*/;
 	location.href = "/myHome/"+ mem_id ;
-	console.log(refresh);
 }
 
 
@@ -329,8 +328,8 @@ function follow(){
 	console.log("팔로우클릭");
 	var mem_id = /*[[${homeUser.mem_id}]]*/;
 	var json = {"mem_id" : mem_id };
-	console.log(JSON.stringify(mem_id));
-	console.log(mem_id);
+	//console.log(JSON.stringify(mem_id));
+	//console.log(mem_id);
 	$.ajax({
 		type: 'post',
 		url: '/follow',
@@ -346,8 +345,8 @@ function unfollow(){
 	console.log("언팔로우클릭");
 	var mem_id = /*[[${homeUser.mem_id}]]*/;
 	var json = {"mem_id" : mem_id };
-	console.log(JSON.stringify(mem_id));
-	console.log(mem_id);
+	//console.log(JSON.stringify(mem_id));
+	//console.log(mem_id);
 	$.ajax({
 		type: 'post',
 		url: '/unfollow',

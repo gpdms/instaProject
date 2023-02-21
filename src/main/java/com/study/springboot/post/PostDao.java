@@ -12,7 +12,12 @@ public interface PostDao {
 	public PostDto selectOnePost(int post_id); 
 	public List<PostDto> selectAllMyPost(String mem_id);
 	public int insertPost(PostDto post);
-	public List<PostImgDto> selectAllImgByPost(int post_id);
 	public int countMyPost(String mem_id);
 	public int diffPostTime(int post_id);
+	public int updatePostContent(PostDto post);
+	
+//	이미지 관련
+	public List<PostImgDto> selectAllImgByPost(int post_id);
+	public int deletePostImg(int img_id);
+	
 }

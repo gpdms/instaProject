@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>instagram</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/new_post.css">
+    <link rel="shortcut icon" href="/imgs/instagram.png">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/update.css">
+</head>
+<body>
+
+
+<section id="container">
+  	<!-- 헤더 -->
+   	<div th:replace="~{/fragments/header.html :: fragment-header}"></div>
+    
+    <!-- 사이드메뉴바 nav-->
+    <div th:replace="~{/fragments/nav.html :: fragment-nav}"></div>
+
+	<!-- 메인 -->
+    <div id="main_container">
+
+        <div class="post_form_container">
+            <form  action="/" method="post" class="post_form">
+<!--            <input type="hidden" name="post_id" value="0">  -->
+                <div class="title">
+                    포스트 수정
+                </div>
+
+				<!-- 이미지 --> 
+				<div id="img_preview" class="slide">
+			      <ul class="imgSlide" th:style="|width:${imgBoxSize}px;|">
+			        <li id="img_container" th:each="img : ${imgs}">
+			        	<button id="del_img" type="button" th:onclick="|delImg(${img.imgId})|">삭제</button>
+			        	<img id="up_img" th:src="|/imgs/post/${img.imgId}|" width="600" height="600" alt="포스트이미지">
+			        </li>
+			      </ul>
+			      <div class="moveBtn">
+			       <a href="#" class="pre">
+          			< </a>
+           			 <a href="#" class="next"> > </a>
+			      </div>
+			    </div>
+                
+                <!--이미지 -->
+<!--                 <div class="preview"> -->
+<!--                   <ul class="bxslider"> -->
+<!-- 				     <li th:each="img : ${imgs}"> -->
+<!-- 				     	<div id="testImg"> -->
+<!-- 					     	<img th:src="|/imgs/post/${img.imgId}|" width="600" height="500" alt="포스트이미지"> -->
+<!-- 					     	<button class="btn1" type="button" onclick="javascript:sensorBtnClick('btn1');">삭제</button> -->
+<!-- 				     	</div> -->
+<!-- 				     </li> -->
+<!-- 				  </ul> -->
+<!--                 </div> -->
+				<p>
+                    <textarea name="content" id="text_field" cols="50" rows="5" ></textarea> 
+                </p>
+                <p>
+            		<input type="hidden" name="mem_id" th:value="${session.user.mem_id}" >
+                </p>
+               
+                <input class="submit_btn" type="submit" value="저장">
+            </form>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+<script src="/js/update.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script th:inline="javascript">
+//사진 삭제
+function delImg(imgId){
+	let ok = confirm(" 사진을 삭제하시겠어요? \n 이 사진을 삭제한 경우 Instagram 앱에서 내 활동 > 최근 삭제한 컨텐츠의 메뉴로 이동하여 30일 이내에 복원할 수 있습니다. \n 30일이 지나면 영구적으로 삭제됩니다.");
+	if (ok) {
+		var json = {img_id : imgId,
+					post_id : /*[[${post.post_id}]]*/		
+		};
+		  $.ajax({
+			    type: 'get',
+			    url: '/deleteImg', 
+			    data: JSON.stringify(json),
+				contentType: "application/json",
+			    success: function (data) {
+			        alert("프로필 이미지가 삭제되었습니다.");
+			    },
+			    error: function (err) {
+			        console.log(err);
+			        alert("프로필 이미지를 삭제할 수 없습니다.");
+			    } 
+		  }) 
+		  
+    }
+}
+
+//사진 슬라이드 
+var i = 0; // 사진 인덱스를 저장할 변수
+var max = /*[[${imgCount}]]*/;
+$(".pre").click(function() { // img 크기만큼 왼쪽으로 이동
+  if (i > 0) {
+    i = i - 1;
+    $(".imgSlide").stop().animate({
+      "left": -600 * i + "px"
+    }, "slow");
+  }
+});
+
+$(".next").click(function() { // img 크기만큼 오른쪽으로 이동
+  if (i < 2 && i < (max-1)) {
+    i = i + 1;
+    $(".imgSlide").stop().animate({
+      "left": -600 * i + "px"
+    }, "slow");
+  }
+});
+
+// });
+// var fileInput  = document.querySelector( "#id_photo" ),
+//     button     = document.querySelector( ".input-file-trigger" ),
+//     the_return = document.querySelector(".file-return");
+// Show image
+// fileInput.addEventListener('change', handleImage, false);
+// var canvas = document.getElementById('imageCanvas');
+// var ctx = canvas.getContext('2d');
+//         function handleImage(e){
+//            var reader = new FileReader();
+//            reader.onload = function(event){
+//                var img = new Image();
+//                // var imgWidth =
+//                img.onload = function(){
+//                    canvas.width = 300;
+//                    canvas.height = 300;
+//                    ctx.drawImage(img,0,0,300,300);
+//                };
+//                img.src = event.target.result;
+//                // img.width = img.width*0.5
+//                // canvas.height = img.height;
+//            };
+//            reader.readAsDataURL(e.target.files[0]);
+//        }
+</script>
+</body>
+</html>

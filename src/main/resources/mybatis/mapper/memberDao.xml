@@ -33,7 +33,7 @@
 	</update>
 <!-- 회원 프로필 삭제(null) -->		
 	<update id="deleteProfimg" parameterType="com.study.springboot.member.MemberDto">
-		update member set profimg = null where mem_id = #{mem_id}
+		update member set profimg = 'D:/pf/profile_img.png' where mem_id = #{mem_id}
 	</update>
 
 

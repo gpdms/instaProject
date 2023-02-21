@@ -1,0 +1,75 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* css 초기화*/
+
+* {
+  padding: 0;
+  margin: 0 auto;
+  list-style: none;
+  text-align: center;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#img_container{
+	position : relative;
+	width: 600px;
+	height:700px;
+}
+#del_img{
+	position: absolute;
+	top: 2%;
+    left : 2%; 	
+}
+
+.slide {
+  width: 600px;
+  height: 700px;
+  position: relative;
+  overflow: hidden;
+  /*영역 밖으로 튀어나온 오브젝트는 숨긴다.*/
+}
+
+.imgSlide {
+  /* 이미지 크키 X 이미지 개수 */
+  height: 700px;
+  position: absolute;
+  z-index: 1;
+  margin-left:0;
+  padding-left:0;
+}
+
+.imgSlide li {
+  float: left;
+  /*이미지를 옆으로 나열시킨다.*/
+}
+
+.imgSlide img {
+  width: 600px;
+  height: 600px;
+  padding-top : 50px;
+}
+
+.moveBtn {
+  width: 600px;
+  color: white;
+  top: 35%;
+  position: absolute;
+  z-index: 2;
+  font-size: 60px;
+  margin-top: 20px;
+}
+
+.moveBtn .pre {
+  float: left;
+  margin-left: 10px;
+}
+
+.moveBtn .next {
+  float: right;
+  margin-right: 10px;
+}
