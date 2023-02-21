@@ -81,7 +81,7 @@
                             </div>
                         </header>
 						
-                        <section class="scroll_section" style="height:400px;"> 
+                        <section class="scroll_section"> 
                         	<!-- 작성 내용 -->
                             <div class="admin_container">
                                 <div class="admin"><img src="/imgs/thumb.jpeg" alt="user"></div>
@@ -98,26 +98,28 @@
                             </div>
 							
 							<!-- 댓글 -->
-							
-							<!-- 댓글 -->
-							
-							 <div id="commentTable">
+							 <div id="commentBox">
 							 	<div class="user_container-detail" th:each="comm,i : ${cList}">
 	                                <div class="user"><img src="imgs/thumb02.jpg" alt="user"></div>
 	                               		 <div class="comment">
+	                               		 	<!-- 댓글 작성자, 댓글 내용 출력 -->
 		                                    <span class="user_id">[[${comm.mem_id}]]</span>[[${comm.com_text}]]
 		                                    <input type="hidden" th:value="${comm.mem_id}">
 		                                    <input type="hidden" id="com_id" th:value="${comm.com_id}">
 		                                   
 		                                   <!-- 댓글 crud버튼 박스 -->
 		                                    <div class="commDetailBox" style="display:flex; color:#999; font-size:15px;">
-												<span>일전</span>&nbsp;&nbsp;
+												<span>
+												
+												</span>&nbsp;&nbsp;
+												<!-- 삭제버튼은 로그인 한 사람의 아이디와 작성자 아이디가 동일할때만 출력 -->
 													<span class="deleteBox">
 														<a th:href="@{/deleteComment(com_id=${comm.com_id})}" th:if="${session.user.mem_id == comm.mem_id}" style="text-decoration:none; color:#999;">
 														삭제
 														</a>
 													</span>&nbsp;&nbsp;
-												<span><a th:value="${#ids.next('list')}" th:id="${#ids.seq('subComBtnId_')}"> 답글 달기 </a></span>&nbsp;
+													<!-- 대댓글 작성 버튼 -->
+												<span><a> 답글 달기 </a></span>&nbsp;
 												<!-- 댓글 작성자 id와 로그인 세션값 id 비교해서 일치하는 경우에 수정 버튼 출력 th:if 사용 -->
 											</div>
 		                                    
@@ -130,6 +132,7 @@
 												</form>
 		                                    </div>
 		                                   
+		                                   <!-- 댓글 아이콘 박스 -->
 		                                    <div class="icon_wrap">
 		                                        <div class="more_trigger">
 		                                            <div class="sprite_more_icon"></div>
@@ -138,20 +141,25 @@
 		                                            <div class="sprite_small_heart_icon_outline"></div>
 		                                        </div>
 		                                    </div>
-	                                        	<div class="subCommentArea" id="subCommentArea" style="display:none";>
-	                                        	</div>
+		                                    
+		                                    <!-- 대댓글 출력 란 -->
+                                        	<div class="subCommentArea" id="subCommentArea">
+	                                        	<ul th:each="subcomm : ${sList}">
+	                                        		<li th:if="${subcomm.com_id == comm.com_id}">[[${subcomm.subcom_text}]]</li>
+	                                        	</ul>
+                                        	</div>
+                                        	
 		                                </div>
 	                            	</div> 
 	                           </div> 
-	                           
-	                           
-	                           
+	                           <!-- 댓글 -->
                         </section>
 
                         <div class="bottom_icons">
                             <div class="left_icons">
                                 <div class="heart_btn">
-                                    <div class="sprite_heart_icon_outline" data-name="heartbeat"></div>
+                                	<!-- 좋아요 버튼 -->
+                                    <div class="sprite_heart_icon_outline" data-name="heartbeat" onclick=""></div>
                                 </div>
                                 <div>
                                     <div class="sprite_bubble_icon"></div>
@@ -174,16 +182,15 @@
                         <div class="timer">2시간</div>
 
 
-						<!-- th:if 로그인세션 존재하면 출력되게 -->
 						
-                        	<input type="hidden" id = "mem_id" name="mem_id" value="${session.user.mem_id}">
-                        	<input type="hidden" id = "post_id" name="post_id" th:value="${post.post_id}">
-                            <input type="text" id = "com_text" name="com_text" placeholder="댓글달기..">
-                            <button id="upload_btn"><a onclick="insertComment()" style="text-decoration:none">게시</a></button>
-                            
-                            
-                           
-
+						<!-- 댓글 작성 창 -->
+                       	<input type="hidden" id = "post_id" name="post_id" th:value="${post.post_id}">
+                        <input type="text" id = "com_text" name="com_text" placeholder="댓글달기..">
+                        <button id="upload_btn"><a onclick="insertComment()" style="text-decoration:none">게시</a></button>
+                        
+						
+						<button onclick="ajax()">테스트버튼</button>
+						<div class="testArea"></div>
                     </div>
                 </article>
             </div>
@@ -232,22 +239,6 @@
 		})
 	});
 
-	function updateComment() {
-		var params = {
-				post_id : $("#post_id").val(),
-				com_text : $('#com_text').val()
-			};
-	    $.ajax({
-	        url: "/insertComment",
-	        type: "POST",
-	        data: params,
-	    })
-	    .done(function (fragment) {
-	        $('#commentTable').replaceWith(fragment);
-	    });
-	}
-	 
-	 
 	// 댓글 인서트 메소드
 	 function insertComment() {
 			var params = {
@@ -262,7 +253,7 @@
 			}).done(function (fragment) {
 				$('#com_text').val("")
 				// 댓글 작성 후 작성란 공백처리
-				 $("#commentTable").replaceWith(fragment);
+				 $("#commentBox").replaceWith(fragment);
 			})
 		} 
 	
@@ -275,8 +266,8 @@
 			// 댓글 작성 버튼을 기준으로 prev와 next를 이용해서 com_id 및 대댓글 작성란을 찾게끔 구현했음.
 		
 			var params = {
-					"com_id" : com_id,
-					"subcom_text" : subcom_text
+					com_id : com_id,
+					subcom_text : subcom_text
 				};
 		
 			$.ajax({
@@ -286,9 +277,8 @@
 			}).done(function (fragment) {
 				 $(".subcom_text").val("")
 				 // 대댓글 작성 후 작성란 공백처리
-				 $("#subComShowHere").append(fragment);
+				 $("#subCommentArea").replaceWith(fragment);
 			})
-			
 		})
 	 })
 	 
@@ -305,37 +295,15 @@
 				location.reload();
 			})
 		}
-		
-	document.querySelector("#text_btn").addEventListener("click", function() {
-		const a = "<div>테스트</div>";
-		
-		$.ajax({
-			type : "POST",
-			url : "/ajaxTest",
-			dataType : "text",
-			data : "a", 
-			success : function(res) {
-				$(".comment_box").append(data)
-				console.log("성공");
-			},
-			error : function(request,status,error) {
-				console.log("통신 실패" + "\n" + 
-				"code : " + request.status + "\n" + 
-				"message : " + request.responseText + "\n" + 
-				"error" + error
-				)
-			}
-		})
-	})
 	
-	
+	// 피드 댓글 출력용 테스트 메소드
 	function ajax(){
 		  $.ajax({
-		    url: "/test",
+		    url: "/ajaxTest",
 		    type: "POST",
 		    success : function(data){
 		      //alert(data)
-		     $(".comment_box").append(data)
+		     $(".testArea").append(data)
 		    },
 		    error : function(){
 		      alert("에러")		
@@ -346,15 +314,10 @@
 	/* 
 		해결해야 할 문제
 			
-		3. 댓글 수정기능(대댓글 기능과 비슷하게), 대댓글 삭제기능
-		4. 방금 전, 몇분 전, 몇시간 전, 몇일 전, 몇주 전 등 시간 출력하기
-			7
-		5. 로그인 세션값이 존재하면 댓글 창 출력되게
-			
-			
-		- 좋아요
-		1. 누르면 인서트, 빨간 하트로 시간차 줘서 바뀌게
-		2. 
+		1. 댓글창 css 완성
+		2. 댓글 작성자 프로필 사진 불러올 수 있게	
+		3. 댓글 좋아요
+		4. 댓글 작성 시간
 	*/
 	
 </script>

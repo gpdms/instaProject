@@ -15,13 +15,14 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor 
-public class SubCommentDto {
-	
+public class SubComShowDto {
+
+	private int post_id;
 	private int subcom_id;
 	private int com_id;
 	private String mem_id;
 	private String subcom_text;
 	private Timestamp subcom_time;
 	private Timestamp up_time;
-
+	
 }

@@ -2,6 +2,7 @@
 
 .contents_detail{
     width:1000px;
+    height: 700px;
     display: flex;
     border: 1px solid rgba(0,0,0,.0975);
     border-radius: 3px;
@@ -409,6 +410,11 @@
     border-bottom: 1px solid rgba(0,0,0,0.09);
     color:#ed4956;
 }
+
+#commentBox {
+	height:300px;
+}
+
 /*---------------------------detail-page*/
 
 

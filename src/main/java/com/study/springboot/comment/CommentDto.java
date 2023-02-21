@@ -2,6 +2,8 @@ package com.study.springboot.comment;
 
 import java.sql.Timestamp;
 
+import com.study.springboot.post.PostDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,4 +24,5 @@ public class CommentDto {
 	private Timestamp com_time;
 	private String up_time;
 	
+	private PostDto postDto;
 }
