@@ -100,38 +100,28 @@
 							<!-- 댓글 -->
 							 <div id="commentBox">
 							 	<div class="user_container-detail" th:each="comm,i : ${cList}">
-	                                <div class="user"><img src="imgs/thumb02.jpg" alt="user"></div>
+	                                <div class="user"><img src="/imgs/thumb02.jpg" alt="user"></div>
 	                               		 <div class="comment">
 	                               		 	<!-- 댓글 작성자, 댓글 내용 출력 -->
-		                                    <span class="user_id">[[${comm.mem_id}]]</span>[[${comm.com_text}]]
+		                                    <span class="user_id">[[${comm.mem_id}]]</span>
+		                                    <span class="comm_content">[[${comm.com_text}]]</span>
 		                                    <input type="hidden" th:value="${comm.mem_id}">
 		                                    <input type="hidden" id="com_id" th:value="${comm.com_id}">
 		                                   
 		                                   <!-- 댓글 crud버튼 박스 -->
-		                                    <div class="commDetailBox" style="display:flex; color:#999; font-size:15px;">
-												<span>
-												
-												</span>&nbsp;&nbsp;
+		                                    <div class="commDetailBox">
 												<!-- 삭제버튼은 로그인 한 사람의 아이디와 작성자 아이디가 동일할때만 출력 -->
-													<span class="deleteBox">
-														<a th:href="@{/deleteComment(com_id=${comm.com_id})}" th:if="${session.user.mem_id == comm.mem_id}" style="text-decoration:none; color:#999;">
-														삭제
-														</a>
-													</span>&nbsp;&nbsp;
+												<span class="deleteBox">
+													<a th:href="@{/deleteComment(com_id=${comm.com_id})}" th:if="${session.user.mem_id == comm.mem_id}" style="text-decoration:none; color:#999;">
+													삭제
+													</a>
+												</span>&nbsp;&nbsp;
 													<!-- 대댓글 작성 버튼 -->
-												<span><a> 답글 달기 </a></span>&nbsp;
+												<span class="replyBtn"><a>답글 달기</a></span>&nbsp;&nbsp;
+												<span class="showSubCom"><a onclick="">댓글 보기</a></span>&nbsp;&nbsp;
 												<!-- 댓글 작성자 id와 로그인 세션값 id 비교해서 일치하는 경우에 수정 버튼 출력 th:if 사용 -->
 											</div>
 		                                    
-		                                    <!-- 대댓글 입력 폼 -->
-		                                    <div class="subComBox">
-		                                    	<form th:id="${#ids.seq('subComBoxId_')}" style="display:none;">
-		                                    		<input type="hidden" id="com_id" th:value="${comm.com_id}">
-													<input type="text" name="subcom_text" id="subcom_text" class="subcom_text" placeholder="대댓글 작성" value="" >
-													<input type="button" value="대댓글 작성">														
-												</form>
-		                                    </div>
-		                                   
 		                                   <!-- 댓글 아이콘 박스 -->
 		                                    <div class="icon_wrap">
 		                                        <div class="more_trigger">
@@ -145,10 +135,51 @@
 		                                    <!-- 대댓글 출력 란 -->
                                         	<div class="subCommentArea" id="subCommentArea">
 	                                        	<ul th:each="subcomm : ${sList}">
-	                                        		<li th:if="${subcomm.com_id == comm.com_id}">[[${subcomm.subcom_text}]]</li>
+	                                        		<li th:if="${subcomm.com_id == comm.com_id}">
+														<div class="user_container-detail">
+						                                <div class="user"><img src="/imgs/thumb02.jpg" alt="user"></div>
+						                               		 <div class="comment">
+						                               		 	<!-- 댓글 작성자, 댓글 내용 출력 -->
+							                                    <span class="user_id">[[${subcomm.mem_id}]]</span>
+							                                    <span class="comm_content">[[${subcomm.subcom_text}]]</span>
+							                                   
+							                                   <!-- 댓글 crud버튼 박스 -->
+							                                    <div class="commDetailBox">
+																	<!-- 삭제버튼은 로그인 한 사람의 아이디와 작성자 아이디가 동일할때만 출력 -->
+																	<span class="deleteBox">
+																		<a th:href="@{/deleteComment(com_id=${comm.com_id})}" th:if="${session.user.mem_id == subcomm.mem_id}" style="text-decoration:none; color:#999;">
+																		삭제
+																		</a>
+																		<!-- 대댓글 삭제 구현하기(쿼리문, 메소드) -->
+																	</span>&nbsp;&nbsp;
+																		<!-- 대댓글 작성 버튼 -->
+																</div>
+							                                    
+							                                   <!-- 댓글 아이콘 박스 -->
+							                                    <div class="icon_wrap">
+							                                        <div class="more_trigger">
+							                                            <div class="sprite_more_icon"></div>
+							                                        </div>
+							                                        <div>
+							                                            <div class="sprite_small_heart_icon_outline"></div>
+							                                        </div>
+							                                    </div>
+							                                    
+							                                </div>
+						                            	</div>
+													</li>
 	                                        	</ul>
                                         	</div>
                                         	
+                                        	<!-- 대댓글 입력 폼 -->
+		                                    <div class="subComBox">
+		                                    	<form th:id="${#ids.seq('subComBoxId_')}" style="display:none;">
+		                                    			<input type="hidden" id="com_id" th:value="${comm.com_id}">
+			                                    		<input type="text" name="subcom_text" id="subcom_text" class="subcom_text" value="" >
+														<div class="subcom_btn"><div id="asd">작성</div></div>
+												</form>
+		                                    </div>
+		                                    
 		                                </div>
 	                            	</div> 
 	                           </div> 
@@ -185,12 +216,14 @@
 						
 						<!-- 댓글 작성 창 -->
                        	<input type="hidden" id = "post_id" name="post_id" th:value="${post.post_id}">
-                        <input type="text" id = "com_text" name="com_text" placeholder="댓글달기..">
-                        <button id="upload_btn"><a onclick="insertComment()" style="text-decoration:none">게시</a></button>
+                        <div class="commit_field"><input type="text" id = "com_text" name="com_text" placeholder="댓글달기..">
+                        <div class="upload_btn" id="upload_btn" onclick="insertComment()">게시</div>
+                        </div>
+                        <!-- <button id="upload_btn"><a onclick="insertComment()" style="text-decoration:none">게시</a></button> -->
                         
+						<!-- <button onclick="ajax()">테스트버튼</button> -->
+						<!-- <div class="testArea"></div> -->
 						
-						<button onclick="ajax()">테스트버튼</button>
-						<div class="testArea"></div>
                     </div>
                 </article>
             </div>
@@ -224,6 +257,21 @@
 
 	 // 대댓글창 출력 함수
 	$(document).ready(function() {
+		$(".showSubCom").prev().click(function() {
+			//let a = $(this).next();
+			
+			let a = $(this).parent().next().next().next().children();
+			console.log(a)
+			
+			if( a.is(":visible")) {
+				a.css('display','none');
+			} else {
+				a.css('display','block');
+			}
+		})
+	});
+	 
+	/* $(document).ready(function() {
 		$(".deleteBox").next().click(function() {
 			//let a = $(this).next();
 			
@@ -237,8 +285,23 @@
 				a.css('display','block');
 			}
 		})
-	});
+	}); */
 
+	 $(document).ready(function() {
+		 $(".replyBtn").next().click(function() {
+			 console.log("테스트")
+			 
+			 let element = $(this).parent().next().next()
+			 console.log(element)
+			 
+			 if( element.is(":visible")) {
+				 element.css('display','none');
+			} else {
+				element.css('display','block');
+			}
+		 })
+	 })
+	 
 	// 댓글 인서트 메소드
 	 function insertComment() {
 			var params = {
@@ -314,10 +377,10 @@
 	/* 
 		해결해야 할 문제
 			
-		1. 댓글창 css 완성
 		2. 댓글 작성자 프로필 사진 불러올 수 있게	
 		3. 댓글 좋아요
 		4. 댓글 작성 시간
+		
 	*/
 	
 </script>

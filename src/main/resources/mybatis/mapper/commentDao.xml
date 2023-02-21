@@ -13,12 +13,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 댓글 출력 쿼리문 -->
 	<select id="selectAllComment" parameterType="com.study.springboot.comment.CommentDto" resultType="com.study.springboot.comment.CommentDto">
-		select * from comment where post_id = #{post_id}
+		select * from comment where post_id = #{post_id} order by com_time desc
 	</select> 
 	
 	<!-- 대댓글 출력 쿼리문 -->
 	<select id="selectAllSubComment" resultType="com.study.springboot.comment.SubCommentDto">
-		select * from subcomment where com_id = #{com_id}
+		select * from subcomment where com_id = #{com_id} order by subcom_time desc
 	</select>
 	
 	<!-- 대댓글 출력 쿼리문 -->
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	  	select * 
 		from (select p.post_id, s.* from post p, comment c, subcomment s where p.post_id = c.post_id and s.com_id = c.com_id) 
 			as view 
-		where post_id = #{post_id};
+		where post_id = #{post_id} order by subcom_time desc
 	</select>
 	
 	<!-- 댓글 삭제 쿼리문 -->
