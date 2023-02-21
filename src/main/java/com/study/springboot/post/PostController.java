@@ -91,7 +91,11 @@ public class PostController {
 	
 	
   	Map<String,Integer> postTimeMap= postService.calPostTime(post_id); //포스팅 시간
-	List<CommentDto> cList = commentdao.selectAllComment(post_id);
+	List<CommentDto> cList = commentdao.selectAllComment(post_id); // 댓글 목록
+	List<SubComShowDto> sList = commentdao.findSubComByPostId(post_id); // 대댓글 목록
+	
+	//model.addAttribute("commTimeMap", commTimeMap); // 댓글 작성 시간 구현중
+	model.addAttribute("sList", sList);
 	model.addAttribute("cList", cList);
 	model.addAttribute("timeMap",postTimeMap);
   	model.addAttribute("imgs", imgs); 
