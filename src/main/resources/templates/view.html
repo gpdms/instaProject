@@ -128,8 +128,11 @@
 		                                   
 		                                   <!-- 댓글 crud버튼 박스 -->
 		                                    <div class="commDetailBox">
-		                                    	<span th:each="time : ${tMap}">
-		                                    	<a th:if="${time.key == comm.com_id}">[[${time.value}]]초전&nbsp;&nbsp;</a>
+		                                    	<span th:each="time : ${tMapCom}">
+		                                    		<a th:if="${time.key == comm.com_id and time.value<60}">[[${time.value}]]초전&nbsp;&nbsp;</a>
+		                                    		<a th:if="${time.key == comm.com_id and time.value>=60 and time.value<(60*60)}" >[[${time.value/60}]]분전&nbsp;&nbsp;</a>
+		                                    		<a th:if="${time.key == comm.com_id and time.value>=(60*60) and time.value<(60*60)}" >[[${time.value/(60*60)}]]시간전&nbsp;&nbsp;</a>
+		                                    		<a th:if="${time.key == comm.com_id and time.value>=(60*60*24) and time.value<(60*60*24)}" >[[${time.value/(60*60*24)}]]시간전&nbsp;&nbsp;</a>
 		                                    	</span>
 												<!-- 삭제버튼은 로그인 한 사람의 아이디와 작성자 아이디가 동일할때만 출력 -->
 												<span class="comDeleteBox">
@@ -173,6 +176,12 @@
 							                                   
 							                                   <!-- 대댓글 crud버튼 박스 -->
 							                                    <div class="commDetailBox">
+							                                    <span th:each="time : ${tMapSub}">
+							                                    		<a th:if="${time.key == subcomm.subcom_id and time.value<60}">[[${time.value}]]초전&nbsp;&nbsp;</a>
+							                                    		<a th:if="${time.key == subcomm.subcom_id and time.value>=60 and time.value<(60*60)}" >[[${time.value/60}]]분전&nbsp;&nbsp;</a>
+							                                    		<a th:if="${time.key == subcomm.subcom_id and time.value>=(60*60) and time.value<(60*60)}" >[[${time.value/(60*60)}]]시간전&nbsp;&nbsp;</a>
+		                                    							<a th:if="${time.key == subcomm.subcom_id and time.value>=(60*60*24) and time.value<(60*60*24)}" >[[${time.value/(60*60*24)}]]일전&nbsp;&nbsp;</a>
+		                                    					</span>
 																	<!-- 삭제버튼은 로그인 한 사람의 아이디와 작성자 아이디가 동일할때만 출력 -->
 																	<span class="subComDeleteBox">
 																		<a th:if="${session.user.mem_id == subcomm.mem_id}" style="text-decoration:none; cursor : pointer; color:#999;">

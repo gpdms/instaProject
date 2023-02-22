@@ -18,8 +18,7 @@ public interface CommentDao {
 	public int deleteSubComment(int subcom_id);
 	
 	public int findComTime(int com_id);
-	
-	
+	public int findSubComTime(int subcom_id);	
 	// findComTime
 	// calComTimeSec
 	// calComTimeMin

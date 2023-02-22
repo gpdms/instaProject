@@ -21,6 +21,7 @@ import com.mysql.cj.Session;
 import com.study.springboot.comment.CommentDao;
 import com.study.springboot.comment.CommentDto;
 import com.study.springboot.comment.SubComShowDto;
+import com.study.springboot.comment.SubCommentDto;
 import com.study.springboot.member.MemberDao;
 import com.study.springboot.member.MemberDto;
 import com.study.springboot.post.img.PostImgDto;
@@ -99,19 +100,27 @@ public class PostController {
 	List<CommentDto> cList = commentdao.selectAllComment(post_id); // 댓글 목록
 	List<SubComShowDto> sList = commentdao.findSubComByPostId(post_id); // 대댓글 목록
 	
-	Map<Integer,Integer> map = new HashMap<>(); // 각 댓글에 출력할 시간을 담을 맵
-	
+	//댓글 시간
+	Map<Integer,Integer> mapCom = new HashMap<>(); // 각 댓글에 출력할 시간을 담을 맵
 	for(CommentDto commentDto : cList) {
 		int com_id = commentDto.getCom_id();
 		int time = commentdao.findComTime(com_id);
-		map.put(com_id, time);
+		mapCom.put(com_id, time);
 		// view에서 com_id로 각 시간을 찾기 위해
 	}
 	
+	//대댓글 시간
+	Map<Integer,Integer> mapSub = new HashMap<>(); // 각 대댓글에 출력할 시간을 담을 맵
+	for(SubComShowDto subComment : sList) {
+		int subcom_id = subComment.getSubcom_id();
+		int time = commentdao.findSubComTime(subcom_id);
+		mapSub.put(subcom_id, time);
+		// view에서 com_id로 각 시간을 찾기 위해
+	}
   	MemberDto postingUser = memberDao.selectOneMember(post.getMem_id());//포스팅 유저 정보
-  	log.info(cList);
 	
-  	model.addAttribute("tMap", map);
+  	model.addAttribute("tMapCom", mapCom);
+  	model.addAttribute("tMapSub", mapSub);
 	model.addAttribute("sList", sList);
 	model.addAttribute("cList", cList);
 	
