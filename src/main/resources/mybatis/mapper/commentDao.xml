@@ -47,6 +47,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT TIMESTAMPDIFF(second, (select com_time from comment where com_id = #{com_id}), current_timestamp())
 	</select>
 	
+	<select id="findSubComTime" resultType="Integer" parameterType="Integer">
+		SELECT TIMESTAMPDIFF(second, (select subcom_time from subcomment where subcom_id = #{subcom_id}), current_timestamp())
+	</select>
+	
 	<!-- com_id로 현재시각 찾는 로직 1 -->
 	
 	<!-- 해당 현재시각으로 오늘날짜에서 얼마나 차이가 있는지 찾는 로직 2 -->

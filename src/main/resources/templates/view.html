@@ -110,14 +110,25 @@
 		                                    <input type="hidden" id="com_id" th:value="${comm.com_id}">
 		                                   
 		                                   <!-- 댓글 crud버튼 박스 -->
-		                                    <div class="commDetailBox" style="display:flex; color:#999; font-size:15px;">
-												<span>일전</span>&nbsp;&nbsp;
-													<span class="deleteBox">
-														<a th:href="@{/deleteComment(com_id=${comm.com_id})}" th:if="${session.user.mem_id == comm.mem_id}" style="text-decoration:none; color:#999;">
-														삭제
-														</a>
-													</span>&nbsp;&nbsp;
-												<span><a th:value="${#ids.next('list')}" th:id="${#ids.seq('subComBtnId_')}"> 답글 달기 </a></span>&nbsp;
+		                                    <div class="commDetailBox">
+		                                    	<span th:each="time : ${tMapCom}">
+		                                    		<a th:if="${time.key == comm.com_id and time.value<60}">[[${time.value}]]초전&nbsp;&nbsp;</a>
+		                                    		<a th:if="${time.key == comm.com_id and time.value>=60 and time.value<(60*60)}" >[[${time.value/60}]]분전&nbsp;&nbsp;</a>
+		                                    		<a th:if="${time.key == comm.com_id and time.value>=(60*60) and time.value<(60*60)}" >[[${time.value/(60*60)}]]시간전&nbsp;&nbsp;</a>
+		                                    		<a th:if="${time.key == comm.com_id and time.value>=(60*60*24) and time.value<(60*60*24)}" >[[${time.value/(60*60*24)}]]시간전&nbsp;&nbsp;</a>
+		                                    	</span>
+												<!-- 삭제버튼은 로그인 한 사람의 아이디와 작성자 아이디가 동일할때만 출력 -->
+												<span class="comDeleteBox">
+													<a th:if="${session.user.mem_id == comm.mem_id}" style="text-decoration:none; cursor:pointer; color:#999;">
+														삭제&nbsp;&nbsp;
+													</a>
+													<!-- <a th:href="@{/deleteComment(com_id=${comm.com_id})}" th:if="${session.user.mem_id == comm.mem_id}" style="text-decoration:none; color:#999;">
+													삭제&nbsp;&nbsp;
+													</a> -->
+												</span>
+													<!-- 대댓글 작성 버튼 -->
+												<span class="replyBtn"><a>답글 달기&nbsp;&nbsp;</a></span>
+												<span class="showSubCom"><a onclick="">댓글 보기&nbsp;&nbsp;</a></span>
 												<!-- 댓글 작성자 id와 로그인 세션값 id 비교해서 일치하는 경우에 수정 버튼 출력 th:if 사용 -->
 											</div>
 		                                    
@@ -138,8 +149,65 @@
 		                                            <div class="sprite_small_heart_icon_outline"></div>
 		                                        </div>
 		                                    </div>
-	                                        	<div class="subCommentArea" id="subCommentArea" style="display:none";>
-	                                        	</div>
+		                                    
+		                                    <!-- 대댓글 출력 란 -->
+                                        	<div class="subCommentArea" id="subCommentArea">
+	                                        	<ul th:each="subcomm : ${sList}">
+	                                        		<li th:if="${subcomm.com_id == comm.com_id}">
+														<div class="user_container-detail">
+						                                <div class="user">
+						                                	<a th:href="@{/myHome/{mem_id}(mem_id=${subcomm.mem_id})}">
+						                                		<img th:src="|/profile/${subcomm.mem_id}|" alt="대댓글프로필">
+						                                	</a>
+						                                </div>
+						                               		 <div class="comment">
+						                               		 	<!-- 대댓글 작성자, 댓글 내용 출력 -->
+							                                    <span class="user_id">[[${subcomm.mem_id}]]</span>
+							                                    <span class="comm_content">[[${subcomm.subcom_text}]]</span>
+							                                   
+							                                   <!-- 대댓글 crud버튼 박스 -->
+							                                    <div class="commDetailBox">
+							                                    <span th:each="time : ${tMapSub}">
+							                                    		<a th:if="${time.key == subcomm.subcom_id and time.value<60}">[[${time.value}]]초전&nbsp;&nbsp;</a>
+							                                    		<a th:if="${time.key == subcomm.subcom_id and time.value>=60 and time.value<(60*60)}" >[[${time.value/60}]]분전&nbsp;&nbsp;</a>
+							                                    		<a th:if="${time.key == subcomm.subcom_id and time.value>=(60*60) and time.value<(60*60)}" >[[${time.value/(60*60)}]]시간전&nbsp;&nbsp;</a>
+		                                    							<a th:if="${time.key == subcomm.subcom_id and time.value>=(60*60*24) and time.value<(60*60*24)}" >[[${time.value/(60*60*24)}]]일전&nbsp;&nbsp;</a>
+		                                    					</span>
+																	<!-- 삭제버튼은 로그인 한 사람의 아이디와 작성자 아이디가 동일할때만 출력 -->
+																	<span class="subComDeleteBox">
+																		<a th:if="${session.user.mem_id == subcomm.mem_id}" style="text-decoration:none; cursor : pointer; color:#999;">
+																			삭제
+																		</a>
+																		<input type="hidden" id="subcom_id" th:value="${subcomm.subcom_id}"/>
+																		<!-- 대댓글 삭제 구현하기(쿼리문, 메소드) -->
+																	</span>&nbsp;&nbsp;
+																		<!-- 대댓글 작성 버튼 -->
+																</div>
+							                                    
+							                                   <!-- 대댓글 아이콘 박스 -->
+							                                    <div class="icon_wrap">
+							                                        <div class="more_trigger">
+							                                            <div class="sprite_more_icon"></div>
+							                                        </div>
+							                                        <div>
+							                                            <div class="sprite_small_heart_icon_outline"></div>
+							                                        </div>
+							                                    </div>
+							                                    
+							                                </div>
+						                            	</div>
+													</li>
+	                                        	</ul>
+                                        	</div>
+                                        	
+                                        	<!-- 대댓글 입력 폼 -->
+		                                    <div class="subComBox">
+		                                    	<form th:id="${#ids.seq('subComBoxId_')}" style="display:none;">
+		                                    			<input type="hidden" id="com_id" th:value="${comm.com_id}">
+			                                    		<input type="text" name="subcom_text" id="subcom_text" class="subcom_text" value="" >
+														<div class="subcom_btn"><a id="asd">작성</a></div>
+												</form>
+		                                    </div>
 		                                </div>
 	                            	</div> 
 	                           </div> 
