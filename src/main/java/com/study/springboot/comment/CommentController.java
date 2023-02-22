@@ -77,28 +77,28 @@ public class CommentController {
 	}
 
 	
-	 @GetMapping("/selectAllComment") 
-	 public String selectAllComment(Model model,CommentDto commDto) {
-	 
-	 int post_id = commDto.getPost_id();
-	 
-	 Map<Integer, List<SubCommentDto>> lst = new HashMap<>(); 
-	 List<CommentDto> cList = commentdao.selectAllComment(post_id);
-	 
-	 for(CommentDto commdto : cList) {
-		 int com_id = commdto.getCom_id();
-		 List<SubCommentDto> sList = commentdao.selectAllSubComment(com_id);
-		 System.out.println(sList);
-		 // 각 com_id로 해당 comment에 달린 subcomment list를 찾는다. 
-		 lst.put(commdto.getCom_id(), sList); // 해당 Map에 
-		 }
-	 
-	 model.addAttribute("lst", lst); 
-	 model.addAttribute("list", cList);
-	 System.out.println(cList);
-	 
-	 return "view"; 
-	 }
+//	 @GetMapping("/selectAllComment") 
+//	 public String selectAllComment(Model model,CommentDto commDto) {
+//	 
+//	 int post_id = commDto.getPost_id();
+//	 
+//	 Map<Integer, List<SubCommentDto>> lst = new HashMap<>(); 
+//	 List<CommentDto> cList = commentdao.selectAllComment(post_id);
+//	 
+//	 for(CommentDto commdto : cList) {
+//		 int com_id = commdto.getCom_id();
+//		 List<SubCommentDto> sList = commentdao.selectAllSubComment(com_id);
+//		 System.out.println(sList);
+//		 // 각 com_id로 해당 comment에 달린 subcomment list를 찾는다. 
+//		 lst.put(commdto.getCom_id(), sList); // 해당 Map에 
+//		 }
+//	 
+//	 model.addAttribute("lst", lst); 
+//	 model.addAttribute("list", cList);
+//	 System.out.println(cList);
+//	 
+//	 return "view"; 
+//	 }
 	 
 
 	// 댓글 삭제. return값 아직 미완성

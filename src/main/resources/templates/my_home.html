@@ -165,7 +165,9 @@
 			<div class="flwmodal-body">
 				<div th:each="follower:${flwerList}" class="thumb_user">
 					<div class="profile_thumb">
-						<img th:src="|/profile/${follower.from_user}|" alt="프로필사진">
+						<a th:href="@{/myHome/{mem_id}(mem_id=${follower.from_user})}">
+							<img th:src="|/profile/${follower.from_user}|" alt="프로필사진">
+						</a>
 					</div>
 					<div class="detail">
 						<div class="id">

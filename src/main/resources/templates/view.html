@@ -28,6 +28,15 @@
  		.bx-wrapper .bx-controls .bx-pager{ 
  			display : none; 
  		} 
+
+
+  		#upload_btn {
+ 			font-size: 15px;
+ 			cursor:pointer;
+ 			width:50px;
+ 			height:20px;
+  		} 
+  
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     
@@ -55,7 +64,9 @@
 	                  <div class="trans_inner">
 		                  <ul class="bxslider">
 						     <li th:each="img : ${imgs}">
-						     	<a href="#"><img th:src="|/imgs/post/${img.imgId}|" width="150" height="150" alt="포스트이미지"></a>
+						     	<a href="#">
+						     		<img th:src="|/imgs/post/${img.imgId}|" style="width:700px; height:700px; object-fit:cover;" alt="포스트이미지">
+						     	</a>
 						     </li>
 						  </ul>
 	                  </div>
@@ -82,7 +93,9 @@
                         	<!-- 작성 내용 -->
                             <div class="admin_container">
                                 <div class="admin">
-	                    			<img th:src="|/profile/${postUser.mem_id}|" alt="프로필이미지">
+                                	<a th:href="@{/myHome/{mem_id}(mem_id=${postUser.mem_id})}">
+	                    				<img th:src="|/profile/${postUser.mem_id}|" alt="프로필이미지">
+	                    			</a>
                                 </div>
                                 <div class="comment">
                                     <span class="user_id">[[${postUser.mem_id}]]</span>
@@ -101,7 +114,11 @@
 							
 							 <div id="commentTable">
 							 	<div class="user_container-detail" th:each="comm,i : ${cList}">
-	                                <div class="user"><img src="/imgs/thumb02.jpg" alt="user"></div>
+	                                <div class="user">
+	                                	<a th:href="@{/myHome/{mem_id}(mem_id=${comm.mem_id})}">
+	                                		<img th:src="|/profile/${comm.mem_id}|" alt="댓글프로필">
+	                                	</a>
+	                                </div>
 	                               		 <div class="comment">
 	                               		 	<!-- 댓글 작성자, 댓글 내용 출력 -->
 		                                    <span class="user_id">[[${comm.mem_id}]]</span>
@@ -138,7 +155,11 @@
 	                                        	<ul th:each="subcomm : ${sList}">
 	                                        		<li th:if="${subcomm.com_id == comm.com_id}">
 														<div class="user_container-detail">
-						                                <div class="user"><img src="/imgs/thumb02.jpg" alt="user"></div>
+						                                <div class="user">
+						                                	<a th:href="@{/myHome/{mem_id}(mem_id=${subcomm.mem_id})}">
+						                                		<img th:src="|/profile/${subcomm.mem_id}|" alt="대댓글프로필">
+						                                	</a>
+						                                </div>
 						                               		 <div class="comment">
 						                               		 	<!-- 댓글 작성자, 댓글 내용 출력 -->
 							                                    <span class="user_id">[[${subcomm.mem_id}]]</span>
@@ -211,13 +232,13 @@
                             <span class="count">2,351</span>
                             개
                         </div>
-                        <div class="timer">2시간</div>
+                        	<div class="timer">2시간</div>
 
 
 						
 						<!-- 댓글 작성 창 -->
                        	<input type="hidden" id = "post_id" name="post_id" th:value="${post.post_id}">
-                        <div class="commit_field"><input type="text" id = "com_text" name="com_text" placeholder="댓글달기..">
+                        <div class="commit_field"><input type="text" id ="com_text" name="com_text" placeholder="댓글달기.." required>
                         <div class="upload_btn" id="upload_btn" onclick="insertComment()">게시</div>
                         </div>
                         <!-- <button id="upload_btn"><a onclick="insertComment()" style="text-decoration:none">게시</a></button> -->
@@ -259,8 +280,7 @@
   $(document).ready(function () {
 	    $('.bxslider').bxSlider({ // 클래스명 주의!
 	        auto: false, // 자동으로 애니메이션 시작
-	        speed: 500,  // 애니메이션 속도
-	        pause: 5000,  // 애니메이션 유지 시간 (1000은 1초)
+	        slideWidth: 700, 
 	        mode: 'horizontal', // 슬라이드 모드 ('fade', 'horizontal', 'vertical' 이 있음)
 	        autoControls: false, // 시작 및 중지버튼 보여짐
 	        pager: false, // 페이지 표시 보여짐
@@ -342,6 +362,7 @@ function deletePost() {
 	 
 	// 댓글 인서트 메소드
 	 function insertComment() {
+			console.log("인서트");
 			var params = {
 					post_id : $("#post_id").val(),
 					com_text : $('#com_text').val()

@@ -102,7 +102,7 @@ public class PostController {
 	model.addAttribute("sList", sList);
   	
   	MemberDto postingUser = memberDao.selectOneMember(post.getMem_id());//포스팅 유저 정보
-  	
+  	log.info(cList);
 	model.addAttribute("cList", cList);
 	model.addAttribute("postUser", postingUser);
 	model.addAttribute("timeMap",postTimeMap);
