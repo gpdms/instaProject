@@ -109,14 +109,12 @@ public class PostController {
 	}
 	
   	MemberDto postingUser = memberDao.selectOneMember(post.getMem_id());//포스팅 유저 정보
-<<<<<<< Updated upstream
   	log.info(cList);
-=======
 	
   	model.addAttribute("tMap", map);
 	model.addAttribute("sList", sList);
->>>>>>> Stashed changes
 	model.addAttribute("cList", cList);
+	
 	model.addAttribute("postUser", postingUser);
 	model.addAttribute("timeMap",postTimeMap);
   	model.addAttribute("imgs", imgs); 
