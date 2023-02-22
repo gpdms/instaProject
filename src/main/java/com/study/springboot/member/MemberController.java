@@ -166,4 +166,48 @@ public class MemberController {
 		String nickname = dao.selectOneMember(member.getMem_id()).getNickname();
 		return nickname;
 	}
+	
+	
+	//비밀번호 변경
+		@PostMapping("/updatePw")
+		public String updatePw(HttpSession session, MemberDto dto, String newPw, String newPwCheck, Model md) {
+			MemberDto sessionUser = (MemberDto) session.getAttribute("user");
+			dto.setMem_id(sessionUser.getMem_id());
+			log.info("새비밀번호-----:"+newPw);
+			log.info("새비밀번호확인----:"+newPwCheck);
+			//현재 비밀번호 확인.
+			MemberDto member = dao.login(dto);
+			if (member == null) {
+				md.addAttribute("msg", "현재 비밀번호가 맞지 않습니다.");
+				md.addAttribute("url", "updateinfo");
+				return "alert";
+			} else if (!newPw.equals(newPwCheck)){
+				md.addAttribute("msg", "새 비밀번호가 맞지 않습니다.");
+				md.addAttribute("url", "updateinfo");
+				return "alert";
+			} else {
+				dto.setMem_pw(newPwCheck);
+				log.info("변경된 유저정보-----:"+dto);
+				int rs = dao.updatePw(dto);
+				log.info("비밀번호변경됐는지 확인------:"+rs);
+				
+				md.addAttribute("msg", "비밀번호가 변경되었습니다.");
+				md.addAttribute("url", "updateinfo");
+				return "alert";
+			}
+		}
+		
+		//이메일 변경
+		@PostMapping("/updateEmail")
+		public String updateEmail(HttpSession session, MemberDto dto, Model md) {
+			MemberDto sessionUser = (MemberDto) session.getAttribute("user");
+			dto.setMem_id(sessionUser.getMem_id());
+			int res = dao.updateEmail(dto);
+			//log.info("이메일변경 성공했는지확인------"+res);
+			md.addAttribute("msg", "이메일이 변경되었습니다.");
+			md.addAttribute("url", "updateinfo");
+			return "alert";
+			
+		}
+	
 }

@@ -14,4 +14,7 @@ public interface MemberDao {
 	public int updateNickname(MemberDto member);
 	public int updateProfimg(MemberDto member);
 	public int deleteProfimg(MemberDto member);
+	
+	public int updatePw(MemberDto member);
+	public int updateEmail(MemberDto member);
 }

@@ -48,6 +48,13 @@ public void toSignup() {
 public void toFeed() {
 }
 
+@GetMapping("/updateinfo")
+public void toUpdateinfo(HttpSession session, Model model) {
+	MemberDto sessionUser = (MemberDto) session.getAttribute("user");
+	String sessionEmail = sessionUser.getEmail();
+	model.addAttribute("sessionEmail", sessionEmail);
+}
+
 
 @GetMapping("/myHome/{mem_id}")
 public String toMyHome(@PathVariable("mem_id") String mem_id, HttpSession session, Model model) throws IOException{
