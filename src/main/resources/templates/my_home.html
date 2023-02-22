@@ -39,7 +39,7 @@
                     <div class="top">
                         <div class="user_name" id="user_nick" th:text="${homeUser.nickname}"></div>
                    <!-- 본인 홈: 프로필편집,로그아웃 버튼-->     
-                        <div th:if="${session.user != null and homeUser.mem_id == session.user.mem_id}">
+                        <div th:if="${session.user != null and homeUser.mem_id == session.user.mem_id}" class="top">
 	                        <a href="#" class="profile_edit" id="pfBtn">프로필편집</a>
 	                        <a href="/logout" class="logout">로그아웃</a>
                         </div>
@@ -163,6 +163,7 @@
    <!---------- 팔로워 모달 -------------------->
 		<div class="followerMd flwmodal">
 			<div class="flwmodal-body">
+				<div th:if="${#lists.isEmpty(flwerList)}" class="follow_empty">팔로워 없음</div>
 				<div th:each="follower:${flwerList}" class="thumb_user">
 					<div class="profile_thumb">
 						<a th:href="@{/myHome/{mem_id}(mem_id=${follower.from_user})}">
@@ -183,6 +184,7 @@
 		<!------------ 팔로잉 모달 ------------->
 		<div class="followingMd flwmodal">
 			<div class="flwmodal-body">
+				<div th:if="${#lists.isEmpty(flwingList)}" class="follow_empty">팔로잉 없음</div>
 				<div th:each="following:${flwingList}" class="thumb_user">
 					<div class="profile_thumb">
 						<img th:src="|/profile/${following.to_user}|" alt="프로필사진">
