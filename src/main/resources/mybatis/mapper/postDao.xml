@@ -57,9 +57,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update post set content = #{content} where post_id = #{post_id}
 	</update>
 	
+	<!-- 게시글 삭제 -->
+	<delete id="deletePost"  parameterType="int">
+    	delete from post where post_id = #{post_id}
+  	</delete>
+  	<!-- 포스트 이미지 DB에서 삭제 -->
+	<delete id="realDeletePostImg"  parameterType="int">
+    	delete from post_img where post_id = #{post_id}
+  	</delete>
+  	
 	<!-- 포스트 이미지 삭제 -->
-	<update id="deletePostImg" parameterType="int">
+	<update id="deletePostImg" parameterType="int" >
 		update post_img set delete_yn = 'y' where img_id = #{img_id}
+	</update>
+	<!-- 포스트 이미지 복원 -->
+	<update id="restorePostImg" parameterType="int" >
+		update post_img set delete_yn = 'n' where img_id = #{img_id}
+	</update>
+	<!-- 포스트 이미지 전체 복원 -->
+	<update id="restoreAllPostImg" parameterType="int" >
+		update post_img set delete_yn = 'n' where post_id = #{post_id}
 	</update>
 	
 </mapper>

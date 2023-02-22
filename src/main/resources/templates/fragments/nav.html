@@ -34,10 +34,34 @@
 	.modal-body {
 		padding-left: 0;
 		padding-right: 0;
+		text-align: center;
 	}
 	
+	.modal-body a {
+		text-decoration:none;
+		cursor: pointer;
+		text-align: center;
+	}
 	.modal-body ul{
 		padding: 0;
+	}
+	.modal-footer .btn-secondary {
+/* 	    background: #3897f0; */
+/* 	    border-color: #3897f0; */
+		background:#999;
+		border-color: #999;
+	    color: #fff;
+	    border-radius: 3px;
+	    border-style: solid;
+	    border-width: 1px;
+	    font-size: 14px;
+	    font-weight: 600;
+	    line-height: 28px;
+	    outline: none;
+	    width: 30%;
+	    padding: 0;
+	    margin-top: 10px;
+	    text-align: center;
 	}
 </style>	
 	
@@ -47,14 +71,22 @@
    <div id="sidebar" style="display:none">
       <div id="close-button"></div>
       <p id="menu"> &nbsp; 메뉴</p>
-      <ul class="dep1">
-        <li><a href="#"><div class="home_icon"></div><p>&nbsp; &nbsp;홈</p></a></li>
+      <ul th:if="${session.user == null}" class="dep1">
+        <li><a th:href="@{/}"><div class="home_icon"></div><p>&nbsp; &nbsp;홈</p></a></li>
         <li><a href="#"><div class="search_icon"></div><p>&nbsp; &nbsp;검색</p></a></li>
-        <li><a href="#"><div class="message_icon"></div><p>&nbsp; &nbsp;메시지</p></a></li>
-        <li><a href="#"><div class="notif_icon"></div><p>&nbsp; &nbsp;알림</p></a></li>
-        <li><a href="#"><div class="plus_icon"></div><p>&nbsp; &nbsp;만들기</p></a></li>
+        <li><a href="#" onclick="signin()"><div class="message_icon"></div><p>&nbsp; &nbsp;메시지</p></a></li>
+        <li><a href="#" onclick="signin()"><div class="notif_icon"></div><p>&nbsp; &nbsp;알림</p></a></li>
+        <li><a href="#" onclick="signin()"><div class="plus_icon"></div><p>&nbsp; &nbsp;만들기</p></a></li>
+        <li><a href="#" onclick="signin()"><div class="settings_icon"></div><p>&nbsp; &nbsp;설정</p></a></li>
+      </ul>
+      
+      <ul th:if="${session.user != null}" class="dep1">
+        <li><a th:href="@{/}"><div class="home_icon"></div><p>&nbsp; &nbsp;홈</p></a></li>
+        <li><a href="#"><div class="search_icon"></div><p>&nbsp; &nbsp;검색</p></a></li>
+        <li><a href="#" onclick="someday()"><div class="message_icon"></div><p>&nbsp; &nbsp;메시지</p></a></li>
+        <li><a href="#" onclick="someday()"><div class="notif_icon"></div><p>&nbsp; &nbsp;알림</p></a></li>
+        <li><a th:href="@{/newPost}" ><div class="plus_icon"></div><p>&nbsp; &nbsp;만들기</p></a></li>
         <li><a href="#" class="settingBtn"><div class="settings_icon"></div><p>&nbsp; &nbsp;설정</p></a></li>
-        
       </ul>
     </div>
     
@@ -67,10 +99,10 @@
 							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 						</div>
 						<div class="modal-body">
-							<ul>
+							<ul th:if="${session.user != null}">
 								<li><a href="#">프로필 편집</a></li> <hr>
 								<li><a th:href="@{/updateinfo}">개인정보 수정</a></li> <hr>
-								<li><a href="#">최근 삭제한 컨텐츠</a></li>
+								<li><a th:href="|/restoreImgList/${session.user.mem_id}|">최근 삭제한 컨텐츠</a></li>
 							</ul>
 						</div>
 						<div class="modal-footer">
@@ -86,13 +118,20 @@
 <script type="text/javascript" th:src="@{/js/nav.js}"></script> 
 
 <script>
-	//설정 클릭시 모달
-	const modal = new bootstrap.Modal(document.querySelector(".modal"));
-	document.querySelector(".settingBtn").addEventListener("click", function(e) {
-		console.log("saveBtn");
-		modal.show();
-		
-	});
+function signin() {
+	  alert("로그인이 필요한 기능입니다.");
+}
+function someday() {
+	alert("추후에 만들 기능입니다...");
+}
+
+//설정 클릭시 모달
+const modal = new bootstrap.Modal(document.querySelector(".modal"));
+document.querySelector(".settingBtn").addEventListener("click", function(e) {
+	console.log("saveBtn");
+	modal.show();
+	
+});
 
 </script>
 

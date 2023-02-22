@@ -85,7 +85,7 @@
 	                    			<img th:src="|/profile/${postUser.mem_id}|" alt="프로필이미지">
                                 </div>
                                 <div class="comment">
-                                    <span class="user_id">[[${post.mem_id}]]</span>
+                                    <span class="user_id">[[${postUser.mem_id}]]</span>
                                     <div style="height:5px;"></div>
                                     <div th:utext="${post.content}"}></div>
                                		<div class="time" th:if="${timeMap['min'] < 1}"> [[${timeMap['sec']}]]초</div>
@@ -99,7 +99,6 @@
 							<!-- 댓글 -->
 							 <div id="commentBox">
 							
-							<!-- 댓글 -->
 							 <div id="commentTable">
 							 	<div class="user_container-detail" th:each="comm,i : ${cList}">
 	                                <div class="user"><img src="/imgs/thumb02.jpg" alt="user"></div>
@@ -241,7 +240,7 @@
 	    </div>
 	    <div th:if="${session.user.mem_id == post.mem_id}"> 
 		    <a th:href="@{/updatePostForm/{post_idS}(post_idS=${post.post_id})}">수정</a> <hr>
-		    <a style="color:red;">삭제</a> <hr>
+		    <a style="color:red;" th:onclick="deletePost()">삭제</a> <hr>
 		</div>    
         <a style="color:#999;" id="upCloseBtn">취소</a>
       </div>
@@ -253,7 +252,7 @@
 <!-- 이미지 슬라이드 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
-<script>
+<script >
   $(document).ready(function(){
     $('.slider').bxSlider();
   });
@@ -272,7 +271,28 @@
 	});
 </script>
 
-<script>
+<script th:inline="javascript">
+// 	게시글 삭제
+function deletePost() {
+	let ok = confirm("해당 게시글을 삭제하시겠습니까?");
+	if(ok) {
+		$.ajax({
+		    type: 'get',
+		    url: '/deletePost/' + /*[[${post.post_id}]]*/,
+			success: function (data) {
+			        alert("포스트를 삭제했습니다."); 
+			        if(data > 0) {
+			        	location.href = "/myHome/" + /*[[${post.mem_id}]]*/ ;
+			        }
+			    },
+			    error: function (err) {
+			    	alert("포스트를 삭제할 수 없습니다.");
+			    	console.log(err);
+			    }
+			}) 
+	}
+}
+
 	 // 대댓글창 출력 함수
 	$(document).ready(function() {
 		$(".showSubCom").prev().click(function() {

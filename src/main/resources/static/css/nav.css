@@ -12,8 +12,8 @@
 		/*  display: none;   */
         /* transition: all 0.5s linear; */
         border: 1px solid  rgba(0,0,0,0.1);
-        
       }
+      
       #close-button {
         position: absolute;
         right: 0;

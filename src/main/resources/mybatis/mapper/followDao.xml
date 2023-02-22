@@ -11,6 +11,13 @@
 		from follow f, member m
 		where f.to_user = #{mem_id} and f.from_user = m.mem_id
 	</select>
+	
+<!-- 	<select id="selectFollower" -->
+<!-- 	resultType="com.study.springboot.follow.FollowDto"> -->
+<!-- 	select from_user, to_user, flw_date  -->
+<!-- 	from follow -->
+<!-- 	where to_user = #{mem_id} -->
+<!-- 	</select> -->
 
 	<!-- 팔로잉 리스트: 내가 팔로우하는 사람들 -->
 	<select id="selectFollowing"
@@ -19,6 +26,13 @@
 		from follow f, member m
 		where f.from_user = #{mem_id} and f.to_user = m.mem_id
 	</select>
+	
+<!-- 	<select id="selectFollowing" -->
+<!-- 		resultType="com.study.springboot.follow.FollowDto"> -->
+<!-- 		select from_user, to_user, flw_date -->
+<!-- 		from follow f -->
+<!-- 		where from_user = #{mem_id} -->
+<!-- 	</select> -->
 
 
 	<!-- 팔로우 되어있는지 확인 -->

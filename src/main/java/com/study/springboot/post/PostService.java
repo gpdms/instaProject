@@ -38,6 +38,13 @@ public class PostService {
         return 0;
 	}
 	
+	public int updatePostCont(PostDto post) {
+        post.setContent(post.getContent().replace("\r\n","<br>")); //줄 개행
+        int up_result = postDao.updatePostContent(post);
+      
+        return up_result;
+	}
+	
     public Map<String, Integer> calPostTime (int post_id) {
     	int postSec = postDao.diffPostTime(post_id);
     	log.info(postSec);
@@ -55,5 +62,6 @@ public class PostService {
 		return postTimeMap;
     }
     
+
   
 }
