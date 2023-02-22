@@ -4,7 +4,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface LikeDao {
-
-	public int likeInsert(LikeDto likeDto);
-	public int likeDeleteTest(LikeDto likeDto);
+	public int like(LikeDto postlike);
+	public int likenum(LikeDto postlike);
+	public int unlike(LikeDto postlike);
+	public int likeheart(LikeDto postlike);
 }
