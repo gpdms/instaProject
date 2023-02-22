@@ -129,7 +129,6 @@
     align-items: center;
     padding: 13px 17px;
     position: relative;
-
     border-bottom: 1px solid rgba(0,0,0,.0975);
 }
 
@@ -350,7 +349,12 @@
     transform:translateY(-50%);
     cursor: pointer;
     opacity: 0.6;
+<<<<<<< Updated upstream
 /*     pointer-events: none; */
+=======
+    pointer-events: none;
+    text-decoration: none;
+>>>>>>> Stashed changes
 }
 
 .commit_field input:focus ~ .upload_btn{
@@ -415,13 +419,13 @@
 }
 
 #commentBox {
-	height:300px;
+/* 	height:300px; */
 }
 
 .commDetailBox {
 	display:flex; 
 	color:#999; 
-	font-size:13px;
+	font-size:12px;
 	margin-top : 2px;
 }
 
@@ -438,7 +442,7 @@
 }
 
 #subcom_text {
-	 width: 80%;
+	 width: 100%;
     height: 38px;
     font-size: 12px;
     border: 1px solid lightgray;

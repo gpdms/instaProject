@@ -2,6 +2,7 @@ package com.study.springboot.post;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,11 +99,23 @@ public class PostController {
 	List<CommentDto> cList = commentdao.selectAllComment(post_id); // 댓글 목록
 	List<SubComShowDto> sList = commentdao.findSubComByPostId(post_id); // 대댓글 목록
 	
-	//model.addAttribute("commTimeMap", commTimeMap); // 댓글 작성 시간 구현중
-	model.addAttribute("sList", sList);
-  	
+	Map<Integer,Integer> map = new HashMap<>(); // 각 댓글에 출력할 시간을 담을 맵
+	
+	for(CommentDto commentDto : cList) {
+		int com_id = commentDto.getCom_id();
+		int time = commentdao.findComTime(com_id);
+		map.put(com_id, time);
+		// view에서 com_id로 각 시간을 찾기 위해
+	}
+	
   	MemberDto postingUser = memberDao.selectOneMember(post.getMem_id());//포스팅 유저 정보
+<<<<<<< Updated upstream
   	log.info(cList);
+=======
+	
+  	model.addAttribute("tMap", map);
+	model.addAttribute("sList", sList);
+>>>>>>> Stashed changes
 	model.addAttribute("cList", cList);
 	model.addAttribute("postUser", postingUser);
 	model.addAttribute("timeMap",postTimeMap);

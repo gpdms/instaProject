@@ -49,7 +49,7 @@
     
     <!-- 사이드메뉴바 nav-->
     <div th:replace="~{/fragments/nav.html :: fragment-nav}"></div>
-
+ 
 	<!-- 메인 -->
     <div id="main_container">
 
@@ -128,15 +128,21 @@
 		                                   
 		                                   <!-- 댓글 crud버튼 박스 -->
 		                                    <div class="commDetailBox">
+		                                    	<span th:each="time : ${tMap}">
+		                                    	<a th:if="${time.key == comm.com_id}">[[${time.value}]]초전&nbsp;&nbsp;</a>
+		                                    	</span>
 												<!-- 삭제버튼은 로그인 한 사람의 아이디와 작성자 아이디가 동일할때만 출력 -->
-												<span class="deleteBox">
-													<a th:href="@{/deleteComment(com_id=${comm.com_id})}" th:if="${session.user.mem_id == comm.mem_id}" style="text-decoration:none; color:#999;">
-													삭제
+												<span class="comDeleteBox">
+													<a th:if="${session.user.mem_id == comm.mem_id}" style="text-decoration:none; cursor:pointer; color:#999;">
+														삭제&nbsp;&nbsp;
 													</a>
-												</span>&nbsp;&nbsp;
+													<!-- <a th:href="@{/deleteComment(com_id=${comm.com_id})}" th:if="${session.user.mem_id == comm.mem_id}" style="text-decoration:none; color:#999;">
+													삭제&nbsp;&nbsp;
+													</a> -->
+												</span>
 													<!-- 대댓글 작성 버튼 -->
-												<span class="replyBtn"><a>답글 달기</a></span>&nbsp;&nbsp;
-												<span class="showSubCom"><a onclick="">댓글 보기</a></span>&nbsp;&nbsp;
+												<span class="replyBtn"><a>답글 달기&nbsp;&nbsp;</a></span>
+												<span class="showSubCom"><a onclick="">댓글 보기&nbsp;&nbsp;</a></span>
 												<!-- 댓글 작성자 id와 로그인 세션값 id 비교해서 일치하는 경우에 수정 버튼 출력 th:if 사용 -->
 											</div>
 		                                    
@@ -161,23 +167,24 @@
 						                                	</a>
 						                                </div>
 						                               		 <div class="comment">
-						                               		 	<!-- 댓글 작성자, 댓글 내용 출력 -->
+						                               		 	<!-- 대댓글 작성자, 댓글 내용 출력 -->
 							                                    <span class="user_id">[[${subcomm.mem_id}]]</span>
 							                                    <span class="comm_content">[[${subcomm.subcom_text}]]</span>
 							                                   
-							                                   <!-- 댓글 crud버튼 박스 -->
+							                                   <!-- 대댓글 crud버튼 박스 -->
 							                                    <div class="commDetailBox">
 																	<!-- 삭제버튼은 로그인 한 사람의 아이디와 작성자 아이디가 동일할때만 출력 -->
-																	<span class="deleteBox">
-																		<a th:href="@{/deleteComment(com_id=${comm.com_id})}" th:if="${session.user.mem_id == subcomm.mem_id}" style="text-decoration:none; color:#999;">
-																		삭제
+																	<span class="subComDeleteBox">
+																		<a th:if="${session.user.mem_id == subcomm.mem_id}" style="text-decoration:none; cursor : pointer; color:#999;">
+																			삭제
 																		</a>
+																		<input type="hidden" id="subcom_id" th:value="${subcomm.subcom_id}"/>
 																		<!-- 대댓글 삭제 구현하기(쿼리문, 메소드) -->
 																	</span>&nbsp;&nbsp;
 																		<!-- 대댓글 작성 버튼 -->
 																</div>
 							                                    
-							                                   <!-- 댓글 아이콘 박스 -->
+							                                   <!-- 대댓글 아이콘 박스 -->
 							                                    <div class="icon_wrap">
 							                                        <div class="more_trigger">
 							                                            <div class="sprite_more_icon"></div>
@@ -198,10 +205,9 @@
 		                                    	<form th:id="${#ids.seq('subComBoxId_')}" style="display:none;">
 		                                    			<input type="hidden" id="com_id" th:value="${comm.com_id}">
 			                                    		<input type="text" name="subcom_text" id="subcom_text" class="subcom_text" value="" >
-														<div class="subcom_btn"><div id="asd">작성</div></div>
+														<div class="subcom_btn"><a id="asd">작성</a></div>
 												</form>
 		                                    </div>
-		                                    
 		                                </div>
 	                            	</div> 
 	                           </div> 
@@ -212,7 +218,7 @@
                             <div class="left_icons">
                                 <div class="heart_btn">
                                 	<!-- 좋아요 버튼 -->
-                                    <div class="sprite_heart_icon_outline" data-name="heartbeat" onclick=""></div>
+                                    <div class="sprite_heart_icon_outline" data-name="heartbeat" onclick="test1()"></div>
                                 </div>
                                 <div>
                                     <div class="sprite_bubble_icon"></div>
@@ -238,8 +244,13 @@
 						
 						<!-- 댓글 작성 창 -->
                        	<input type="hidden" id = "post_id" name="post_id" th:value="${post.post_id}">
+<<<<<<< Updated upstream
                         <div class="commit_field"><input type="text" id ="com_text" name="com_text" placeholder="댓글달기.." required>
                         <div class="upload_btn" id="upload_btn" onclick="insertComment()">게시</div>
+=======
+                        <div class="commit_field"><input type="text" id = "com_text" name="com_text" placeholder="댓글달기..">
+                        <a class="upload_btn" id="upload_btn" onclick="insertComment()">게시</a>
+>>>>>>> Stashed changes
                         </div>
                         <!-- <button id="upload_btn"><a onclick="insertComment()" style="text-decoration:none">게시</a></button> -->
                         
@@ -345,6 +356,7 @@ function deletePost() {
 		})
 	}); */
 
+	// 대댓글란 출력 메소드
 	 $(document).ready(function() {
 		 $(".replyBtn").next().click(function() {
 			 console.log("테스트")
@@ -375,7 +387,8 @@ function deletePost() {
 			}).done(function (fragment) {
 				$('#com_text').val("")
 				// 댓글 작성 후 작성란 공백처리
-				 $("#commentBox").replaceWith(fragment);
+				 //$("#commentBox").replaceWith(fragment);
+				location.reload();
 			})
 		} 
 	
@@ -399,15 +412,60 @@ function deletePost() {
 			}).done(function (fragment) {
 				 $(".subcom_text").val("")
 				 // 대댓글 작성 후 작성란 공백처리
-				 $("#subCommentArea").replaceWith(fragment);
+				 //$("#subCommentArea").replaceWith(fragment);
+				 location.reload();
 			})
 		})
 	 })
 	 
+	 //댓글 삭제
+	 $(document).ready(function() {
+		 $(".comDeleteBox").children().click(function() {
+			 console.log($(this));
+			 
+			 var com_id = {
+					 com_id : $(this).parent().parent().prev().val()
+			 }
+			 
+			 console.log(com_id)
+			 
+			 $.ajax({
+				url : "/deleteComment",
+				type : "POST",
+				data : com_id,
+				success: function (data) {
+					location.reload();
+				}
+			})
+		 })
+	 })
+	 
+	 $(document).ready(function() {
+		 $(".subComDeleteBox").children().click(function() {
+			 console.log($(this));
+			 
+			 var subcom_id = {
+					 subcom_id : $(this).next().val()
+			 }
+			 
+			 console.log(subcom_id)
+			 
+			 $.ajax({
+				url : "/deleteSubComment",
+				type : "POST",
+				data : subcom_id,
+				success : function (data) {
+					location.reload();
+				}
+			})
+		 })
+	 })
+	 
 	  // 댓글 삭제 메소드
-		function deleteComment() {
-			var com_id = $("#com_id").val();
+		/* function deleteComment() {
+			var com_id = $(this).parent().parent().prev().val();
 			
+			console.log(com_id)
 			$.ajax({
 				url : "/deleteComment",
 				type : "POST",
@@ -416,7 +474,7 @@ function deletePost() {
 				alert("댓글 삭제 성공");
 				location.reload();
 			})
-		}
+		} */
 	
 	// 피드 댓글 출력용 테스트 메소드
 	function ajax(){
@@ -433,6 +491,94 @@ function deletePost() {
 		  });
 		}
 	
+	// 좋아요 사진 바뀌는 버튼 메소드
+	function editNickname(){
+	var nickFormData = $("#nickForm").serialize();
+	$.ajax({
+	    type: 'post',
+	    url: '/updateNickname',
+	    data: nickFormData,
+		success: function (data) {
+		        alert("닉네임이 변경되었습니다."); 
+		        var nickname = data;
+		        $("#user_nick").replaceWith(`<div class="user_name" id="user_nick"> ${nickname} </div>`);
+		        $("#modal_nick").replaceWith(`<div id="modal_nick"> ${nickname}님의 프로필 </div>`);
+		        modalClose();
+		    },
+		    error: function (err) {
+		    	alert("닉네임을 변경할 수 없습니다.");
+		    	console.log(err);
+		    }
+		})
+}
+	
+	function test1(){
+		var post_id = {
+				post_id : $("#post_id").val()
+		}
+		
+		console.log(post_id)
+		$.ajax({
+			type : 'Post',
+			url : '/likeTest',
+			data : post_id,
+			success : function (data) {
+				alert("좋아요 ok");
+				var asd = data;
+				$(".sprite_heart_icon_outline").replaceWith(`<div class="liked_heart" id="liked_heart" onclick="test2()"></div>`);
+				},
+				error : function (err) {
+					alert("변경x")
+				}
+		})
+	}
+	
+	function test2(){
+		var post_id = {
+				post_id : $("#post_id").val()
+		}
+		
+		console.log(post_id)
+		$.ajax({
+			type : 'Post',
+			url : '/likeTest2',
+			data : post_id,
+			success : function (data) {
+				alert("좋아요삭제 ok");
+				var asd = data;
+				$(".user_name").replaceWith(`<div class="sprite_heart_icon_outline" data-name="heartbeat" onclick="test1()"></div>`);
+				},
+				error : function (err) {
+					alert("삭제x")
+				}
+		})
+	}
+	// 삭제로직
+	
+/* 
+
+function editNickname(){
+	var nickFormData = $("#nickForm").serialize();
+	$.ajax({
+	    type: 'post',
+	    url: '/updateNickname',
+	    data: nickFormData,
+		success: function (data) {
+		        alert("닉네임이 변경되었습니다."); 
+		        var nickname = data;
+		        $("#user_nick").replaceWith(`<div class="user_name" id="user_nick"> ${nickname} </div>`);
+		        $("#modal_nick").replaceWith(`<div id="modal_nick"> ${nickname}님의 프로필 </div>`);
+		        modalClose();
+		    },
+		    error: function (err) {
+		    	alert("닉네임을 변경할 수 없습니다.");
+		    	console.log(err);
+		    }
+		}) 
+}
+
+*/
+
 	/* 
 		해결해야 할 문제
 			
