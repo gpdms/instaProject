@@ -14,12 +14,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 댓글 출력 쿼리문 -->
 	<select id="selectAllComment" parameterType="com.study.springboot.comment.CommentDto" resultType="com.study.springboot.comment.CommentDto">
 		select * from comment where post_id = #{post_id} order by com_time desc
-	</select> 
+	</select> 	
 	
 	<!-- 대댓글 출력 쿼리문 -->
 	<select id="selectAllSubComment" resultType="com.study.springboot.comment.SubCommentDto">
 		select * from subcomment where com_id = #{com_id} order by subcom_time desc
-	</select>
+	</select>	
 	
 	<!-- 대댓글 출력 쿼리문 -->
 	<select id="findSubComByPostId" resultType="com.study.springboot.comment.SubComShowDto">
@@ -34,11 +34,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from comment where com_id = #{com_id}
 	</delete>
 	
+	<delete id="deleteSubComment">
+		delete from subcomment where subcom_id = #{subcom_id}
+	</delete>
+	
 	<!-- 대댓글 작성 쿼리문 -->
 	<insert id="insertSubComment">
 		insert into subcomment (mem_id, com_id, subcom_text) values (#{mem_id}, #{com_id}, #{subcom_text})
 	</insert>
 
+	<select id="findComTime" resultType="Integer" parameterType="Integer">
+		SELECT TIMESTAMPDIFF(second, (select com_time from comment where com_id = #{com_id}), current_timestamp())
+	</select>
+	
+	<!-- com_id로 현재시각 찾는 로직 1 -->
+	
+	<!-- 해당 현재시각으로 오늘날짜에서 얼마나 차이가 있는지 찾는 로직 2 -->
+	
+	
 	<!--<select id="calculateCommentTime" resultType="int">
 		select datediff (current_date(), (select com_time from comment where com_id = #{com_id}))
 	</select>-->

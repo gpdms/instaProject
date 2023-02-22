@@ -55,7 +55,13 @@ body {
     width: 25px;
     height: 25px;
 }
-
+.liked_heart {
+	display: inline-block;
+    background: url('/imgs/heart_black.png');
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+}
 .sprite_user_icon_outline {
     display: inline-block;
     background: url('/imgs/user.png');

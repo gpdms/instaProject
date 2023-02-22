@@ -23,6 +23,4 @@ public class CommentDto {
 	private String com_text;
 	private Timestamp com_time;
 	private String up_time;
-	
-	private PostDto postDto;
 }

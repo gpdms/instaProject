@@ -1,6 +1,5 @@
 package com.study.springboot.comment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Controller
+
 public class CommentController {
 	private final CommentDao commentdao;
 	// private final MemberDto memberDto;
@@ -73,7 +73,7 @@ public class CommentController {
 		// view에 뿌려주는 용도
 		//model.addAttribute("sList", commentdao.selectAllSubComment(com_id));
 
-		return "/view :: #subCommentArea";
+		return "/view :: #commentArea";
 	}
 
 	
@@ -100,15 +100,22 @@ public class CommentController {
 //	 return "view"; 
 //	 }
 	 
-
 	// 댓글 삭제. return값 아직 미완성
 	@ResponseBody
-	@GetMapping("/deleteComment")
+	@PostMapping("/deleteComment")
 	public String deleteComment(int com_id) {
-
 		commentdao.deleteComment(com_id);
-
-		return "삭제 완료";
+		
+		return "";
+	}
+	
+	// 대댓글 삭제.
+	@ResponseBody
+	@PostMapping("/deleteSubComment")
+	public String deleteSubComment(int subcom_id) {
+		commentdao.deleteSubComment(subcom_id);
+		
+		return "";
 	}
 
 	// feed에서 댓글 작성 시 사용 예정
@@ -119,31 +126,5 @@ public class CommentController {
 		String content = "";
 		return "테스트용 메소드";
 	}
-
-	// @GetMapping("/feed/{login_id}")
-	// public String toMyFeed(@PathVariable("login_id") String login_id, Model
-	// model) throws IOException{
-//		List<PostDto> myPostList = postDao.selectAllMyPost(login_id);
-//		log.info("-----------PostController toMyFeed()-------------");
-	//
-//		Map<String, List<Integer>> myImgMap = new HashMap<>();
-	//
-//		for (PostDto post : myPostList) {
-//			//포스트 한개의 이미지Dto들
-//			List<PostImgDto> imgs= postDao.selectAllMyImg(post.getPost_id());
-//			//포스트 한개의 이미지Id들
-//			List<Integer> imgIds = new ArrayList<>();
-//			for(PostImgDto img : imgs) {
-//				imgIds.add(img.getImg_id());
-//			}
-//			myImgMap.put(String.valueOf(post.getPost_id()), imgIds);
-//			imgIds = null;
-//		}
-//		log.info(myImgMap);
-	//
-//		model.addAttribute("myImgMap", myImgMap);
-//		model.addAttribute("myPostList", myPostList);
-//		return "feed";
-	// }
 
 }
