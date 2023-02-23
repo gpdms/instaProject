@@ -53,5 +53,13 @@
 		delete from follow where from_user=#{sessionId} and
 		to_user = #{mem_id}
 	</delete>
+	
+	<!-- 아이디 검색 -->
+	<select id="searchId" resultType="com.study.springboot.member.MemberDto">
+		select * from member 
+		<where>
+			(mem_id like #{searchWord})
+		</where>
+	</select>
 
 </mapper>

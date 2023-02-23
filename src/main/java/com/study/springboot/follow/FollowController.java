@@ -1,6 +1,10 @@
 package com.study.springboot.follow;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,6 +53,25 @@ public class FollowController {
 		
 	}
 	
+	//아이디 검색
+		@GetMapping("/search")
+		public String search(String searchWord, Model model) {
+			if(!searchWord.isEmpty()) {
+			log.info(searchWord);
+			
+			List<MemberDto> list = followDao.searchId("%"+searchWord+"%");
+			model.addAttribute("searchList", list);
+			return "search";
+			}
+			else {
+				model.addAttribute("msg", "검색어를 입력하세요.");
+				model.addAttribute("url", "location.href");
+
+				return "alert";
+			}
+			
+		}
+		
 	
 	
 		
