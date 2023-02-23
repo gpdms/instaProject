@@ -349,12 +349,8 @@
     transform:translateY(-50%);
     cursor: pointer;
     opacity: 0.6;
-<<<<<<< Updated upstream
 /*     pointer-events: none; */
-=======
-    pointer-events: none;
-    text-decoration: none;
->>>>>>> Stashed changes
+
 }
 
 .commit_field input:focus ~ .upload_btn{

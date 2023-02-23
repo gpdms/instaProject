@@ -79,4 +79,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update post_img set delete_yn = 'n' where post_id = #{post_id}
 	</update>
 	
+	
+	<update id="postLikePlus" parameterType="int" useGeneratedKeys="true" keyProperty="post_id">
+		update post set likes = #{likes}+1 where post_id = #{post_id}
+	</update>
+		<update id="postLikeMinus" parameterType="int" useGeneratedKeys="true" keyProperty="post_id">
+		update post set likes = #{likes}-1 where post_id = #{post_id}
+	</update>
+	
 </mapper>

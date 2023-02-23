@@ -15,29 +15,28 @@
     <link rel="stylesheet" href="/css/detail-page.css">
     <link rel="stylesheet" href="/css/update_modal.css">
 	<!-- 이미지 슬라이드 -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+ <link rel="stylesheet" href="/css/jquery.bxslider.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="/js/jquery.bxslider.min.js"></script>
+
 	<style>
- 		.bx-wrapper .bx-controls .bx-controls-auto{ 
- 			display : none; 
- 		} 
- 		.bx-wrapper .bx-controls .bx-controls-direction .bx-next, .bx-prev{
- 			z-index: 1;
- 		}
+/*  		.bx-wrapper .bx-controls .bx-controls-auto{  */
+/*  			display : none;  */
+/*  		}  */
+/*  		.bx-wrapper .bx-controls .bx-controls-direction .bx-next, .bx-prev{ */
+/*  			z-index: 1; */
+/*  		} */
  		
- 		.bx-wrapper .bx-controls .bx-pager{ 
- 			display : none; 
- 		} 
-
-
-  		#upload_btn {
- 			font-size: 15px;
- 			cursor:pointer;
- 			width:50px;
- 			height:20px;
-  		} 
+/*  		.bx-wrapper .bx-controls .bx-pager{  */
+/*  			display : none;  */
+/*  		}  */
+/*   		#upload_btn { */
+/*  			font-size: 15px; */
+/*  			cursor:pointer; */
+/*  			width:50px; */
+/*  			height:20px; */
+/*   		}  */
 	</style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-</head>
 <body>
 
 <section id="container">
@@ -61,9 +60,7 @@
 	                  <div class="trans_inner">
 		                  <ul class="bxslider">
 						     <li th:each="img : ${imgs}">
-						     	<a href="#">
-						     		<img th:src="|/imgs/post/${img.imgId}|" style="width:700px; height:700px; object-fit:cover;" alt="포스트이미지">
-						     	</a>
+						     	<img th:src="|/imgs/post/${img.imgId}|" style="width:700px; height:700px; object-fit:cover;" alt="포스트이미지">
 						     </li>
 						  </ul>
 	                  </div>
@@ -281,35 +278,29 @@
         <a style="color:#999;" id="upCloseBtn">취소</a>
       </div>
     </div>
+    
 
 <script src="/js/update_modal.js"></script>
-<!-- 이미지 슬라이드 -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 <script>
-  $(document).ready(function(){
-    $('.slider').bxSlider();
-  });
-  $(document).ready(function () {
-	    $('.bxslider').bxSlider({ // 클래스명 주의!
-	        auto: false, // 자동으로 애니메이션 시작
-	        slideWidth: 700, 
-	        speed: 500,  // 애니메이션 속도
-	        pause: 5000,  // 애니메이션 유지 시간 (1000은 1초)
-	        mode: 'horizontal', // 슬라이드 모드 ('fade', 'horizontal', 'vertical' 이 있음)
-	        autoControls: false, // 시작 및 중지버튼 보여짐
-	        pager: false, // 페이지 표시 보여짐
-	        captions: true, // 이미지 위에 텍스트를 넣을 수 있음
-	        infiniteLoop: false, //무한루프 x
-	        hideControlOnEnd: true 
-	    });
-	});
-  
-</script>
-<script src="/js/like.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script th:inline="javascript">
+$(document).ready(function () {
+    $('.bxslider').bxSlider({ // 클래스명 주의!
+        auto: false, // 자동으로 애니메이션 시작
+        slideWidth: 700, 
+//	        speed: 500,  // 애니메이션 속도
+//	        pause: 5000,  // 애니메이션 유지 시간 (1000은 1초)
+        mode: 'horizontal', // 슬라이드 모드 ('fade', 'horizontal', 'vertical' 이 있음)
+//	        autoControls: false, // 시작 및 중지버튼 보여짐
+//	        pager: false, // 페이지 표시 보여짐
+        captions: true, // 이미지 위에 텍스트를 넣을 수 있음
+        infiniteLoop: false, //무한루프 x
+        hideControlOnEnd: true 
+    });
+});
 
+</script>
+<!-- <script src="/js/like.js"></script> -->
+<!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
+<script th:inline="javascript">
 // 	게시글 삭제
 function deletePost() {
 	let ok = confirm("해당 게시글을 삭제하시겠습니까?");
@@ -334,11 +325,6 @@ function deletePost() {
 
 <script>
 const mem_id='[[${post.mem_id}]]';
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
-	 
 	 // 대댓글 입력창 출력 함수
 
 

@@ -34,7 +34,6 @@ public class FollowController {
 		//log.info("/follow 세션아이디---------:"+sessionId);
 		//log.info("/follow 홈유저아이디-------:"+homeUser);
 		//log.info("/follow add팔로우됐는지 확인---------:"+res);
-		
 	}
 	
 	@ResponseBody

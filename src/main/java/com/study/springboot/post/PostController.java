@@ -98,10 +98,14 @@ public class PostController {
 	  if(likedto ==null) {
 		  liketrue = false;
 	  }
+	  log.info("----post_id"+post_id);
+	  log.info("----likedto"+likedto);
+	  log.info("----로그인 유저"+login_user);
+	  log.info("----라이크 트루"+liketrue);
+	  
+	  
   	log.info("-----------PostController toView()-------------");
-  	log.info("----likedto"+likedto);
-  	log.info("----로그인 유저"+login_user);
-  	log.info("----라이크 트루"+liketrue);
+  	
   	
   	PostDto post = postDao.selectOnePost(post_id);
   	List<PostImgEntity> imgs = new ArrayList<>();
@@ -175,7 +179,7 @@ public class PostController {
 	
 	@PostMapping("/updatePost")
 	@ResponseBody
-	public int updatePost(PostDto post, Model model) {
+	public int updatePost(PostDto post) {
 		int up_result = postService.updatePostCont(post); 
 		if(up_result>0) {
 			return post.getPost_id();

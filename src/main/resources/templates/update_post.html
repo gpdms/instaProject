@@ -99,13 +99,14 @@ function delImg(imgId){
 	if (ok) {
 		var json = {img_id : imgId,
 					post_id : /*[[${post.post_id}]]*/
-		};
+					};
 		  $.ajax({
 			    type: 'post',
 			    url: '/deleteImg', 
 			    data: JSON.stringify(json),
 				contentType: "application/json",
 			    success: function (data) {
+			    	dara
 			        alert("이미지가 삭제되었습니다.");
 			   		 $("#img_preview").replaceWith(data);
 			   		 i = 0;

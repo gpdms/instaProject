@@ -5,8 +5,6 @@ package com.study.springboot.like;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
@@ -16,12 +14,11 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @Log4j2
 public class LikeController {
-	
 	private final LikeDao likedao;
 
 	@GetMapping("/like")
 	@ResponseBody
-	public String like(LikeDto postlike, Model model ) {
+	public String like(LikeDto postlike) {
 		log.info("..........."+postlike);
 		int lik = likedao.like(postlike);
 		return "ok";
@@ -36,12 +33,11 @@ public class LikeController {
 	
 	@ResponseBody
 	@GetMapping("/unlike")
-	public String unlike(LikeDto postlike, Model model) {
+	public String unlike(LikeDto postlike) {
 		int unlik = likedao.unlike(postlike);
 		return "delete";
 	}
-}	
-	
+
 	
 //	@RequestMapping("/like/insert/{id}")
 //	@ResponseBody
@@ -54,4 +50,8 @@ public class LikeController {
 //		return 1;
 //	}
 //
-//}
+
+
+}	
+	
+
