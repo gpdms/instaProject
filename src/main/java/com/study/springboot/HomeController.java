@@ -54,8 +54,9 @@ public void toFeed() {
 @GetMapping("/updateinfo")
 public void toUpdateinfo(HttpSession session, Model model) {
 	MemberDto sessionUser = (MemberDto) session.getAttribute("user");
-	String sessionEmail = sessionUser.getEmail();
-	model.addAttribute("sessionEmail", sessionEmail);
+//	String sessionEmail = sessionUser.getEmail();
+	String email = memberDao.selectOneMember(sessionUser.getMem_id()).getEmail();
+	model.addAttribute("sessionEmail", email);
 }
 
 
@@ -81,7 +82,7 @@ public String toMyHome(@PathVariable("mem_id") String mem_id, HttpSession sessio
 	model.addAttribute("homeUser", homeUser);
 	model.addAttribute("postCount", postCount);
 	model.addAttribute("firstImgs", firstImgs);
-	
+	log.info("포스팅처음이미지++++++++++++"+firstImgs);
 	//----------------팔로워----------------------
 	List<FollowDto> flwerList = followDao.selectFollower(mem_id);
 	int countFlwer = flwerList.size();
@@ -108,17 +109,17 @@ public String toMyHome(@PathVariable("mem_id") String mem_id, HttpSession sessio
 		//log.info("세션유저아이디-----"+sessionId);
 		//log.info("팔로우되어있으면 1------------:"+checkFlw);
 		
-		//좋아요 게시물
-		List<Integer> postLikesList = likeDao.mylike(sessionId);
-		//좋아요한 게시물의 첫번째 이미지들	
-		List<PostImgDto> firstImgsLikes = new ArrayList<>();
-		for (Integer post_id : postLikesList) {
-			List<PostImgDto> myImgList  = new ArrayList<>();
-			myImgList = postDao.selectAllImgByPost(post_id);
-			if(!myImgList.isEmpty()) 
-			firstImgs.add(myImgList.get(0));
-		}	
-		model.addAttribute("LikesImgList", firstImgsLikes);
+//		//좋아요 게시물
+//		List<Integer> postLikesList = likeDao.mylike(sessionId);
+//		//좋아요한 게시물의 첫번째 이미지들	
+//		List<PostImgDto> firstImgsLikes = new ArrayList<>();
+//		for (Integer post_id : postLikesList) {
+//			List<PostImgDto> myImgList  = new ArrayList<>();
+//			myImgList = postDao.selectAllImgByPost(post_id);
+//			if(!myImgList.isEmpty()) 
+//			firstImgs.add(myImgList.get(0));
+//		}	
+//		model.addAttribute("LikesImgList", firstImgsLikes);
 	return "my_home";
 }
 

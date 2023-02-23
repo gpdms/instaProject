@@ -1,5 +1,6 @@
 package com.study.springboot.post;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -166,6 +167,7 @@ public class PostController {
 		model.addAttribute("imgCount", imgs.size());
 	  	model.addAttribute("imgs", imgs);
 		}
+		
 	  	return "/update_post :: #img_preview"; 
 	}
 	
@@ -186,8 +188,17 @@ public class PostController {
 		int post_id = Integer.parseInt(post_idS);
 		int post_del_result =  postDao.deletePost(post_id);
 		if (post_del_result > 0) {
+			List<PostImgEntity> del_imgList = new ArrayList<>();
+			del_imgList	= imgRepo.findByPostId(Long.valueOf(post_id));
 			int img_del_result = postDao.realDeletePostImg(post_id);
+			if (img_del_result > 0) {
+				for(PostImgEntity postImg: del_imgList) {
+					File file = new File(postImg.getSavePath());
+					if(file.exists())
+			    		file.delete();
+				}
 			return post_del_result + img_del_result;
+			}
 		}
 		return 0;
 	}

@@ -66,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	delete from post_img where post_id = #{post_id}
   	</delete>
   	
+  	
 	<!-- 포스트 이미지 삭제 -->
 	<update id="deletePostImg" parameterType="int" >
 		update post_img set delete_yn = 'y' where img_id = #{img_id}

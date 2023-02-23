@@ -1,5 +1,6 @@
 package com.study.springboot.member;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -207,7 +208,8 @@ public class MemberController {
 			md.addAttribute("msg", "이메일이 변경되었습니다.");
 			md.addAttribute("url", "updateinfo");
 			return "alert";
-			
 		}
+		
+		
 	
 }
