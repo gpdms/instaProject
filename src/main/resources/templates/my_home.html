@@ -209,7 +209,7 @@ function signin() {
 	  alert("로그인이 필요한 기능입니다.");
 	  location.href = "/";
 }
-// 프로필 관련
+//------------------ 프로필 관련 
 function editNickname(){
 	var nickFormData = $("#nickForm").serialize();
 	$.ajax({
@@ -229,6 +229,7 @@ function editNickname(){
 		    }
 		}) 
 }
+// 사진 삭제
 function delPf() {
 	$.ajax({
 	    type: 'get',
@@ -245,6 +246,7 @@ function delPf() {
 	});
 }
 
+//사진 수정
 function fileChange() {
     // 파일이 선택되면 업로드를 진행한다.
     editPf();
@@ -283,8 +285,6 @@ function follow(){
 	console.log("팔로우클릭");
 	var mem_id = /*[[${homeUser.mem_id}]]*/;
 	var json = {"mem_id" : mem_id };
-	//console.log(JSON.stringify(mem_id));
-	//console.log(mem_id);
 	$.ajax({
 		type: 'post',
 		url: '/follow',
@@ -300,8 +300,6 @@ function unfollow(){
 	console.log("언팔로우클릭");
 	var mem_id = /*[[${homeUser.mem_id}]]*/;
 	var json = {"mem_id" : mem_id };
-	//console.log(JSON.stringify(mem_id));
-	//console.log(mem_id);
 	$.ajax({
 		type: 'post',
 		url: '/unfollow',

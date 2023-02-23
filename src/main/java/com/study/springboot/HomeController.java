@@ -33,10 +33,6 @@ public class HomeController {
 	private final MemberDao memberDao;
 	private final FollowDao followDao;
 
-@GetMapping("/signup")
-public void toSignup() {
-	
-}
 	
 @GetMapping("/")
 public String toLogIn() {

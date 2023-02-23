@@ -13,16 +13,30 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/detail-page.css">
+    <link rel="stylesheet" href="/css/update_modal.css">
 	<!-- 이미지 슬라이드 -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-	
-    <style>
-        #main_container {
-            /*height: 6000px;*/
-        }
-    </style>
+	<style>
+ 		.bx-wrapper .bx-controls .bx-controls-auto{ 
+ 			display : none; 
+ 		} 
+ 		.bx-wrapper .bx-controls .bx-controls-direction .bx-next, .bx-prev{
+ 			z-index: 1;
+ 		}
+ 		
+ 		.bx-wrapper .bx-controls .bx-pager{ 
+ 			display : none; 
+ 		} 
+
+
+  		#upload_btn {
+ 			font-size: 15px;
+ 			cursor:pointer;
+ 			width:50px;
+ 			height:20px;
+  		} 
+	</style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <script type=""></script>
 </head>
 <body>
 
@@ -44,16 +58,12 @@
                 
 					<!--이미지 -->
                     <div class="img_section">
-<!--                         <div class="trans_inner"> -->
-<!--                             <img src="imgs/img_section/img03.jpg" alt=""> -->
-<!--                         </div> -->
-<!-- 	                   <th:block th:each="img : ${imgs}" class="trans_inner" > -->
-<!-- 							<img th:src="|/images/${img.imgId}|" width="150" height="150" alt="포스트이미지"> -->
-<!-- 	                   </th:block> -->
 	                  <div class="trans_inner">
 		                  <ul class="bxslider">
 						     <li th:each="img : ${imgs}">
-						     	<a href="#"><img th:src="|/imgs/post/${img.imgId}|" width="150" height="150" alt="포스트이미지"></a>
+						     	<a href="#">
+						     		<img th:src="|/imgs/post/${img.imgId}|" style="width:700px; height:700px; object-fit:cover;" alt="포스트이미지">
+						     	</a>
 						     </li>
 						  </ul>
 	                  </div>
@@ -65,26 +75,25 @@
                         <header class="top">
                             <div class="user_container">
                                 <div class="profile_img">
-                                    <img src="/imgs/thumb.jpeg" alt="">
+                                    <img th:src="|/profile/${postUser.mem_id}|" alt="프로필이미지">
                                 </div>
                                 <div class="user_name">
                                     <div class="nick_name">[[${post.mem_id}]]</div>
                                     <div class="country">Seoul, South Korea</div>
                                 </div>
                             </div>
-                            <div class="sprite_more_icon" data-name="more">
-                                <ul class="more_detail">
-                                    <li>팔로우</li>
-                                    <li>수정</li>
-                                    <li>삭제</li>
-                                </ul>
-                            </div>
+                            <!--  글 삭제, 수정  -->
+                            <div id="upBtn" class="sprite_more_icon" data-name="more"> </div>
                         </header>
 						
-                        <section class="scroll_section" style="height:400px;"> 
+                        <section class="scroll_section">
                         	<!-- 작성 내용 -->
                             <div class="admin_container">
-                                <div class="admin"><img src="/imgs/thumb.jpeg" alt="user"></div>
+                                <div class="admin">
+                                	<a th:href="@{/myHome/{mem_id}(mem_id=${postUser.mem_id})}">
+	                    				<img th:src="|/profile/${postUser.mem_id}|" alt="프로필이미지">
+	                    			</a>
+                                </div>
                                 <div class="comment">
                                     <span class="user_id">[[${post.mem_id}]]</span>
                                     <div style="height:5px;"></div>
@@ -97,7 +106,6 @@
                                  </div>
                             </div>
 							
-							<!-- 댓글 -->
 							
 							<!-- 댓글 -->
 							
@@ -259,7 +267,21 @@
     </div>
 </section>
 
+ <!-- 글 삭제, 수정 버튼 모달 -->
+	<div class="updateMd upmodal">
+     <div class="upmodal-body">	
+	    <div th:if="${session.user.mem_id != post.mem_id}">
+	    	<a>팔로우</a> <hr>
+	    </div>
+	    <div th:if="${session.user.mem_id == post.mem_id}"> 
+		    <a th:href="@{/updatePostForm/{post_idS}(post_idS=${post.post_id})}">수정</a> <hr>
+		    <a style="color:red;" th:onclick="deletePost()">삭제</a> <hr>
+		</div>    
+        <a style="color:#999;" id="upCloseBtn">취소</a>
+      </div>
+    </div>
 
+<script src="/js/update_modal.js"></script>
 <!-- 이미지 슬라이드 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
@@ -270,21 +292,47 @@
   $(document).ready(function () {
 	    $('.bxslider').bxSlider({ // 클래스명 주의!
 	        auto: false, // 자동으로 애니메이션 시작
+	        slideWidth: 700, 
 	        speed: 500,  // 애니메이션 속도
 	        pause: 5000,  // 애니메이션 유지 시간 (1000은 1초)
 	        mode: 'horizontal', // 슬라이드 모드 ('fade', 'horizontal', 'vertical' 이 있음)
 	        autoControls: false, // 시작 및 중지버튼 보여짐
 	        pager: false, // 페이지 표시 보여짐
 	        captions: true, // 이미지 위에 텍스트를 넣을 수 있음
+	        infiniteLoop: false, //무한루프 x
+	        hideControlOnEnd: true 
 	    });
 	});
   
 </script>
 <script src="/js/like.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script th:inline="javascript">
+// 	게시글 삭제
+function deletePost() {
+	let ok = confirm("해당 게시글을 삭제하시겠습니까?");
+	if(ok) {
+		$.ajax({
+		    type: 'get',
+		    url: '/deletePost/' + /*[[${post.post_id}]]*/,
+			success: function (data) {
+			        alert("포스트를 삭제했습니다."); 
+			        if(data > 0) {
+			        	location.href = "/myHome/" + /*[[${post.mem_id}]]*/ ;
+			        }
+			    },
+			    error: function (err) {
+			    	alert("포스트를 삭제할 수 없습니다.");
+			    	console.log(err);
+			    }
+			}) 
+	}
+}
+</script>
+
 <script>
 const mem_id='[[${post.mem_id}]]';
-const like_id='[[${post.like_id}]]';
+// const like_id='[[${post.like_id}]]';
 	 // 대댓글창 출력 함수
 	$(document).ready(function() {
 		$(".deleteBox").next().click(function() {
@@ -452,17 +500,17 @@ const like_id='[[${post.like_id}]]';
 				}
 			})
 		};
-	function count(){
+// 	function count(){
 		
-		$.ajax({
-			type:'get',
-			url:'/likenum',
-			data:'like_id='+like_id,
-			success: function(data) {
-				if()
-			}
-		})
-	}	
+// 		$.ajax({
+// 			type:'get',
+// 			url:'/likenum',
+// 			data:'like_id='+like_id,
+// 			success: function(data) {
+// 				if()
+// 			}
+// 		})
+// 	}	
 	/* 
 		해결해야 할 문제
 			
