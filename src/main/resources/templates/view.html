@@ -109,11 +109,18 @@
 							
 							<!-- 댓글 -->
 							
+							<div id="commentBox">
 							 <div id="commentTable">
 							 	<div class="user_container-detail" th:each="comm,i : ${cList}">
-	                                <div class="user"><img src="imgs/thumb02.jpg" alt="user"></div>
+	                                <div class="user">
+	                                	<a th:href="@{/myHome/{mem_id}(mem_id=${comm.mem_id})}">
+	                                		<img th:src="|/profile/${comm.mem_id}|" alt="댓글프로필">
+	                                	</a>
+	                                </div>
 	                               		 <div class="comment">
-		                                    <span class="user_id">[[${comm.mem_id}]]</span>[[${comm.com_text}]]
+	                               		 	<!-- 댓글 작성자, 댓글 내용 출력 -->
+		                                    <span class="user_id">[[${comm.mem_id}]]</span>
+		                                    <span class="comm_content">[[${comm.com_text}]]</span>
 		                                    <input type="hidden" th:value="${comm.mem_id}">
 		                                    <input type="hidden" id="com_id" th:value="${comm.com_id}">
 		                                   
@@ -140,15 +147,8 @@
 												<!-- 댓글 작성자 id와 로그인 세션값 id 비교해서 일치하는 경우에 수정 버튼 출력 th:if 사용 -->
 											</div>
 		                                    
-		                                    <!-- 대댓글 입력 폼 -->
-		                                    <div class="subComBox">
-		                                    	<form th:id="${#ids.seq('subComBoxId_')}" style="display:none;">
-		                                    		<input type="hidden" id="com_id" th:value="${comm.com_id}">
-													<input type="text" name="subcom_text" id="subcom_text" class="subcom_text" placeholder="대댓글 작성" value="" >
-													<input type="button" value="대댓글 작성">														
-												</form>
-		                                    </div>
 		                                   
+		                                   <!-- 댓글 아이콘 박스 -->
 		                                    <div class="icon_wrap">
 		                                        <div class="more_trigger">
 		                                            <div class="sprite_more_icon"></div>
@@ -219,9 +219,8 @@
 		                                </div>
 	                            	</div> 
 	                           </div> 
-	                           
-	                           
-	                           
+	                           </div>
+	                           <!-- 댓글 -->
                         </section>
 
                         <div class="bottom_icons">
@@ -250,16 +249,14 @@
                         <div class="timer">2시간</div>
 
 
-						<!-- th:if 로그인세션 존재하면 출력되게 -->
+							<!-- 댓글 작성 창 -->
+							<!-- <input type="hidden" id = "mem_id" name="mem_id" value="${session.user.mem_id}"> -->
+	                       	<input type="hidden" id = "post_id" name="post_id" th:value="${post.post_id}">
+	                        <div class="commit_field">
+		                        <input type="text" id ="com_text" name="com_text" placeholder="댓글달기.." required>
+		                        <div class="upload_btn" id="upload_btn" onclick="insertComment()">게시</div>
+	                        </div>
 						
-                        	<input type="hidden" id = "mem_id" name="mem_id" value="${session.user.mem_id}">
-                        	<input type="hidden" id = "post_id" name="post_id" th:value="${post.post_id}">
-                            <input type="text" id = "com_text" name="com_text" placeholder="댓글달기..">
-                            <button id="upload_btn"><a onclick="insertComment()" style="text-decoration:none">게시</a></button>
-                            
-                            
-                           
-
                     </div>
                 </article>
             </div>
@@ -332,15 +329,15 @@ function deletePost() {
 
 <script>
 const mem_id='[[${post.mem_id}]]';
-// const like_id='[[${post.like_id}]]';
-	 // 대댓글창 출력 함수
+// const like_id='[[${post.likes}]]';
+	 
+	 // 대댓글 입력창 출력 함수
 	$(document).ready(function() {
-		$(".deleteBox").next().click(function() {
+		$(".showSubCom").prev().click(function() {
 			//let a = $(this).next();
 			
-			let a = $(this).parent().next().children();
+			let a = $(this).parent().next().next().next().children();
 			console.log(a)
-			
 			
 			if( a.is(":visible")) {
 				a.css('display','none');
@@ -349,25 +346,27 @@ const mem_id='[[${post.mem_id}]]';
 			}
 		})
 	});
-
-	function updateComment() {
-		var params = {
-				post_id : $("#post_id").val(),
-				com_text : $('#com_text').val()
-			};
-	    $.ajax({
-	        url: "/insertComment",
-	        type: "POST",
-	        data: params,
-	    })
-	    .done(function (fragment) {
-	        $('#commentTable').replaceWith(fragment);
-	    });
-	}
 	 
-	 
-	// 댓글 인서트 메소드
+	// 대댓글란 출력 메소드
+	 $(document).ready(function() {
+		 $(".replyBtn").next().click(function() {
+			 console.log("테스트")
+			 
+			 let element = $(this).parent().next().next()
+			 console.log(element)
+			 
+			 if( element.is(":visible")) {
+				 element.css('display','none');
+			} else {
+				element.css('display','block');
+			}
+		 })
+	 })
+	
+	 // 댓글 인서트 메소드
 	 function insertComment() {
+		
+		if($("#post_id").val() != null) {
 			var params = {
 					post_id : $("#post_id").val(),
 					com_text : $('#com_text').val()
@@ -379,11 +378,15 @@ const mem_id='[[${post.mem_id}]]';
 				data : params
 			}).done(function (fragment) {
 				$('#com_text').val("")
+				location.reload();
 				// 댓글 작성 후 작성란 공백처리
-				 $("#commentTable").replaceWith(fragment);
+				//$("#commentTable").replaceWith(fragment);
 			})
-		} 
-	
+		} else {
+			alert("댓글을 입력 해 주세요")
+		}
+	} 
+	 
 	// 대댓글 인서트 메소드
 	$(document).ready(function() {
 		$(".subcom_text").next().click(function() {
@@ -393,8 +396,8 @@ const mem_id='[[${post.mem_id}]]';
 			// 댓글 작성 버튼을 기준으로 prev와 next를 이용해서 com_id 및 대댓글 작성란을 찾게끔 구현했음.
 		
 			var params = {
-					"com_id" : com_id,
-					"subcom_text" : subcom_text
+					com_id : com_id,
+					subcom_text : subcom_text
 				};
 		
 			$.ajax({
@@ -404,62 +407,55 @@ const mem_id='[[${post.mem_id}]]';
 			}).done(function (fragment) {
 				 $(".subcom_text").val("")
 				 // 대댓글 작성 후 작성란 공백처리
-				 $("#subComShowHere").append(fragment);
+				 //$("#subCommentArea").replaceWith(fragment);
+				 location.reload();
 			})
-			
 		})
 	 })
-	 
-	  // 댓글 삭제 메소드
-		function deleteComment() {
-			var com_id = $("#com_id").val();
-			
-			$.ajax({
+	
+	 //댓글 삭제
+	 $(document).ready(function() {
+		 $(".comDeleteBox").children().click(function() {
+			 console.log($(this));
+			 
+			 var com_id = {
+					 com_id : $(this).parent().parent().prev().val()
+			 }
+			 
+			 console.log(com_id)
+			 
+			 $.ajax({
 				url : "/deleteComment",
 				type : "POST",
-				data : com_id
-			}).success(function (data) {
-				alert("댓글 삭제 성공");
-				location.reload();
+				data : com_id,
+				success: function (data) {
+					location.reload();
+				}
 			})
-		}
-		
-	document.querySelector("#text_btn").addEventListener("click", function() {
-		const a = "<div>테스트</div>";
-	
-		$.ajax({
-			type : "POST",
-			url : "/ajaxTest",
-			dataType : "text",
-			data : "a", 
-			success : function(res) {
-				$(".comment_box").append(data)
-				console.log("성공");
-			},
-			error : function(request,status,error) {
-				console.log("통신 실패" + "\n" + 
-				"code : " + request.status + "\n" + 
-				"message : " + request.responseText + "\n" + 
-				"error" + error
-				)
-			}
-		})
-	})
-	
-	
-	function ajax(){
-		  $.ajax({
-		    url: "/test",
-		    type: "POST",
-		    success : function(data){
-		      //alert(data)
-		     $(".comment_box").append(data)
-		    },
-		    error : function(){
-		      alert("에러")		
-		    }
-		  });
-		}
+		 })
+	 })
+	 
+	 //대댓글 삭제
+	 $(document).ready(function() {
+		 $(".subComDeleteBox").children().click(function() {
+			 console.log($(this));
+			 
+			 var subcom_id = {
+					 subcom_id : $(this).next().val()
+			 }
+			 
+			 console.log(subcom_id)
+			 
+			 $.ajax({
+				url : "/deleteSubComment",
+				type : "POST",
+				data : subcom_id,
+				success : function (data) {
+					location.reload();
+				}
+			})
+		 })
+	 })
 	
 	// 좋아요 추가 메소드
 	function addLike(){
@@ -478,7 +474,6 @@ const mem_id='[[${post.mem_id}]]';
 			    	console.log(err);
 			    }
 		})
-
 	};
 	
 	//좋아요 삭제 메소드
@@ -511,19 +506,6 @@ const mem_id='[[${post.mem_id}]]';
 // 			}
 // 		})
 // 	}	
-	/* 
-		해결해야 할 문제
-			
-		3. 댓글 수정기능(대댓글 기능과 비슷하게), 대댓글 삭제기능
-		4. 방금 전, 몇분 전, 몇시간 전, 몇일 전, 몇주 전 등 시간 출력하기
-			7
-		5. 로그인 세션값이 존재하면 댓글 창 출력되게
-			
-			
-		- 좋아요
-		1. 누르면 인서트, 빨간 하트로 시간차 줘서 바뀌게
-		2. 
-	*/
 	
 </script>
 </body>
