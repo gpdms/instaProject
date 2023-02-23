@@ -7,7 +7,7 @@
 	<!-- 팔로워 리스트: 나를 팔로우하는 사람들 -->
 	<select id="selectFollower"
 		resultType="com.study.springboot.follow.FollowDto">
-		select f.from_user, f.to_user, f.flw_date, m.profimg
+		select f.from_user, f.to_user, f.flw_date, m.profimg, m.nickname
 		from follow f, member m
 		where f.to_user = #{mem_id} and f.from_user = m.mem_id
 	</select>
@@ -22,7 +22,7 @@
 	<!-- 팔로잉 리스트: 내가 팔로우하는 사람들 -->
 	<select id="selectFollowing"
 		resultType="com.study.springboot.follow.FollowDto">
-		select f.from_user, f.to_user, f.flw_date, m.profimg
+		select f.from_user, f.to_user, f.flw_date, m.profimg, m.nickname
 		from follow f, member m
 		where f.from_user = #{mem_id} and f.to_user = m.mem_id
 	</select>

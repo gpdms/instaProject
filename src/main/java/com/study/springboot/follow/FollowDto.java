@@ -18,5 +18,6 @@ public class FollowDto {
 	private String from_user;
 	private String to_user;
 	private Timestamp flw_date;
+	private String nickname;
 	
 }
