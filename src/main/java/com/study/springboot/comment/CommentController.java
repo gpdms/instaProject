@@ -24,8 +24,9 @@ public class CommentController {
 	// private final MemberDto memberDto;
 
 	// 댓글 인서트 메소드
+	@ResponseBody
 	@PostMapping("/insertComment1")
-	public String insertComment(Model model, @RequestParam Map<String, Object> resultMap, HttpSession session) {
+	public int insertComment(Model model, @RequestParam Map<String, Object> resultMap, HttpSession session) {
 
 		CommentDto commDto = new CommentDto();
 		int post_id = Integer.parseInt((String) (resultMap.get("post_id")));
@@ -45,7 +46,7 @@ public class CommentController {
 		// db에 인서트
 		model.addAttribute("cList", commentdao.selectAllComment(post_id));
 		// view에 뿌려주는 용도
-		return "/view :: #commentBox";
+		return post_id;
 	}
 
 	// 대댓글 인서트 메소드

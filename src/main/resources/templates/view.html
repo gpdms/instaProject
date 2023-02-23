@@ -334,7 +334,10 @@ function deletePost() {
 
 <script>
 const mem_id='[[${post.mem_id}]]';
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 	 
 	 // 대댓글 입력창 출력 함수
 
@@ -376,24 +379,43 @@ const mem_id='[[${post.mem_id}]]';
 	 // 댓글 인서트 메소드
 	 function insertComment() {
 		
-		if($("#post_id").val() != null) {
+		if($("#com_text").val() == "") {
+			alert("댓글을 입력 해 주세요");
+		} else {
+			
 			var params = {
 					post_id : $("#post_id").val(),
 					com_text : $('#com_text').val()
 				};
 			
-			$.ajax({
+			/* $.ajax({
 				url : "/insertComment1",
 				type : "POST",
 				data : params
-			}).done(function (fragment) {
+			}).done(function (data) {
+				
+				console.log(data);
 				$('#com_text').val("")
-				location.reload();
+				location.href = ('/view'+data);
+				//location.reload();
 				// 댓글 작성 후 작성란 공백처리
 				//$("#commentTable").replaceWith(fragment);
+			}) */
+			
+			$.ajax({
+				url : "/insertComment1",
+				type : "POST",
+				data : params,
+				success : (function (data) {
+					
+					console.log(data);
+					$('#com_text').val("")
+					location.href = ('/view/'+data);
+					//location.reload();
+					// 댓글 작성 후 작성란 공백처리
+					//$("#commentTable").replaceWith(fragment);
+				})
 			})
-		} else {
-			alert("댓글을 입력 해 주세요")
 		}
 	} 
 	 
@@ -405,21 +427,25 @@ const mem_id='[[${post.mem_id}]]';
 			// 대댓글 작성 시 자신이 종속되어 있는 댓글의 번호를 참조해야 하기 때문에
 			// 댓글 작성 버튼을 기준으로 prev와 next를 이용해서 com_id 및 대댓글 작성란을 찾게끔 구현했음.
 		
-			var params = {
-					com_id : com_id,
-					subcom_text : subcom_text
-				};
-		
-			$.ajax({
-				url : "/insertSubComment",
-				type : "POST",
-				data : params
-			}).done(function (fragment) {
-				 $(".subcom_text").val("")
-				 // 대댓글 작성 후 작성란 공백처리
-				 //$("#subCommentArea").replaceWith(fragment);
-				 location.reload();
-			})
+			if(subcom_text == "") {
+				alert("댓글을 입력 해 주세요");
+			} else {
+				var params = {
+						com_id : com_id,
+						subcom_text : subcom_text
+					};
+			
+				$.ajax({
+					url : "/insertSubComment",
+					type : "POST",
+					data : params
+				}).done(function (fragment) {
+					 $(".subcom_text").val("")
+					 // 대댓글 작성 후 작성란 공백처리
+					 //$("#subCommentArea").replaceWith(fragment);
+					 location.reload();
+				})
+			}
 		})
 	 })
 	
