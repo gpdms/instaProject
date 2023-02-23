@@ -79,17 +79,14 @@
 	          		<a th:if="${session.user != null}" th:href="@{/view/{post_id}(post_id=${img.post_id})}"> 
 						<img th:src="|/imgs/post/${img.img_id}|" width="150" height="150" alt="첫번째_미리보기_이미지">
 					</a>
-					<a th:if="${session.user == null}" href="#" onclick="signin()"> 
-						<img th:src="|/imgs/post/${img.img_id}|" width="150" height="150" alt="첫번째_미리보기_이미지">
-					</a>
 				</div>
             </div>
             <div th:if="${postCount == 0}">
 				<p style="font-size: 20px; color: #555;">등록된 게시글이 없습니다</p>
 			</div>
 
-			<!-- 북마크 -->
-            <div class="bookmark_contents contents_container">
+			<!-- 좋아요 -->
+            <div class="bookmark_contents contents_container" >
                 <div class="pic">
                     <a href="#"><img src="imgs/img_section/img03.jpg" alt=""></a>
                 </div>

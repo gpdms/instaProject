@@ -17,4 +17,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <select id="likeview" resultType="com.study.springboot.like.LikeDto">
 	select * from postlike where post_id = #{post_id} and mem_id = #{mem_id}  
 </select>
+<select id="mylike" resultType="Integer">
+		select 
+			post_id
+		from 
+			postlike
+		where 
+			mem_id = #{mem_id}
+		order by like_id desc
+</select>
 </mapper>

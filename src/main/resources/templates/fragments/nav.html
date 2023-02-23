@@ -81,7 +81,7 @@
       </ul>
       
       <ul th:if="${session.user != null}" class="dep1">
-        <li><a th:href="@{/}"><div class="home_icon"></div><p>&nbsp; &nbsp;홈</p></a></li>
+        <li><a th:href="@{/myHome/{mem_id}(mem_id=${session.user.mem_id})}"><div class="home_icon"></div><p>&nbsp; &nbsp;홈</p></a></li>
         <li><a href="#"><div class="search_icon"></div><p>&nbsp; &nbsp;검색</p></a></li>
         <li><a href="#" onclick="someday()"><div class="message_icon"></div><p>&nbsp; &nbsp;메시지</p></a></li>
         <li><a href="#" onclick="someday()"><div class="notif_icon"></div><p>&nbsp; &nbsp;알림</p></a></li>

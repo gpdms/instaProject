@@ -22,9 +22,9 @@
 <!-- 	               th:href="@{/feed/{login_id}(login_id=${session.user.mem_id})}"> -->
 <!-- 	               	<div class="sprite_write_logo"></div> -->
 <!-- 	               </a> -->
-		           <a th:if="${session.user != null}" href="#" onclick="someday()"> 
-		           	<div class="sprite_write_logo"></div>
-		           </a>
+			           <a th:if="${session.user != null}" th:href="@{/myHome/{mem_id}(mem_id=${session.user.mem_id})}"> 
+			           	<div class="sprite_write_logo"></div>
+			           </a>
             </h1>
 
             <div class="search_field">

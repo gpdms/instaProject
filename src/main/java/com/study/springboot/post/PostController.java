@@ -64,6 +64,7 @@ public class PostController {
 	
     @PostMapping("/upload")
     @Transactional
+    @ResponseBody
     public String insertPost(PostDto post, @RequestParam("imgs") List<MultipartFile> imgs, Model model) {
     	//post테이블에 insert(postService -> postDao.xml(Mybatis))
     	int newPost_id = postService.insertPost(post);
@@ -73,19 +74,16 @@ public class PostController {
     	if(newPost_id != 0)
     	newImgIds = imgService.savePostImg(newPost_id, imgs);
     	
-        //post_img테이블에 insert 성공시에 post 반환
+        //post_img테이블에 insert 성공시에 해당 멤버아이디 반환
     	PostDto newPost = null;
     	if(!newImgIds.isEmpty()) {
        	 newPost = postDao.selectOnePost(newPost_id);
         }
         
         if(newPost != null) {
-        	 model.addAttribute("imgList", newImgIds);
-        	 model.addAttribute("post", newPost);
-        	 return "feed";
+        	 return newPost.getMem_id();
         } else {
-        	model.addAttribute("msg", "게시물 등록에 실패하였습니다!");
-        	return "new_post";
+        	return null;
         }
     }
 	
@@ -98,15 +96,8 @@ public class PostController {
 	  if(likedto ==null) {
 		  liketrue = false;
 	  }
-	  log.info("----post_id"+post_id);
-	  log.info("----likedto"+likedto);
-	  log.info("----로그인 유저"+login_user);
-	  log.info("----라이크 트루"+liketrue);
-	  
 	  
   	log.info("-----------PostController toView()-------------");
-  	
-  	
   	PostDto post = postDao.selectOnePost(post_id);
   	List<PostImgEntity> imgs = new ArrayList<>();
   	imgs = imgRepo.findByPostIdAndDeleteYnOrderByInTimeDesc(post_id, "n");
@@ -144,6 +135,8 @@ public class PostController {
   	model.addAttribute("imgs", imgs); 
   	model.addAttribute("post", post);
   	model.addAttribute("liketrue", liketrue);
+  	
+  	
   	return "view";
   }
   

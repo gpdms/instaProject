@@ -1,5 +1,7 @@
 package com.study.springboot.like;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,4 +13,6 @@ public interface LikeDao {
 	public int unlike(LikeDto postlike);
 	public int likeheart(LikeDto postlike);
 	public LikeDto likeview(@Param("post_id")int post_id, @Param("mem_id") String mem_id);
+	
+	public List<Integer> mylike(@Param("mem_id") String mem_id);
 }

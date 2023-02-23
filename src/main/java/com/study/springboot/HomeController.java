@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.study.springboot.follow.FollowDao;
 import com.study.springboot.follow.FollowDto;
+import com.study.springboot.like.LikeDao;
 import com.study.springboot.member.MemberDao;
 import com.study.springboot.member.MemberDto;
 import com.study.springboot.post.ImgService;
@@ -32,6 +33,7 @@ public class HomeController {
 	private final PostDao postDao;
 	private final MemberDao memberDao;
 	private final FollowDao followDao;
+	private final LikeDao likeDao; 
 
 	
 @GetMapping("/")
@@ -105,7 +107,18 @@ public String toMyHome(@PathVariable("mem_id") String mem_id, HttpSession sessio
 		//log.info("페이지주인 아이디--------:"+mem_id);
 		//log.info("세션유저아이디-----"+sessionId);
 		//log.info("팔로우되어있으면 1------------:"+checkFlw);
-	
+		
+		//좋아요 게시물
+		List<Integer> postLikesList = likeDao.mylike(sessionId);
+		//좋아요한 게시물의 첫번째 이미지들	
+		List<PostImgDto> firstImgsLikes = new ArrayList<>();
+		for (Integer post_id : postLikesList) {
+			List<PostImgDto> myImgList  = new ArrayList<>();
+			myImgList = postDao.selectAllImgByPost(post_id);
+			if(!myImgList.isEmpty()) 
+			firstImgs.add(myImgList.get(0));
+		}	
+		model.addAttribute("LikesImgList", firstImgsLikes);
 	return "my_home";
 }
 
