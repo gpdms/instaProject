@@ -78,13 +78,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="restoreAllPostImg" parameterType="int" >
 		update post_img set delete_yn = 'n' where post_id = #{post_id}
 	</update>
-	
-	
-	<update id="postLikePlus" parameterType="int" useGeneratedKeys="true" keyProperty="post_id">
-		update post set likes = #{likes}+1 where post_id = #{post_id}
+	<update id="pluslikes" parameterType="com.study.springboot.post.PostDto" useGeneratedKeys="true"  keyProperty="post_id">
+		update post set likes = #{likes} + 1 where post_id =#{post_id} 
 	</update>
-		<update id="postLikeMinus" parameterType="int" useGeneratedKeys="true" keyProperty="post_id">
-		update post set likes = #{likes}-1 where post_id = #{post_id}
+	<update id="minuslikes" parameterType="com.study.springboot.post.PostDto" useGeneratedKeys="true"  keyProperty="post_id">
+		update post set likes = #{likes} - 1 where post_id =#{post_id} 
 	</update>
-	
+	<select id="selectlikes">
+		select likes from post where post_id = #{post_id}
+	</select>
+
 </mapper>

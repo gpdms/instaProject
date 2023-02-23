@@ -17,6 +17,8 @@ public interface PostDao {
 	public int updatePostContent(PostDto post);
 	public int deletePost(int post_id);
 	public int realDeletePostImg(int post_id);
+	public int pluslikes(PostDto postDto);
+	public int minuslikes(PostDto postDto);
 	
 //	이미지 관련
 	public List<PostImgDto> selectAllImgByPost(int post_id);

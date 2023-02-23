@@ -143,6 +143,7 @@
 												<span class="showSubCom"><a onclick="">댓글 보기&nbsp;&nbsp;</a></span>
 												<!-- 댓글 작성자 id와 로그인 세션값 id 비교해서 일치하는 경우에 수정 버튼 출력 th:if 사용 -->
 											</div>
+		                                    
 		                                   
 		                                   <!-- 댓글 아이콘 박스 -->
 		                                    <div class="icon_wrap">
@@ -221,9 +222,13 @@
 
                         <div class="bottom_icons">
                             <div class="left_icons">
-                                <div class="heart_btn" onclick="addLike()" id="hertbtn">
-                                    <div class="sprite_heart_icon_outline" data-name="heartbeat" id="heartbeat"></div>
+                                <div id="postlike">
+	                                <div th:if ="${liketrue!=true}"class="heart_btn" onclick="addLike()" id="hertbtn">
+	                                    <div class="sprite_heart_icon_outline" data-name="heartbeat" id="heartbeat"></div>
+	                                </div>
+	                                <div th:if ="${liketrue == true}" id="heartbeatNegative" class="heart_btn" onclick="addLike1()"><img src="/imgs/colorheart.jpg"></div>
                                 </div>
+                                
                                 <div>
                                     <div class="sprite_bubble_icon"></div>
                                 </div>
@@ -239,7 +244,7 @@
 
                         <div class="count_likes">
                             좋아요
-                            <span class="count"></span>개
+                            <span class="count" id="countlikes">[[${post.likes}]]</span>개
                             
                         </div>
                         <div class="timer">2시간</div>
@@ -296,6 +301,7 @@ $(document).ready(function () {
 <!-- <script src="/js/like.js"></script> -->
 <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
 <script th:inline="javascript">
+
 // 	게시글 삭제
 function deletePost() {
 	let ok = confirm("해당 게시글을 삭제하시겠습니까?");
@@ -320,10 +326,7 @@ function deletePost() {
 
 <script>
 const mem_id='[[${post.mem_id}]]';
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 	 
 	 // 대댓글 입력창 출력 함수
 
@@ -365,29 +368,24 @@ const mem_id='[[${post.mem_id}]]';
 	 // 댓글 인서트 메소드
 	 function insertComment() {
 		
-		if($("#com_text").val() == "") {
-			alert("댓글을 입력 해 주세요");
-		} else {
-			
+		if($("#post_id").val() != null) {
 			var params = {
 					post_id : $("#post_id").val(),
 					com_text : $('#com_text').val()
 				};
 			
-			 $.ajax({
+			$.ajax({
 				url : "/insertComment1",
 				type : "POST",
 				data : params
-			}).done(function (data) {
-				
-				console.log(data);
+			}).done(function (fragment) {
 				$('#com_text').val("")
 				location.reload();
-				//location.reload();
 				// 댓글 작성 후 작성란 공백처리
 				//$("#commentTable").replaceWith(fragment);
-			}) 
-			
+			})
+		} else {
+			alert("댓글을 입력 해 주세요")
 		}
 	} 
 	 
@@ -399,25 +397,21 @@ const mem_id='[[${post.mem_id}]]';
 			// 대댓글 작성 시 자신이 종속되어 있는 댓글의 번호를 참조해야 하기 때문에
 			// 댓글 작성 버튼을 기준으로 prev와 next를 이용해서 com_id 및 대댓글 작성란을 찾게끔 구현했음.
 		
-			if(subcom_text == "") {
-				alert("댓글을 입력 해 주세요");
-			} else {
-				var params = {
-						com_id : com_id,
-						subcom_text : subcom_text
-					};
-			
-				$.ajax({
-					url : "/insertSubComment",
-					type : "POST",
-					data : params
-				}).done(function (fragment) {
-					 $(".subcom_text").val("")
-					 // 대댓글 작성 후 작성란 공백처리
-					 //$("#subCommentArea").replaceWith(fragment);
-					 location.reload();
-				})
-			}
+			var params = {
+					com_id : com_id,
+					subcom_text : subcom_text
+				};
+		
+			$.ajax({
+				url : "/insertSubComment",
+				type : "POST",
+				data : params
+			}).done(function (fragment) {
+				 $(".subcom_text").val("")
+				 // 대댓글 작성 후 작성란 공백처리
+				 //$("#subCommentArea").replaceWith(fragment);
+				 location.reload();
+			})
 		})
 	 })
 	
@@ -472,11 +466,15 @@ const mem_id='[[${post.mem_id}]]';
 		
 		$.ajax({
 			type: 'get',
-		    url: '/like',
+		    url: '/likes',
 		    data: 'post_id='+post_id +'&mem_id='+mem_id,
 			success: function (data) {
-			        $("#heartbeat").replaceWith(`<div id="heartbeatNegative" class="heart_btn" onclick="addLike1()"><img src="/imgs/colorheart.jpg"></div>`);
-			    },
+				console.log(data);
+				var child = `<div id="heartbeatNegative" class="heart_btn" onclick="addLike1()"><img src="/imgs/colorheart.jpg"></div>`;
+			    $("#postlike").empty();    
+				$("#postlike").append(child);
+				$("#countlikes").replaceWith(`<span class="count" id="countlikes">`+data+`</span>`)},
+				
 			    error: function (err) {
 			    	alert("좋아요버튼을 다시 눌러주세요");
 			    	console.log(err);
@@ -494,8 +492,13 @@ const mem_id='[[${post.mem_id}]]';
 				url: '/unlike',
 				data: 'post_id='+post_id +'&mem_id='+mem_id,
 				success: function(data) {
-					$("#heartbeatNegative")
-					.replaceWith(`<div class="sprite_heart_icon_outline" data-name="heartbeat" id="heartbeat"></div>`)
+					console.log(data);
+					var child = `<div class="heart_btn" onclick="addLike()" id="hertbtn">
+                        <div class="sprite_heart_icon_outline" data-name="heartbeat" id="heartbeat"></div>
+                        </div>`;
+				    $("#postlike").empty();    
+					$("#postlike").append(child);
+					$("#countlikes").replaceWith(`<span class="count" id="countlikes">`+data+`</span>`)
 				},
 				error: function (err) {
 					alert("좋아요버튼을 다시 눌러주세요");
@@ -503,18 +506,65 @@ const mem_id='[[${post.mem_id}]]';
 				}
 			})
 		};
-// 	function count(){
 		
-// 		$.ajax({
-// 			type:'get',
-// 			url:'/likenum',
-// 			data:'like_id='+like_id,
-// 			success: function(data) {
-// 				if()
+// 		//좋아요 개수 카운트 메소드
+// 		function countlike() {
+// 			  // get the post ID and user ID
+// 			  var post_id = $("#post_id").val(); // replace with actual post ID
+// 			  var mem_id = $("#mem_id").val();// replace with actual user ID
+			 
+// 			  // send an AJAX request to retrieve the like status for this post and user
+// 			  $.ajax({
+// 			    type: 'get',
+// 			    url: '/pluslikes',
+// 			    data: 'post_id='+post_id +'&mem_id='+mem_id,
+// 			    success: function(data) {
+// 			      // if the user has already liked this post, remove the like
+// 			      if (data) {
+// 			        // send an AJAX request to remove the like
+// 			        $.ajax({
+// 			          type: 'get',
+// 			          url: '/pluslikes',
+// 			          data: { post_id: post_id, mem_id: mem_id },
+// 			          success: function() {
+// 			            // update the like count display
+// 			            var countElem = document.getElementById('likecount');
+// 			            countElem.textContent = parseInt(countElem.textContent) + 1;
+// 			          }
+// 			        });
+// 			      }
+// 			      // if the user hasn't liked this post, add a like
+// 			      else {
+// 			        // send an AJAX request to add the like
+// 			        $.ajax({
+// 			          type: 'get',
+// 			          url: '/minuslikes',
+// 			          data: 'post_id='+post_id +'&mem_id='+mem_id,
+// 			          success: function() {
+// 			            // update the like count display
+// 			            var countElem = document.getElementById('likecount');
+// 			            countElem.textContent = parseInt(countElem.textContent) - 1;
+// 			          }
+// 			        });
+// 			      }
+// 			    }
+// 			  });
 // 			}
-// 		})
-// 	}	
-	
+
+	/* 
+		해결해야 할 문제
+			
+		3. 댓글 수정기능(대댓글 기능과 비슷하게), 대댓글 삭제기능
+		4. 방금 전, 몇분 전, 몇시간 전, 몇일 전, 몇주 전 등 시간 출력하기
+			7
+		5. 로그인 세션값이 존재하면 댓글 창 출력되게
+			
+			
+		- 좋아요
+		1. 누르면 인서트, 빨간 하트로 시간차 줘서 바뀌게
+		2. 
+	*/
+
 </script>
 </body>
  

@@ -22,4 +22,5 @@ public class PostDto {
 	private String content;
 	private Timestamp posttime;
 	private Timestamp uptime;
+	private int likes;
 }

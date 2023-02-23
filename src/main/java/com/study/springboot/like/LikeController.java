@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.study.springboot.post.PostDao;
+import com.study.springboot.post.PostDto;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -15,13 +18,23 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class LikeController {
 	private final LikeDao likedao;
+	private final PostDao postDao;
 
-	@GetMapping("/like")
+	@GetMapping("/likes")
 	@ResponseBody
-	public String like(LikeDto postlike) {
+
+	
+
+	public int like(LikeDto postlike) {
+
 		log.info("..........."+postlike);
 		int lik = likedao.like(postlike);
-		return "ok";
+		PostDto postDto = postDao.selectOnePost(postlike.getPost_id());
+		int result = postDao.pluslikes(postDto);
+		PostDto afterLikePost = postDao.selectOnePost(postlike.getPost_id());
+		log.info("+++++++++++222"+ afterLikePost);
+		return afterLikePost.getLikes();
+		
 	}
 	
 	@GetMapping("/likenum")
@@ -33,10 +46,25 @@ public class LikeController {
 	
 	@ResponseBody
 	@GetMapping("/unlike")
-	public String unlike(LikeDto postlike) {
+
+
+	public int unlike(LikeDto postlike, Model model) {
+
 		int unlik = likedao.unlike(postlike);
-		return "delete";
+		PostDto postDto = postDao.selectOnePost(postlike.getPost_id());
+		int result = postDao.minuslikes(postDto);
+		PostDto afterLikePost = postDao.selectOnePost(postlike.getPost_id());
+		log.info("+++++++++++222"+ afterLikePost);
+		return afterLikePost.getLikes();
+		
 	}
+
+
+
+	
+	
+}	
+	
 
 	
 //	@RequestMapping("/like/insert/{id}")
@@ -52,6 +80,5 @@ public class LikeController {
 //
 
 
-}	
-	
+
 
