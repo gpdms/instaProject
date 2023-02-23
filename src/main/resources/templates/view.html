@@ -225,9 +225,13 @@
 
                         <div class="bottom_icons">
                             <div class="left_icons">
-                                <div class="heart_btn" onclick="addLike()" id="hertbtn">
-                                    <div class="sprite_heart_icon_outline" data-name="heartbeat" id="heartbeat"></div>
+                                <div id="postlike">
+	                                <div th:if ="${liketrue!=true}"class="heart_btn" onclick="addLike()" id="hertbtn">
+	                                    <div class="sprite_heart_icon_outline" data-name="heartbeat" id="heartbeat"></div>
+	                                </div>
+	                                <div th:if ="${liketrue == true}" id="heartbeatNegative" class="heart_btn" onclick="addLike1()"><img src="/imgs/colorheart.jpg"></div>
                                 </div>
+                                
                                 <div>
                                     <div class="sprite_bubble_icon"></div>
                                 </div>
@@ -305,6 +309,7 @@
 <script src="/js/like.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script th:inline="javascript">
+
 // 	게시글 삭제
 function deletePost() {
 	let ok = confirm("해당 게시글을 삭제하시겠습니까?");
@@ -329,9 +334,14 @@ function deletePost() {
 
 <script>
 const mem_id='[[${post.mem_id}]]';
-// const like_id='[[${post.likes}]]';
+
 	 
 	 // 대댓글 입력창 출력 함수
+
+
+
+	 // 대댓글창 출력 함수
+
 	$(document).ready(function() {
 		$(".showSubCom").prev().click(function() {
 			//let a = $(this).next();
@@ -467,8 +477,10 @@ const mem_id='[[${post.mem_id}]]';
 		    url: '/like',
 		    data: 'post_id='+post_id +'&mem_id='+mem_id,
 			success: function (data) {
-			        $("#heartbeat").replaceWith(`<div id="heartbeatNegative" class="heart_btn" onclick="addLike1()"><img src="/imgs/colorheart.jpg"></div>`);
-			    },
+				var child = `<div id="heartbeatNegative" class="heart_btn" onclick="addLike1()"><img src="/imgs/colorheart.jpg"></div>`;
+			    $("#postlike").empty();    
+				$("#postlike").append(child);
+			},
 			    error: function (err) {
 			    	alert("좋아요버튼을 다시 눌러주세요");
 			    	console.log(err);
@@ -486,8 +498,11 @@ const mem_id='[[${post.mem_id}]]';
 				url: '/unlike',
 				data: 'post_id='+post_id +'&mem_id='+mem_id,
 				success: function(data) {
-					$("#heartbeatNegative")
-					.replaceWith(`<div class="sprite_heart_icon_outline" data-name="heartbeat" id="heartbeat"></div>`)
+					var child = `<div class="heart_btn" onclick="addLike()" id="hertbtn">
+                        <div class="sprite_heart_icon_outline" data-name="heartbeat" id="heartbeat"></div>
+                        </div>`;
+				    $("#postlike").empty();    
+					$("#postlike").append(child);
 				},
 				error: function (err) {
 					alert("좋아요버튼을 다시 눌러주세요");
@@ -495,18 +510,21 @@ const mem_id='[[${post.mem_id}]]';
 				}
 			})
 		};
-// 	function count(){
-		
-// 		$.ajax({
-// 			type:'get',
-// 			url:'/likenum',
-// 			data:'like_id='+like_id,
-// 			success: function(data) {
-// 				if()
-// 			}
-// 		})
-// 	}	
-	
+
+	/* 
+		해결해야 할 문제
+			
+		3. 댓글 수정기능(대댓글 기능과 비슷하게), 대댓글 삭제기능
+		4. 방금 전, 몇분 전, 몇시간 전, 몇일 전, 몇주 전 등 시간 출력하기
+			7
+		5. 로그인 세션값이 존재하면 댓글 창 출력되게
+			
+			
+		- 좋아요
+		1. 누르면 인서트, 빨간 하트로 시간차 줘서 바뀌게
+		2. 
+	*/
+
 </script>
 </body>
  

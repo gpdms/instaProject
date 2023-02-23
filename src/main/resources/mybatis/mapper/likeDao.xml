@@ -8,10 +8,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	insert into postlike(post_id, mem_id)
 	values(#{post_id}, #{mem_id})
 </insert>
-<select id="likenum" resultType="com.study.springboot.like.LikeDto">
-	select like_id from postlike where like_id = #{like_id}
-</select>
+<!-- <select id="likenum" resultType="com.study.springboot.like.LikeDto"> -->
+<!-- 	select like_id from postlike where like_id = #{like_id} -->
+<!-- </select> -->
 <delete id="unlike">
 	delete from postlike where post_id=#{post_id} and mem_id = #{mem_id}
 </delete>
+<select id="likeview" resultType="com.study.springboot.like.LikeDto">
+	select * from postlike where post_id=#{post_id} and mem_id = #{mem_id}  
+</select>
 </mapper>

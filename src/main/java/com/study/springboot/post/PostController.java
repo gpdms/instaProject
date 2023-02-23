@@ -22,6 +22,8 @@ import com.study.springboot.comment.CommentDao;
 import com.study.springboot.comment.CommentDto;
 import com.study.springboot.comment.SubComShowDto;
 import com.study.springboot.comment.SubCommentDto;
+import com.study.springboot.like.LikeDao;
+import com.study.springboot.like.LikeDto;
 import com.study.springboot.member.MemberDao;
 import com.study.springboot.member.MemberDto;
 import com.study.springboot.post.img.PostImgDto;
@@ -40,7 +42,7 @@ public class PostController {
 	private final ImgService imgService;
 	private final PostDao postDao;
 	private final PostImgRepository imgRepo;
-
+	private final LikeDao likeDao;
 	private final MemberDao memberDao;
 	private final CommentDao commentdao;
 	
@@ -89,8 +91,17 @@ public class PostController {
 	
  
   @GetMapping("/view/{post_idS}")
-  public String toView(@PathVariable("post_idS") int post_id, Model model) throws IOException{
+  public String toView(@PathVariable("post_idS") int post_id, Model model, HttpSession session) throws IOException{
+	  MemberDto login_user= (MemberDto)session.getAttribute("user");
+	  LikeDto likedto = likeDao.likeview(post_id, login_user.getMem_id());
+	  boolean liketrue = true;
+	  if(likedto ==null) {
+		  liketrue = false;
+	  }
   	log.info("-----------PostController toView()-------------");
+  	log.info("----likedto"+likedto);
+  	log.info("----로그인 유저"+login_user);
+  	log.info("----라이크 트루"+liketrue);
   	
   	PostDto post = postDao.selectOnePost(post_id);
   	List<PostImgEntity> imgs = new ArrayList<>();
@@ -128,7 +139,7 @@ public class PostController {
 	model.addAttribute("timeMap",postTimeMap);
   	model.addAttribute("imgs", imgs); 
   	model.addAttribute("post", post);
-  	
+  	model.addAttribute("liketrue", liketrue);
   	return "view";
   }
   
