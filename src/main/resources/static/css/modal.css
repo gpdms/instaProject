@@ -202,11 +202,6 @@
 }
 
 
-.thumb_user .time{
-    font-size: 10px;
-    letter-spacing: 0.2px;
-    color:#999;
-}
 
 .profile_thumb{
     width: 50px;
@@ -223,7 +218,7 @@
 }
     
 .detail .id{
-    margin-bottom: 5px;
+    margin-bottom: 1px;
 }
 
 .detail .id > a{

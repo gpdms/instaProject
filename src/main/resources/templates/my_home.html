@@ -171,7 +171,7 @@
 						<div class="id">
 							<a th:href="@{/myHome/{mem_id}(mem_id=${follower.from_user})}">[[${follower.from_user}]]</a>
 						</div>
-						<div class="time">[[${follower.flw_date}]]</div>
+						<div class="time">[[${follower.nickname}]]</div>
 					</div>
 				</div>
 
@@ -190,7 +190,7 @@
 						<div class="id">
 							<a th:href="@{/myHome/{mem_id}(mem_id=${following.to_user})}">[[${following.to_user}]]</a>
 						</div>
-						<div class="time">[[${following.flw_date}]]</div>
+						<div class="time">[[${following.nickname}]]</div>
 					</div>
 				</div>
 
