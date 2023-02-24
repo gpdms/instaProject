@@ -323,7 +323,7 @@ function deletePost() {
 </script>
 
 <script>
-const mem_id='[[${post.mem_id}]]';
+const mem_id='[[${session.user.mem_id}]]';
 
 	 
 	 // 대댓글 입력창 출력 함수
@@ -458,6 +458,7 @@ const mem_id='[[${post.mem_id}]]';
 	 })
 	
 	// 좋아요 추가 메소드
+	
 	function addLike(){
 		
 		var post_id = $("#post_id").val();

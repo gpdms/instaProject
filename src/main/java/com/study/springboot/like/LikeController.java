@@ -22,10 +22,7 @@ public class LikeController {
 
 	@GetMapping("/likes")
 	@ResponseBody
-
-	
-
-	public int like(LikeDto postlike) {
+	public int like(LikeDto postlike ) {
 
 		log.info("..........."+postlike);
 		int lik = likedao.like(postlike);
