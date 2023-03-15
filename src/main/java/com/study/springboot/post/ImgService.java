@@ -31,6 +31,7 @@ public class ImgService {
 	@Value("${file.dir}")
     private String profileImgDir;
 	
+	
 	//포스트 이미지 저장 
     public List<Long> savePostImg(int post_id, List<MultipartFile> imgs) {
     	List<Long> imgIds = new ArrayList<Long>();
@@ -45,6 +46,7 @@ public class ImgService {
 	         	log.warn("this file is not image type");
 	         	return imgIds;
 	        }
+	        
 	        
 	        // MultipartFile로부터 -->
 	        // 원래 파일 이름 추출
@@ -73,7 +75,7 @@ public class ImgService {
 	                .saveName(save_name)
 	                .savePath(save_path)
 	                .build();
-	        PostImgEntity imgEntity = imgRepository.saveAndFlush(newImgEntity);
+	        PostImgEntity imgEntity = imgRepository.save(newImgEntity);
 	        
 	        if (imgEntity != null) {
 	        	imgIds.add(imgEntity.getImgId());
