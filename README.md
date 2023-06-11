@@ -27,7 +27,9 @@
 
 - ERD 담당부분
 <img width="100%" alt="ERD" src="https://github.com/gpdms/instaProject/assets/118142992/c94814a8-6940-4a71-bbc7-db60eb3ec5e5">
-<br/>
+<br/><br/>
+
 <img width="100%" alt="code_follow" src="https://github.com/gpdms/instaProject/assets/118142992/c2d34bdb-c249-489d-84a2-e2eafe1dc04c">
-<br/>
+<br/><br/>
+
 <img width="100%" alt="code_userinfo" src="https://github.com/gpdms/instaProject/assets/118142992/7c7e23b1-1c2d-4c6c-a7f8-eb955229b1fa">
