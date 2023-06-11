@@ -24,3 +24,6 @@
     + [MyBatis](https://github.com/gpdms/instaProject/blob/main/src/main/resources/mybatis/mapper/followDao.xml)
 
     + [프론트(alert.html, login.html, my_home.html)](https://github.com/gpdms/instaProject/tree/main/src/main/resources/templates )
+
+- ERD 담당부분
+<img width="95%" alt="ERD" src="https://github.com/gpdms/instaProject/assets/118142992/c94814a8-6940-4a71-bbc7-db60eb3ec5e5">
