@@ -9,7 +9,7 @@
     + IDE : Eclipse
     + Template Engine: Thymeleaf
     + Frontend : HTML, CSS, Javascript
-- 담당역할
+- 나의 역할
     + 로그인/회원가입
     + 팔로우/팔로잉
     + 개인정보수정
